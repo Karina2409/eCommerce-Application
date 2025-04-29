@@ -32,6 +32,19 @@ module.exports = tseslint.config(
           style: 'kebab-case',
         },
       ],
+      'no-inline-comments': 'error',
+      'no-console': 'warn',
+      'prefer-const': 'error',
+      'class-methods-use-this': 'error',
+
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        { accessibility: 'explicit', overrides: { constructors: 'off' } },
+      ],
+      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/member-ordering': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
   },
   {
