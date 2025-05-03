@@ -59,17 +59,20 @@ npm run start
 ```
 
 ## Application scripts 📜
-
-- `npm run start`: runs the app in the development mode (http://localhost:3000 in browser)
+- `npm run ng`: outputs the project name
+- `npm run start`: runs the app in the development mode (http://localhost:4200 in browser)
 - `npm run build`: builds the app to `dist` folder
-- `npm run prettier-check`: runs Prettier check
-- `npm run format`: runs Prettier for auto-formatting according to `.prettierrc`
-- `npm run lint`: runs ESLint to check for coding style issues according to `eslint.config.js`
+- `npm run watch`: as you make changes to a file, the watch recompiles and rebuilds the code. The dist/eCommerce-Application directory is updated with the latest code.
 - `npm run test`: launches test runner
+- `npm run lint`: runs ESLint to check for coding style issues according to `eslint.config.js`
+- `npm run format`: runs Prettier for auto-formatting according to `.prettierrc`
+- `npm run prettier-check`: runs Prettier check
+- `npm run prettier-diff`: runs Prettier with flag --list-different (or -l) which prints the filenames of files that are different from Prettier formatting. If there are differences the script errors out, which is useful in a CI scenario.
+- `npm run prettier-unknown`: runs Prettier with --ignore-unknown (or -u), prettier will ignore unknown files matched by patterns.
 - `npm run prepare`: installs Husky, that is used for git hooks
 
 ## Creators 👨‍👨‍👧
 
 - [Karina](https://github.com/karina2409)
-- [Dmitri](https://github.com/tubyliec)
+- [Dzmitry](https://github.com/tubyliec)
 - [Mikhail](https://github.com/mishania261282)
