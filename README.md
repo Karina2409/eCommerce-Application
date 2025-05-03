@@ -34,7 +34,7 @@ App pages:
 
 To set up and run the project locally, do the following:
 
-1. Clone he repository
+1. Clone the repository
 
 ```
 git clone https://github.com/Karina2409/eCommerce-Application.git
