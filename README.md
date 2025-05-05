@@ -6,7 +6,7 @@ Welcome to DEVICES - a TypeScript e-commerce application.
 
 Our online store is designed to sell devices, paying special attention to such popular products as smartphones and accessories.
 
-Discover a wide range of products sorted by category.Here you can find everything you need.
+Discover a wide range of products sorted by category. Here you can find everything you need.
 
 Sign up in our app to personalize your shopping experience and manage your personal data.
 
