@@ -1,8 +1,13 @@
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import './reset.scss';
 
 :root {
   --primary-color: #d6e2fd;
   --secondary-color: #0c62bf;
 }
+
+html, body { height: 100%; }
+
+
+
+
 
