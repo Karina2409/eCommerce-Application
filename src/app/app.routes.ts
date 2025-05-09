@@ -5,7 +5,7 @@ import { RegistrationPageComponent } from '@pages/registration-page/registration
 import { NotFoundPageComponent } from '@pages/not-found-page/not-found-page.component';
 
 export const routes: Routes = [
-  { path: '', component: LoginPageComponent },
+  { path: '', component: MainPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'registration', component: RegistrationPageComponent },
   { path: 'main', component: MainPageComponent },
