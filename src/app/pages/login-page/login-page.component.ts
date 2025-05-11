@@ -11,10 +11,10 @@ import { NgIf } from '@angular/common';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  public showPassword = false;
+  public isPasswordShown = false;
 
   public form: FormGroup = new FormGroup({
-    username: new FormControl('', [
+    email: new FormControl('', [
       Validators.required,
       Validators.email,
       Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
@@ -38,6 +38,6 @@ export class LoginPageComponent {
   }
 
   public togglePassword(): void {
-    this.showPassword = !this.showPassword;
+    this.isPasswordShown = !this.isPasswordShown;
   }
 }
