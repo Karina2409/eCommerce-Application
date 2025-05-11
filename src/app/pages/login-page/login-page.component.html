@@ -22,7 +22,9 @@
     <input type="checkbox" (change)="togglePassword()" />
     Show Password
   </label>
-  <button class="login__form-button" mat-flat-button type="submit">Log In</button>
+  <button class="login__form-button" mat-flat-button type="submit" [disabled]="!form.valid">
+    Log In
+  </button>
   <button class="login__form-button" mat-flat-button type="button" routerLink="/main">
     Cancel
   </button>
