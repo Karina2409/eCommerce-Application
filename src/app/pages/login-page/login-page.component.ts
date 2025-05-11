@@ -12,7 +12,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  public showPassword: boolean = false;
+  public showPassword = false;
 
   public form: FormGroup = new FormGroup({
     username: new FormControl('', [
@@ -34,7 +34,7 @@ export class LoginPageComponent {
 
   public onSubmitAction(): void {
     if (this.form.valid) {
-      console.log(this.form.value);
+      // console.log(this.form.value);
     }
   }
 
