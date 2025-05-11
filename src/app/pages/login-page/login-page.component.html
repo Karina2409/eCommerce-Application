@@ -1,24 +1,31 @@
-<form class="login-form form--shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
+<form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
   <h1>Log In</h1>
 
-  <label class="login-label">
-    <input class="login-input" type="email" placeholder="Enter email" formControlName="username" />
+  <label class="login__form-label">
+    <input
+      class="login__form-input"
+      type="email"
+      placeholder="Enter email"
+      formControlName="username"
+    />
   </label>
 
-  <label class="login-label">
+  <label class="login__form-label">
     <input
-      class="login-input"
+      class="login__form-input"
       [type]="showPassword ? 'text' : 'password'"
       placeholder="Enter password"
       formControlName="password"
     />
   </label>
-  <label class="login-checkbox">
+  <label class="login__form-checkbox">
     <input type="checkbox" (change)="togglePassword()" />
     Show Password
   </label>
-  <button class="login-button" mat-flat-button type="submit">Log In</button>
-  <button class="login-button" mat-flat-button type="button" routerLink="/main">Cancel</button>
+  <button class="login__form-button" mat-flat-button type="submit">Log In</button>
+  <button class="login__form-button" mat-flat-button type="button" routerLink="/main">
+    Cancel
+  </button>
 </form>
 
 <div class="login-info" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">

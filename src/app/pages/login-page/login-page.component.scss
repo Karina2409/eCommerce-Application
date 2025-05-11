@@ -21,13 +21,13 @@
   }
 }
 
-.form--shadow {
+.login-form_shadow {
   box-shadow:
     0 8px 16px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.login-input {
+.login__form-input {
   color: var(--secondary-color);
   padding: 1rem 0.5rem;
   background-color: var(--primary-color);
@@ -41,7 +41,7 @@
   }
 }
 
-.login-checkbox {
+.login__form-checkbox {
   display: flex;
   color: var(--secondary-color);
   align-items: center;
