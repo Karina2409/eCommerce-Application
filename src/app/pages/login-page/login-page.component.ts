@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { MatFabButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-login-page',
-  imports: [MatFabButton, RouterLink, ReactiveFormsModule, NgIf],
+  imports: [MatButtonModule, RouterLink, ReactiveFormsModule, NgIf],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })

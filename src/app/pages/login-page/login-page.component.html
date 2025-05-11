@@ -13,12 +13,12 @@
       formControlName="password"
     />
   </label>
-   <label class="login-checkbox">
+  <label class="login-checkbox">
     <input type="checkbox" (change)="togglePassword()" />
     Show Password
   </label>
-  <button class="login-button" mat-fab extended type="submit">Log In</button>
-  <button class="login-button" mat-fab extended type="button" routerLink="/main">Cancel</button>
+  <button class="login-button" mat-flat-button type="submit">Log In</button>
+  <button class="login-button" mat-flat-button type="button" routerLink="/main">Cancel</button>
 </form>
 
 <div class="login-info" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">
@@ -30,7 +30,9 @@
 </div>
 <div class="login-info" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
   <small *ngIf="form.get('password')?.errors?.['required']">Password is required</small>
-  <small *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 8 characters</small>
+  <small *ngIf="form.get('password')?.errors?.['minlength']"
+    >Password must be at least 8 characters</small
+  >
   <small *ngIf="form.get('password')?.errors?.['pattern']">
     Password must include uppercase, lowercase, number and special character.
   </small>
