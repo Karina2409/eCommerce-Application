@@ -1,1 +1,48 @@
-<p>login-page works!</p>
+<form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
+  <h1>Log In</h1>
+
+  <label class="login-form__label">
+    <input
+      class="login-form__input"
+      type="email"
+      placeholder="Enter email"
+      formControlName="email"
+    />
+  </label>
+
+  <label class="login-form__label">
+    <input
+      class="login-form__input"
+      [type]="isPasswordShown ? 'text' : 'password'"
+      placeholder="Enter password"
+      formControlName="password"
+    />
+  </label>
+  <label class="login-form__checkbox">
+    <input type="checkbox" (change)="togglePassword()" />
+    Show Password
+  </label>
+  <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
+    Log In
+  </button>
+  <button class="login-form__button" mat-flat-button type="button" routerLink="/main">
+    Cancel
+  </button>
+</form>
+
+<div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+  <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
+  <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
+  <small *ngIf="form.get('email')?.errors?.['pattern']">
+    No whitespace or invalid email domain.</small
+  >
+</div>
+<div class="form-validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+  <small *ngIf="form.get('password')?.errors?.['required']">Password is required</small>
+  <small *ngIf="form.get('password')?.errors?.['minlength']"
+    >Password must be at least 8 characters</small
+  >
+  <small *ngIf="form.get('password')?.errors?.['pattern']">
+    Password must include uppercase, lowercase, number and special character.
+  </small>
+</div>

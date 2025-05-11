@@ -1,13 +1,13 @@
+@use '@angular/material' as mat;
 @import './reset.scss';
 
 :root {
   --primary-color: #d6e2fd;
   --secondary-color: #0c62bf;
+  --light-color: #fffdf6;
 }
 
-html, body { height: 100%; }
-
-
-
-
-
+html,
+body {
+  height: 100%;
+}
