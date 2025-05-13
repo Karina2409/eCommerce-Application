@@ -1,4 +1,4 @@
-#  DEVISEES
+# DEVISEES
 
 ## Description
 
@@ -29,7 +29,6 @@ App pages:
 - Sass
 - ESLint, Prettier, Husky
 
-
 ## Setting up and running locally 🚀
 
 To set up and run the project locally, do the following:
@@ -59,6 +58,7 @@ npm run start
 ```
 
 ## Application scripts 📜
+
 - `npm run ng`: outputs the project name
 - `npm run start`: runs the app in the development mode (http://localhost:4200 in browser)
 - `npm run build`: builds the app to `dist` folder
