@@ -1,4 +1,4 @@
-import { Customer } from './customer';
+import { Customer } from '@commercetools/platform-sdk';
 
 export type SignUpResult = {
   result: true | false;

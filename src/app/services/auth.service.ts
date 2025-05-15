@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment.development';
 import { createApiBuilderFromCtpClient, CustomerDraft } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
@@ -11,9 +10,11 @@ import {
   RefreshAuthMiddlewareOptions,
 } from '@commercetools/ts-client';
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-import { tokenCacheAnonym, tokenCacheAuth } from './tocken';
+
 import { SignUpResult } from '@models/types/signUpResult';
-import { Session } from '@models/types/session';
+import { Session } from '@models/enums/session';
+import { environment } from '@environments/environment.development';
+import { tokenCacheAnonym, tokenCacheAuth } from '@services/token';
 
 @Injectable({
   providedIn: 'root',

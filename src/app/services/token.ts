@@ -1,5 +1,5 @@
 import type { TokenCache, TokenStore } from '@commercetools/ts-client';
-import { environment } from 'src/environments/environment.development';
+import { environment } from '@environments/environment.development';
 
 const tokenCacheAnonym: TokenCache = {
   get: (): TokenStore => {
