@@ -29,9 +29,7 @@
       "@pages/*": ["src/app/pages/*"],
       "@services/*": ["src/app/services/*"],
       "@models/*": ["src/app/models/*"],
-      "@environments/*": ["src/environments/*"],
-      "@enums/*": ["src/app/models/enums/*"],
-      "@types/*": ["src/app/models/types/*"]
+      "@environments/*": ["src/environments/*"]
     }
   },
   "angularCompilerOptions": {

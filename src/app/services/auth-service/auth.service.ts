@@ -11,10 +11,10 @@ import {
 } from '@commercetools/ts-client';
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
-import { SignUpResult } from '@models/types/signUpResult';
-import { Session } from '@models/enums/session';
+import { SignUpResult } from '@models/types/sign-up-result/signUpResult';
 import { environment } from '@environments/environment.development';
-import { tokenCacheAnonym, tokenCacheAuth } from '@services/token';
+import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
+import { Session } from '@models/enums/session';
 
 @Injectable({
   providedIn: 'root',
