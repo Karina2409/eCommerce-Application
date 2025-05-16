@@ -58,7 +58,6 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
-        console.log(customerResponse.body.customer);
         return {
           result: true,
           message: 'you have successfully created an account',
@@ -72,7 +71,7 @@ export class AuthService {
     }
   }
 
-  public async signIn(email: string, password: string): Promise<void | SignUpResult> {
+  public async signIn(email: string, password: string): Promise<SignUpResult | string | undefined> {
     const customerCredentials = {
       email,
       password,
@@ -91,7 +90,6 @@ export class AuthService {
       if (customerResponse.statusCode === 200) {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
-        console.log(customerResponse.body.customer);
         return {
           result: true,
           message: 'You are logged in',
@@ -101,7 +99,10 @@ export class AuthService {
         return { result: false, message: 'Login to account failed.' };
       }
     } catch (error) {
-      return console.log(error);
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return undefined;
     }
   }
 

@@ -46,3 +46,6 @@
     Password must include uppercase, lowercase, number and special character.
   </small>
 </div>
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>

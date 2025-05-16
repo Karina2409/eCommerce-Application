@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+/* eslint-disable @typescript-eslint/member-ordering */
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { AuthService } from '@services/auth-service';
 
 @Component({
   selector: 'app-login-page',
@@ -11,8 +13,10 @@ import { NgIf } from '@angular/common';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
+  constructor(private authService: AuthService) {}
+  public router = inject(Router);
+  public errorMessage = '';
   public isPasswordShown = false;
-
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -33,7 +37,14 @@ export class LoginPageComponent {
 
   public onSubmitAction(): void {
     if (this.form.valid) {
-      // console.log(this.form.value);
+      this.authService.signIn(this.form.value.email, this.form.value.password).then((result) => {
+        if (result instanceof Object && result.result === true) {
+          this.router.navigate(['main']);
+        } else if (typeof result === 'string') {
+          this.errorMessage = result;
+          console.log(result);
+        }
+      });
     }
   }
 
