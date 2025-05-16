@@ -1,2 +1,6 @@
-<button mat-flat-button routerLink="/login">Log In</button>
-<button mat-flat-button routerLink="/registration">Sign Up</button>
+@if (isAuthorized()) {
+  <button mat-flat-button (click)="logout()">Log Out</button>
+} @else {
+  <button mat-flat-button routerLink="/login">Log In</button>
+  <button mat-flat-button routerLink="/registration">Sign Up</button>
+}
