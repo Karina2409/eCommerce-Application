@@ -29,6 +29,7 @@
       "@pages/*": ["src/app/pages/*"],
       "@services/*": ["src/app/services/*"],
       "@models/*": ["src/app/models/*"],
+      "@validators/*": ["src/app/validators/*"],
       "@environments/*": ["src/environments/*"]
     }
   },
