@@ -4,7 +4,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { minAgeValidator } from '../../validators';
-import { Countries } from '@models/enums/countries.enum';
+import { Countries } from '@models/enums';
 
 @Component({
   selector: 'app-registration-page',
