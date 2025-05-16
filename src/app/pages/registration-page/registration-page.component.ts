@@ -4,6 +4,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { minAgeValidator } from '../../validators/age.validator';
+import { Countries } from '@models/enums/countries.enum';
 
 @Component({
   selector: 'app-registration-page',
@@ -43,6 +44,8 @@ export class RegistrationPageComponent {
       country: new FormControl('', [Validators.required]),
     }),
   });
+
+  protected readonly Countries = Countries;
 
   public onSubmitAction(): void {
     if (this.form.valid) {
