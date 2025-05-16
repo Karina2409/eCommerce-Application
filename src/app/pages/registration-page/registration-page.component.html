@@ -42,7 +42,7 @@
         >Country:
         <select formControlName="country" class="login-form__input">
           <option value="">Select</option>
-          <option *ngFor="let country of Countries | keyvalue" [value]="country.value">
+          <option *ngFor="let country of countries | keyvalue" [value]="country.value">
             {{ country.value }}
           </option>
         </select></label

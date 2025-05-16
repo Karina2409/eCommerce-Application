@@ -3,8 +3,8 @@ import { MatButton } from '@angular/material/button';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { minAgeValidator } from '../../validators';
 import { Countries } from '@models/enums';
+import { minAgeValidator } from '@validators/age';
 
 @Component({
   selector: 'app-registration-page',
@@ -45,7 +45,7 @@ export class RegistrationPageComponent {
     }),
   });
 
-  protected readonly Countries = Countries;
+  protected readonly countries = Countries;
 
   public onSubmitAction(): void {
     if (this.form.valid) {
