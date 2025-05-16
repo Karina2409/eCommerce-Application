@@ -46,7 +46,7 @@ export class AuthService {
     }
   }
 
-  public async signUp(customerDraft: CustomerDraft): Promise<void | SignUpResult> {
+  public async signUp(customerDraft: CustomerDraft): Promise<SignUpResult | string> {
     if (this.isAuthorized()) {
       await this.logout();
     }
@@ -67,11 +67,14 @@ export class AuthService {
         return { result: false, message: 'Account creation failed.' };
       }
     } catch (error) {
-      return console.log(error);
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
     }
   }
 
-  public async signIn(email: string, password: string): Promise<SignUpResult | string | undefined> {
+  public async signIn(email: string, password: string): Promise<SignUpResult | string> {
     const customerCredentials = {
       email,
       password,
@@ -102,7 +105,7 @@ export class AuthService {
       if (error instanceof Error) {
         return error.message;
       }
-      return undefined;
+      return String(error);
     }
   }
 

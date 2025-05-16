@@ -37,14 +37,15 @@ export class LoginPageComponent {
 
   public onSubmitAction(): void {
     if (this.form.valid) {
-      this.authService.signIn(this.form.value.email, this.form.value.password).then((result) => {
-        if (result instanceof Object && result.result === true) {
-          this.router.navigate(['main']);
-        } else if (typeof result === 'string') {
-          this.errorMessage = result;
-          console.log(result);
-        }
-      });
+      this.authService
+        .signIn(this.form.value.email, this.form.value.password)
+        .then((loginResponse) => {
+          if (loginResponse instanceof Object && loginResponse.result === true) {
+            this.router.navigate(['main']);
+          } else if (typeof loginResponse === 'string') {
+            this.errorMessage = loginResponse;
+          }
+        });
     }
   }
 
