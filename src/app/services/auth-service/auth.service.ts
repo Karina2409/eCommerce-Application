@@ -58,7 +58,7 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
-        console.log(customerResponse.body.customer);
+        // console.log(customerResponse.body.customer);
         return {
           result: true,
           message: 'you have successfully created an account',
@@ -67,8 +67,8 @@ export class AuthService {
       } else {
         return { result: false, message: 'Account creation failed.' };
       }
-    } catch (error) {
-      return console.log(error);
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : String(err));
     }
   }
 
@@ -91,7 +91,7 @@ export class AuthService {
       if (customerResponse.statusCode === 200) {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
-        console.log(customerResponse.body.customer);
+        // console.log(customerResponse.body.customer);
         return {
           result: true,
           message: 'You are logged in',
@@ -100,8 +100,8 @@ export class AuthService {
       } else {
         return { result: false, message: 'Login to account failed.' };
       }
-    } catch (error) {
-      return console.log(error);
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : String(err));
     }
   }
 
