@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { NgForOf, NgIf } from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { minAgeValidator } from '../../validators/age.validator';
 
 @Component({
   selector: 'app-registration-page',
-  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, NgForOf],
+  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, NgForOf, KeyValuePipe],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
   public isPasswordShown = false;
-  public countries = ['United States', 'Belarus'];
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
