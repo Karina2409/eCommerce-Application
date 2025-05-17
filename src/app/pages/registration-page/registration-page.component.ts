@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+/* eslint-disable @typescript-eslint/member-ordering */
+import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Countries } from '@models/enums';
 import { signal } from '@angular/core';
 import { minAgeValidator } from '@validators/age';
+import { AuthService } from '@services/auth-service';
+import { CustomerDraft } from '@commercetools/platform-sdk';
 
 @Component({
   selector: 'app-registration-page',
@@ -14,6 +17,10 @@ import { minAgeValidator } from '@validators/age';
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
+  constructor(private authService: AuthService) {}
+  public customer: CustomerDraft = { email: '' };
+  public router = inject(Router);
+  public errorMessage = signal('');
   public isPasswordShown = signal(false);
   public isDefaultBillingAddress = signal(false);
   public isDefaultShippingAddress = signal(false);
@@ -60,7 +67,22 @@ export class RegistrationPageComponent {
 
   public onSubmitAction(): void {
     if (this.form.valid) {
-      // console.log(this.form.value);
+      this.customer = this.form.value;
+      this.authService.signUp(this.customer).then((loginResponse) => {
+        if (loginResponse instanceof Object && loginResponse.result === true) {
+          this.authService
+            .signIn(this.form.value.email, this.form.value.password)
+            .then((loginResponse) => {
+              if (loginResponse instanceof Object && loginResponse.result === true) {
+                this.router.navigate(['main']);
+              } else if (typeof loginResponse === 'string') {
+                this.errorMessage.set(loginResponse);
+              }
+            });
+        } else if (typeof loginResponse === 'string') {
+          this.errorMessage.set(loginResponse);
+        }
+      });
     }
   }
 
