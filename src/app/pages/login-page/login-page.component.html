@@ -13,7 +13,7 @@
   <label class="login-form__label">
     <input
       class="login-form__input"
-      [type]="isPasswordShown ? 'text' : 'password'"
+      [type]="isPasswordShown() ? 'text' : 'password'"
       placeholder="Enter password"
       formControlName="password"
     />
@@ -28,8 +28,8 @@
   <button class="login-form__button" mat-flat-button type="button" routerLink="/main">
     Cancel
   </button>
+  <span class="login-form__link"> Don't have an account? <a href="/registration">Register</a></span>
 </form>
-
 <div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
   <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
   <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
@@ -45,4 +45,7 @@
   <small *ngIf="form.get('password')?.errors?.['pattern']">
     Password must include uppercase, lowercase, number and special character.
   </small>
+</div>
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage() }}
 </div>

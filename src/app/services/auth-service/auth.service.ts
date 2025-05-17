@@ -46,7 +46,7 @@ export class AuthService {
     }
   }
 
-  public async signUp(customerDraft: CustomerDraft): Promise<void | SignUpResult> {
+  public async signUp(customerDraft: CustomerDraft): Promise<SignUpResult | string> {
     if (this.isAuthorized()) {
       await this.logout();
     }
@@ -58,7 +58,6 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
-        // console.log(customerResponse.body.customer);
         return {
           result: true,
           message: 'you have successfully created an account',
@@ -67,12 +66,15 @@ export class AuthService {
       } else {
         return { result: false, message: 'Account creation failed.' };
       }
-    } catch (err) {
-      throw new Error(err instanceof Error ? err.message : String(err));
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
     }
   }
 
-  public async signIn(email: string, password: string): Promise<void | SignUpResult> {
+  public async signIn(email: string, password: string): Promise<SignUpResult | string> {
     const customerCredentials = {
       email,
       password,
@@ -91,7 +93,6 @@ export class AuthService {
       if (customerResponse.statusCode === 200) {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
-        // console.log(customerResponse.body.customer);
         return {
           result: true,
           message: 'You are logged in',
@@ -100,8 +101,11 @@ export class AuthService {
       } else {
         return { result: false, message: 'Login to account failed.' };
       }
-    } catch (err) {
-      throw new Error(err instanceof Error ? err.message : String(err));
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
     }
   }
 
