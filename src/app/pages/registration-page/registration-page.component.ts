@@ -4,6 +4,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Countries } from '@models/enums';
+import { signal } from '@angular/core';
 import { minAgeValidator } from '@validators/age';
 
 @Component({
@@ -13,9 +14,9 @@ import { minAgeValidator } from '@validators/age';
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
-  public isPasswordShown = false;
-  public isDefaultBillingAddress = false;
-  public isDefaultShippingAddress = false;
+  public isPasswordShown = signal(false);
+  public isDefaultBillingAddress = signal(false);
+  public isDefaultShippingAddress = signal(false);
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
@@ -64,14 +65,14 @@ export class RegistrationPageComponent {
   }
 
   public togglePassword(): void {
-    this.isPasswordShown = !this.isPasswordShown;
+    this.isPasswordShown.update((value) => !value);
   }
 
   public toggleBillingAddress(): void {
-    this.isDefaultBillingAddress = !this.isDefaultBillingAddress;
+    this.isDefaultBillingAddress.update((value) => !value);
   }
 
   public toggleShippingAddress(): void {
-    this.isDefaultShippingAddress = !this.isDefaultShippingAddress;
+    this.isDefaultShippingAddress.update((value) => !value);
   }
 }

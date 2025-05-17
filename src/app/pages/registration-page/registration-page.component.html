@@ -17,7 +17,7 @@
         Password:
         <input
           class="login-form__input"
-          [type]="isPasswordShown ? 'text' : 'password'"
+          [type]="isPasswordShown() ? 'text' : 'password'"
           placeholder="Enter password"
           formControlName="password"
         />
