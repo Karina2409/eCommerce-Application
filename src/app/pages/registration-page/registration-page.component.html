@@ -96,6 +96,9 @@
     </button>
   </div>
   <span class="login-form__link"> Already have an account? <a href="/login">Log in</a></span>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage() }}
+  </div>
 </form>
 
 <div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
