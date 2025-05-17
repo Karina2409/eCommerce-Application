@@ -14,6 +14,8 @@ import { minAgeValidator } from '@validators/age';
 })
 export class RegistrationPageComponent {
   public isPasswordShown = false;
+  public isDefaultBillingAddress = false;
+  public isDefaultShippingAddress = false;
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
@@ -34,14 +36,22 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    address: new FormGroup({
-      street: new FormControl('', Validators.required),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      postalCode: new FormControl('', [
+    country: new FormControl('', [Validators.required]),
+    shippingAddress: new FormGroup({
+      shippingStreet: new FormControl('', Validators.required),
+      shippingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      shippingPostalCode: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
-      country: new FormControl('', [Validators.required]),
+    }),
+    billingAddress: new FormGroup({
+      billingStreet: new FormControl('', Validators.required),
+      billingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      billingPostalCode: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
+      ]),
     }),
   });
 
@@ -55,5 +65,13 @@ export class RegistrationPageComponent {
 
   public togglePassword(): void {
     this.isPasswordShown = !this.isPasswordShown;
+  }
+
+  public toggleBillingAddress(): void {
+    this.isDefaultBillingAddress = !this.isDefaultBillingAddress;
+  }
+
+  public toggleShippingAddress(): void {
+    this.isDefaultShippingAddress = !this.isDefaultShippingAddress;
   }
 }

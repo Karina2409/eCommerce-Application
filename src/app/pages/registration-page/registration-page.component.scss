@@ -95,3 +95,15 @@
 .login-form__link {
   color: var(--secondary-color);
 }
+
+.address-form__address {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.address-legend {
+  color: var(--secondary-color);
+  text-align: center;
+}
