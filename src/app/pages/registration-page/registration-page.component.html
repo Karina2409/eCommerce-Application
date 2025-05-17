@@ -17,7 +17,7 @@
         Password:
         <input
           class="login-form__input"
-          [type]="isPasswordShown ? 'text' : 'password'"
+          [type]="isPasswordShown() ? 'text' : 'password'"
           placeholder="Enter password"
           formControlName="password"
         />
@@ -35,9 +35,6 @@
       <label class="login-form__label"
         >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
       /></label>
-    </div>
-
-    <div formGroupName="address" class="address-form">
       <label class="login-form__label"
         >Country:
         <select formControlName="country" class="login-form__input">
@@ -47,19 +44,48 @@
           </option>
         </select></label
       >
-
-      <label class="login-form__label"
-        >City: <input formControlName="city" class="login-form__input"
-      /></label>
-
-      <label class="login-form__label"
-        >Street: <input formControlName="street" class="login-form__input"
-      /></label>
-
-      <label class="login-form__label"
-        >Postal Code: <input formControlName="postalCode" class="login-form__input"
-      /></label>
     </div>
+
+    <form formGroupName="shippingAddress" class="address-form">
+      <fieldset class="address-form__address">
+        <legend class="address-legend">Shipping address</legend>
+        <label class="login-form__label"
+          >City: <input formControlName="shippingCity" class="login-form__input"
+        /></label>
+
+        <label class="login-form__label"
+          >Street: <input formControlName="shippingStreet" class="login-form__input"
+        /></label>
+
+        <label class="login-form__label"
+          >Postal Code: <input formControlName="shippingPostalCode" class="login-form__input"
+        /></label>
+      </fieldset>
+      <label class="login-form__checkbox">
+        <input type="checkbox" (change)="toggleShippingAddress()" />
+        Use as default shipping address
+      </label>
+    </form>
+    <form formGroupName="billingAddress" class="address-form">
+      <fieldset class="address-form__address">
+        <legend class="address-legend">Billing address</legend>
+        <label class="login-form__label"
+          >City: <input formControlName="billingCity" class="login-form__input"
+        /></label>
+
+        <label class="login-form__label"
+          >Street: <input formControlName="billingStreet" class="login-form__input"
+        /></label>
+
+        <label class="login-form__label"
+          >Postal Code: <input formControlName="billingPostalCode" class="login-form__input"
+        /></label>
+      </fieldset>
+      <label class="login-form__checkbox">
+        <input type="checkbox" (change)="toggleBillingAddress()" />
+        Use as default billing address
+      </label>
+    </form>
   </div>
   <div class="login-form__button-container">
     <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
@@ -112,28 +138,33 @@
 
 <div
   class="form-validation"
-  *ngIf="form.get('address.street')?.invalid && form.get('address.street')?.touched"
+  *ngIf="form.get('address.shippingStreet')?.invalid && form.get('address.shippingStreet')?.touched"
 >
   <small>Street is required</small>
 </div>
 
 <div
   class="form-validation"
-  *ngIf="form.get('address.city')?.invalid && form.get('address.city')?.touched"
+  *ngIf="form.get('address.shippingCity')?.invalid && form.get('address.shippingCity')?.touched"
 >
   <small>Only letters allowed</small>
 </div>
 
 <div
   class="form-validation"
-  *ngIf="form.get('address.postalCode')?.invalid && form.get('address.postalCode')?.touched"
+  *ngIf="
+    form.get('address.shippingPostalCode')?.invalid &&
+    form.get('address.shippingPostalCode')?.touched
+  "
 >
   <small>Invalid format</small>
 </div>
 
 <div
   class="form-validation"
-  *ngIf="form.get('address.country')?.invalid && form.get('address.country')?.touched"
+  *ngIf="
+    form.get('address.shippingCountry')?.invalid && form.get('address.shippingCountry')?.touched
+  "
 >
   <small>Country is required</small>
 </div>

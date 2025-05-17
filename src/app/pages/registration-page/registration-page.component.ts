@@ -4,6 +4,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Countries } from '@models/enums';
+import { signal } from '@angular/core';
 import { minAgeValidator } from '@validators/age';
 
 @Component({
@@ -13,7 +14,9 @@ import { minAgeValidator } from '@validators/age';
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
-  public isPasswordShown = false;
+  public isPasswordShown = signal(false);
+  public isDefaultBillingAddress = signal(false);
+  public isDefaultShippingAddress = signal(false);
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
@@ -34,14 +37,22 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    address: new FormGroup({
-      street: new FormControl('', Validators.required),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      postalCode: new FormControl('', [
+    country: new FormControl('', [Validators.required]),
+    shippingAddress: new FormGroup({
+      shippingStreet: new FormControl('', Validators.required),
+      shippingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      shippingPostalCode: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
-      country: new FormControl('', [Validators.required]),
+    }),
+    billingAddress: new FormGroup({
+      billingStreet: new FormControl('', Validators.required),
+      billingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      billingPostalCode: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
+      ]),
     }),
   });
 
@@ -54,6 +65,14 @@ export class RegistrationPageComponent {
   }
 
   public togglePassword(): void {
-    this.isPasswordShown = !this.isPasswordShown;
+    this.isPasswordShown.update((value) => !value);
+  }
+
+  public toggleBillingAddress(): void {
+    this.isDefaultBillingAddress.update((value) => !value);
+  }
+
+  public toggleShippingAddress(): void {
+    this.isDefaultShippingAddress.update((value) => !value);
   }
 }
