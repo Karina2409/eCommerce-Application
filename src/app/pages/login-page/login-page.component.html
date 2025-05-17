@@ -13,7 +13,7 @@
   <label class="login-form__label">
     <input
       class="login-form__input"
-      [type]="isPasswordShown ? 'text' : 'password'"
+      [type]="isPasswordShown() ? 'text' : 'password'"
       placeholder="Enter password"
       formControlName="password"
     />
@@ -47,5 +47,5 @@
   </small>
 </div>
 <div *ngIf="errorMessage" class="error-message">
-  {{ errorMessage }}
+  {{ errorMessage() }}
 </div>

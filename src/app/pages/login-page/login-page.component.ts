@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/member-ordering */
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -15,8 +15,8 @@ import { AuthService } from '@services/auth-service';
 export class LoginPageComponent {
   constructor(private authService: AuthService) {}
   public router = inject(Router);
-  public errorMessage = '';
-  public isPasswordShown = false;
+  public errorMessage = signal('');
+  public isPasswordShown = signal(false);
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
       Validators.required,
@@ -43,13 +43,13 @@ export class LoginPageComponent {
           if (loginResponse instanceof Object && loginResponse.result === true) {
             this.router.navigate(['main']);
           } else if (typeof loginResponse === 'string') {
-            this.errorMessage = loginResponse;
+            this.errorMessage.set(loginResponse);
           }
         });
     }
   }
 
   public togglePassword(): void {
-    this.isPasswordShown = !this.isPasswordShown;
+    this.isPasswordShown.update((value) => !value);
   }
 }
