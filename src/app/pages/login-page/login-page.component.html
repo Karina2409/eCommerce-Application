@@ -28,8 +28,8 @@
   <button class="login-form__button" mat-flat-button type="button" routerLink="/main">
     Cancel
   </button>
+  <span class="login-form__link"> Don't have an account? <a href="/registration">Register</a></span>
 </form>
-<span class="login-form__link"> Don't have an account? <a href="/registration">Register</a></span>
 <div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
   <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
   <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
