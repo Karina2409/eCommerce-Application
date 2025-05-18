@@ -65,27 +65,33 @@
         <input type="checkbox" (change)="toggleShippingAddress()" />
         Use as default shipping address
       </label>
-    </form>
-    <form formGroupName="billingAddress" class="address-form">
-      <fieldset class="address-form__address">
-        <legend class="address-legend">Billing address</legend>
-        <label class="login-form__label"
-          >City: <input formControlName="billingCity" class="login-form__input"
-        /></label>
-
-        <label class="login-form__label"
-          >Street: <input formControlName="billingStreet" class="login-form__input"
-        /></label>
-
-        <label class="login-form__label"
-          >Postal Code: <input formControlName="billingPostalCode" class="login-form__input"
-        /></label>
-      </fieldset>
       <label class="login-form__checkbox">
-        <input type="checkbox" (change)="toggleBillingAddress()" />
-        Use as default billing address
+        <input type="checkbox" (change)="toggleBothAddress()" />
+        Use as default shipping and billing address
       </label>
     </form>
+    @if (!isDefaultBothAddress()) {
+      <form formGroupName="billingAddress" class="address-form">
+        <fieldset class="address-form__address">
+          <legend class="address-legend">Billing address</legend>
+          <label class="login-form__label"
+            >City: <input formControlName="billingCity" class="login-form__input"
+          /></label>
+
+          <label class="login-form__label"
+            >Street: <input formControlName="billingStreet" class="login-form__input"
+          /></label>
+
+          <label class="login-form__label"
+            >Postal Code: <input formControlName="billingPostalCode" class="login-form__input"
+          /></label>
+        </fieldset>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleBillingAddress()" />
+          Use as default billing address
+        </label>
+      </form>
+    }
   </div>
   <div class="login-form__button-container">
     <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
