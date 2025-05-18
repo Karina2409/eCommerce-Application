@@ -87,6 +87,9 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 }
 
 .login-form__info {
