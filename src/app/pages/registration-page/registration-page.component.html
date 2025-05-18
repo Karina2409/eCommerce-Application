@@ -35,57 +35,78 @@
       <label class="login-form__label"
         >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
       /></label>
-      <label class="login-form__label"
-        >Country:
-        <select formControlName="country" class="login-form__input">
-          <option value="">Select</option>
-          <option *ngFor="let country of countries | keyvalue" [value]="country.value">
-            {{ country.value }}
-          </option>
-        </select></label
-      >
     </div>
+    @if (!isBillingAddressAsDefault()) {
+      <form formGroupName="shippingAddress" class="address-form">
+        <fieldset class="address-form__address">
+          <legend class="address-legend">Shipping address</legend>
+          <label class="login-form__label"
+            >Country:
+            <select formControlName="country" class="login-form__input">
+              <option value="">Select</option>
+              <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+                {{ country.value }}
+              </option>
+            </select></label
+          >
+          <label class="login-form__label"
+            >City: <input formControlName="city" class="login-form__input"
+          /></label>
 
-    <form formGroupName="shippingAddress" class="address-form">
-      <fieldset class="address-form__address">
-        <legend class="address-legend">Shipping address</legend>
-        <label class="login-form__label"
-          >City: <input formControlName="shippingCity" class="login-form__input"
-        /></label>
+          <label class="login-form__label"
+            >Street: <input formControlName="streetName" class="login-form__input"
+          /></label>
 
-        <label class="login-form__label"
-          >Street: <input formControlName="shippingStreet" class="login-form__input"
-        /></label>
+          <label class="login-form__label"
+            >Postal Code: <input formControlName="postalCode" class="login-form__input"
+          /></label>
+        </fieldset>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleShippingAddress()" />
+          Use as default shipping address
+        </label>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleShippingAddressAsDefault()" />
+          Use as default shipping and billing address
+        </label>
+      </form>
+    }
 
-        <label class="login-form__label"
-          >Postal Code: <input formControlName="shippingPostalCode" class="login-form__input"
-        /></label>
-      </fieldset>
-      <label class="login-form__checkbox">
-        <input type="checkbox" (change)="toggleShippingAddress()" />
-        Use as default shipping address
-      </label>
-    </form>
-    <form formGroupName="billingAddress" class="address-form">
-      <fieldset class="address-form__address">
-        <legend class="address-legend">Billing address</legend>
-        <label class="login-form__label"
-          >City: <input formControlName="billingCity" class="login-form__input"
-        /></label>
+    @if (!isShippingAddressAsDefault()) {
+      <form formGroupName="billingAddress" class="address-form">
+        <fieldset class="address-form__address">
+          <legend class="address-legend">Billing address</legend>
+          <label class="login-form__label"
+            >Country:
+            <select formControlName="country" class="login-form__input">
+              <option value="">Select</option>
+              <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+                {{ country.value }}
+              </option>
+            </select></label
+          >
+          <label class="login-form__label"
+            >City: <input formControlName="city" class="login-form__input"
+          /></label>
 
-        <label class="login-form__label"
-          >Street: <input formControlName="billingStreet" class="login-form__input"
-        /></label>
+          <label class="login-form__label"
+            >Street: <input formControlName="streetName" class="login-form__input"
+          /></label>
 
-        <label class="login-form__label"
-          >Postal Code: <input formControlName="billingPostalCode" class="login-form__input"
-        /></label>
-      </fieldset>
-      <label class="login-form__checkbox">
-        <input type="checkbox" (change)="toggleBillingAddress()" />
-        Use as default billing address
-      </label>
-    </form>
+          <label class="login-form__label"
+            >Postal Code: <input formControlName="postalCode" class="login-form__input"
+          /></label>
+        </fieldset>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleBillingAddress()" />
+          Use as default billing address
+        </label>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleBillingAddressAsDefault()" />
+          Use as default shipping and billing address
+        </label>
+      </form>
+    }
   </div>
   <div class="login-form__button-container">
     <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
@@ -101,73 +122,133 @@
   </div>
 </form>
 
-<div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
-  <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
-  <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
-  <small *ngIf="form.get('email')?.errors?.['pattern']">
-    No whitespace or invalid email domain.</small
+<div class="validation-container">
+  <div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+    <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
+    <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
+    <small *ngIf="form.get('email')?.errors?.['pattern']">
+      No whitespace or invalid email domain.</small
+    >
+  </div>
+  <div
+    class="form-validation"
+    *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
   >
-</div>
-<div class="form-validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-  <small *ngIf="form.get('password')?.errors?.['required']">Password is required</small>
-  <small *ngIf="form.get('password')?.errors?.['minlength']"
-    >Password must be at least 8 characters</small
+    <small *ngIf="form.get('password')?.errors?.['required']">Password is required.</small>
+    <small *ngIf="form.get('password')?.errors?.['minlength']"
+      >Password must be at least 8 characters.</small
+    >
+    <small *ngIf="form.get('password')?.errors?.['pattern']">
+      Password must include uppercase, lowercase, number and special character latin alphabet.
+    </small>
+  </div>
+
+  <div
+    class="form-validation"
+    *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
   >
-  <small *ngIf="form.get('password')?.errors?.['pattern']">
-    Password must include uppercase, lowercase, number and special character.
-  </small>
-</div>
+    <small *ngIf="form.get('firstName')?.errors?.['required']">First name is required.</small>
+    <small *ngIf="form.get('firstName')?.errors?.['pattern']"
+      >Only letters latin alphabet allowed in First name.</small
+    >
+  </div>
 
-<div
-  class="form-validation"
-  *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
->
-  <small *ngIf="form.get('firstName')?.errors?.['pattern']"
-    >Only letters allowed in First name</small
+  <div
+    class="form-validation"
+    *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
   >
-</div>
+    <small *ngIf="form.get('lastName')?.errors?.['required']">Last name is required.</small>
+    <small *ngIf="form.get('lastName')?.errors?.['pattern']"
+      >Only letters latin alphabet allowed in Last name.</small
+    >
+  </div>
 
-<div class="form-validation" *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid">
-  <small *ngIf="form.get('lastName')?.errors?.['pattern']">Only letters allowed in Last name</small>
-</div>
+  <div
+    class="form-validation"
+    *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.invalid"
+  >
+    <small *ngIf="form.get('dateOfBirth')?.errors?.['required']">Date of birdth is required.</small>
+    <small *ngIf="form.get('dateOfBirth')?.errors?.['tooYoung']">You must be at least 13.</small>
+  </div>
 
-<div
-  class="form-validation"
-  *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.invalid"
->
-  <small *ngIf="form.get('dateOfBirth')?.errors?.['required']">Required</small>
-  <small *ngIf="form.get('dateOfBirth')?.errors?.['tooYoung']">You must be at least 13</small>
-</div>
+  <div
+    class="form-validation"
+    *ngIf="form.get('shippingAddress.country')?.invalid && form.get('country')?.touched"
+  >
+    <small>Country for shipping address is required.</small>
+  </div>
 
-<div
-  class="form-validation"
-  *ngIf="form.get('address.shippingStreet')?.invalid && form.get('address.shippingStreet')?.touched"
->
-  <small>Street is required</small>
-</div>
+  <div
+    class="form-validation"
+    *ngIf="
+      form.get('shippingAddress.streetNamet')?.invalid &&
+      form.get('shippingAddress.streetName')?.touched
+    "
+  >
+    <small *ngIf="form.get('shippingAddress.streetName')?.errors?.['required']"
+      >Shipping address street is required.</small
+    >
+  </div>
 
-<div
-  class="form-validation"
-  *ngIf="form.get('address.shippingCity')?.invalid && form.get('address.shippingCity')?.touched"
->
-  <small>Only letters allowed</small>
-</div>
+  <div
+    class="form-validation"
+    *ngIf="form.get('shippingAddress.city')?.invalid && form.get('shippingAddress.city')?.touched"
+  >
+    <small *ngIf="form.get('shippingAddress.city')?.errors?.['required']"
+      >Shipping address city is required.</small
+    >
+    <small *ngIf="form.get('shippingAddress.city')?.errors?.['pattern']"
+      >Only letters latin alphabet allowed in shipping address.</small
+    >
+  </div>
 
-<div
-  class="form-validation"
-  *ngIf="
-    form.get('address.shippingPostalCode')?.invalid &&
-    form.get('address.shippingPostalCode')?.touched
-  "
->
-  <small>Invalid format</small>
-</div>
+  <div
+    class="form-validation"
+    *ngIf="
+      form.get('shippingAddress.postalCode')?.invalid &&
+      form.get('shippingAddress.postalCode')?.touched
+    "
+  >
+    <small>Invalid postal code format.</small>
+  </div>
 
-<div
-  class="form-validation"
-  *ngIf="
-    form.get('address.shippingCountry')?.invalid && form.get('address.shippingCountry')?.touched
-  "
->
-  <small>Country is required</small>
+  <div
+    class="form-validation"
+    *ngIf="form.get('billingAddress.country')?.invalid && form.get('country')?.touched"
+  >
+    <small>Country for billing address is required.</small>
+  </div>
+
+  <div
+    class="form-validation"
+    *ngIf="
+      form.get('billingAddress.streetName')?.invalid &&
+      form.get('billingAddress.streetName')?.touched
+    "
+  >
+    <small *ngIf="form.get('billingAddress.streetName')?.errors?.['required']"
+      >Billing address street is required.</small
+    >
+  </div>
+
+  <div
+    class="form-validation"
+    *ngIf="form.get('billingAddress.city')?.invalid && form.get('billingAddress.city')?.touched"
+  >
+    <small *ngIf="form.get('billingAddress.city')?.errors?.['required']"
+      >Billing address city is required.</small
+    >
+    <small *ngIf="form.get('billingAddress.city')?.errors?.['pattern']"
+      >Only letters latin alphabet allowed in shipping address.</small
+    >
+  </div>
+  <div
+    class="form-validation"
+    *ngIf="
+      form.get('billingAddress.postalCode')?.invalid &&
+      form.get('billingAddress.postalCode')?.touched
+    "
+  >
+    <small>Invalid postal code format.</small>
+  </div>
 </div>

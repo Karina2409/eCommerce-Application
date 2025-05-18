@@ -24,6 +24,8 @@ export class RegistrationPageComponent {
   public isPasswordShown = signal(false);
   public isDefaultBillingAddress = signal(false);
   public isDefaultShippingAddress = signal(false);
+  public isShippingAddressAsDefault = signal(false);
+  public isBillingAddressAsDefault = signal(false);
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
@@ -44,19 +46,20 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    country: new FormControl('', [Validators.required]),
     shippingAddress: new FormGroup({
-      shippingStreet: new FormControl('', Validators.required),
-      shippingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      shippingPostalCode: new FormControl('', [
+      country: new FormControl('', [Validators.required]),
+      streetName: new FormControl('', Validators.required),
+      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      postalCode: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
     }),
     billingAddress: new FormGroup({
-      billingStreet: new FormControl('', Validators.required),
-      billingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      billingPostalCode: new FormControl('', [
+      country: new FormControl('', [Validators.required]),
+      streetName: new FormControl('', Validators.required),
+      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      postalCode: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
@@ -92,6 +95,23 @@ export class RegistrationPageComponent {
 
   public toggleBillingAddress(): void {
     this.isDefaultBillingAddress.update((value) => !value);
+  }
+  public toggleShippingAddressAsDefault(): void {
+    this.isShippingAddressAsDefault.update((value) => !value);
+    if (this.isShippingAddressAsDefault()) {
+      this.form.get('billingAddress')?.disable();
+    } else {
+      this.form.get('billingAddress')?.enable();
+    }
+  }
+
+  public toggleBillingAddressAsDefault(): void {
+    this.isBillingAddressAsDefault.update((value) => !value);
+    if (this.isBillingAddressAsDefault()) {
+      this.form.get('shippingAddress')?.disable();
+    } else {
+      this.form.get('shippingAddress')?.enable();
+    }
   }
 
   public toggleShippingAddress(): void {

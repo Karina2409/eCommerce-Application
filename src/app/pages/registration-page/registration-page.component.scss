@@ -58,12 +58,21 @@
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
+  align-self: flex-start;
 }
 
 .address-form {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.validation-container {
+  margin: 0 auto;
+  display: flex;
+  width: 50%;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .form-validation {
@@ -79,6 +88,9 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 }
 
 .login-form__info {
