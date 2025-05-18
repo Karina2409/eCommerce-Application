@@ -47,17 +47,17 @@ export class RegistrationPageComponent {
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
     country: new FormControl('', [Validators.required]),
     shippingAddress: new FormGroup({
-      shippingStreet: new FormControl('', Validators.required),
-      shippingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      shippingPostalCode: new FormControl('', [
+      streetName: new FormControl('', Validators.required),
+      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      postalCode: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
     }),
     billingAddress: new FormGroup({
-      billingStreet: new FormControl('', Validators.required),
-      billingCity: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      billingPostalCode: new FormControl('', [
+      streetName: new FormControl('', Validators.required),
+      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+      postalCode: new FormControl('', [
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),

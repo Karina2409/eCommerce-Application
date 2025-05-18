@@ -163,26 +163,23 @@
   <div
     class="form-validation"
     *ngIf="
-      form.get('shippingAddress.shippingStreet')?.invalid &&
-      form.get('shippingAddress.shippingStreet')?.touched
+      form.get('shippingAddress.streetNamet')?.invalid &&
+      form.get('shippingAddress.streetName')?.touched
     "
   >
-    <small *ngIf="form.get('shippingAddress.shippingStreet')?.errors?.['required']"
+    <small *ngIf="form.get('shippingAddress.streetName')?.errors?.['required']"
       >Shipping address street is required.</small
     >
   </div>
 
   <div
     class="form-validation"
-    *ngIf="
-      form.get('shippingAddress.shippingCity')?.invalid &&
-      form.get('shippingAddress.shippingCity')?.touched
-    "
+    *ngIf="form.get('shippingAddress.city')?.invalid && form.get('shippingAddress.city')?.touched"
   >
-    <small *ngIf="form.get('shippingAddress.shippingCity')?.errors?.['required']"
+    <small *ngIf="form.get('shippingAddress.city')?.errors?.['required']"
       >Shipping address city is required.</small
     >
-    <small *ngIf="form.get('shippingAddress.shippingCity')?.errors?.['pattern']"
+    <small *ngIf="form.get('shippingAddress.city')?.errors?.['pattern']"
       >Only letters allowed in shipping address.</small
     >
   </div>
@@ -190,8 +187,8 @@
   <div
     class="form-validation"
     *ngIf="
-      form.get('shippingAddress.shippingPostalCode')?.invalid &&
-      form.get('shippingAddress.shippingPostalCode')?.touched
+      form.get('shippingAddress.postalCode')?.invalid &&
+      form.get('shippingAddress.postalCode')?.touched
     "
   >
     <small>Invalid postal code format.</small>
@@ -200,34 +197,31 @@
   <div
     class="form-validation"
     *ngIf="
-      form.get('billingAddress.billingStreet')?.invalid &&
-      form.get('billingAddress.billingStreet')?.touched
+      form.get('billingAddress.streetName')?.invalid &&
+      form.get('billingAddress.streetName')?.touched
     "
   >
-    <small *ngIf="form.get('billingAddress.billingStreet')?.errors?.['required']"
+    <small *ngIf="form.get('billingAddress.streetName')?.errors?.['required']"
       >Billing address street is required.</small
     >
   </div>
 
   <div
     class="form-validation"
-    *ngIf="
-      form.get('billingAddress.billingCity')?.invalid &&
-      form.get('billingAddress.billingCity')?.touched
-    "
+    *ngIf="form.get('billingAddress.city')?.invalid && form.get('billingAddress.city')?.touched"
   >
-    <small *ngIf="form.get('billingAddress.billingCity')?.errors?.['required']"
+    <small *ngIf="form.get('billingAddress.city')?.errors?.['required']"
       >Billing address city is required.</small
     >
-    <small *ngIf="form.get('billingAddress.billingCity')?.errors?.['pattern']"
+    <small *ngIf="form.get('billingAddress.city')?.errors?.['pattern']"
       >Only letters allowed in shipping address.</small
     >
   </div>
   <div
     class="form-validation"
     *ngIf="
-      form.get('billingAddress.billingPostalCode')?.invalid &&
-      form.get('billingAddress.billingPostalCode')?.touched
+      form.get('billingAddress.postalCode')?.invalid &&
+      form.get('billingAddress.postalCode')?.touched
     "
   >
     <small>Invalid postal code format.</small>
