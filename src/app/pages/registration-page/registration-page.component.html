@@ -36,41 +36,43 @@
         >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
       /></label>
     </div>
+    @if (!isBillingAddressAsDefault()) {
+      <form formGroupName="shippingAddress" class="address-form">
+        <fieldset class="address-form__address">
+          <legend class="address-legend">Shipping address</legend>
+          <label class="login-form__label"
+            >Country:
+            <select formControlName="country" class="login-form__input">
+              <option value="">Select</option>
+              <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+                {{ country.value }}
+              </option>
+            </select></label
+          >
+          <label class="login-form__label"
+            >City: <input formControlName="city" class="login-form__input"
+          /></label>
 
-    <form formGroupName="shippingAddress" class="address-form">
-      <fieldset class="address-form__address">
-        <legend class="address-legend">Shipping address</legend>
-        <label class="login-form__label"
-          >Country:
-          <select formControlName="country" class="login-form__input">
-            <option value="">Select</option>
-            <option *ngFor="let country of countries | keyvalue" [value]="country.value">
-              {{ country.value }}
-            </option>
-          </select></label
-        >
-        <label class="login-form__label"
-          >City: <input formControlName="city" class="login-form__input"
-        /></label>
+          <label class="login-form__label"
+            >Street: <input formControlName="streetName" class="login-form__input"
+          /></label>
 
-        <label class="login-form__label"
-          >Street: <input formControlName="streetName" class="login-form__input"
-        /></label>
+          <label class="login-form__label"
+            >Postal Code: <input formControlName="postalCode" class="login-form__input"
+          /></label>
+        </fieldset>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleShippingAddress()" />
+          Use as default shipping address
+        </label>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleShippingAddressAsDefault()" />
+          Use as default shipping and billing address
+        </label>
+      </form>
+    }
 
-        <label class="login-form__label"
-          >Postal Code: <input formControlName="postalCode" class="login-form__input"
-        /></label>
-      </fieldset>
-      <label class="login-form__checkbox">
-        <input type="checkbox" (change)="toggleShippingAddress()" />
-        Use as default shipping address
-      </label>
-      <label class="login-form__checkbox">
-        <input type="checkbox" (change)="toggleBothAddress()" />
-        Use as default shipping and billing address
-      </label>
-    </form>
-    @if (!isDefaultBothAddress()) {
+    @if (!isShippingAddressAsDefault()) {
       <form formGroupName="billingAddress" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>
@@ -98,6 +100,10 @@
         <label class="login-form__checkbox">
           <input type="checkbox" (change)="toggleBillingAddress()" />
           Use as default billing address
+        </label>
+        <label class="login-form__checkbox">
+          <input type="checkbox" (change)="toggleBillingAddressAsDefault()" />
+          Use as default shipping and billing address
         </label>
       </form>
     }

@@ -24,7 +24,8 @@ export class RegistrationPageComponent {
   public isPasswordShown = signal(false);
   public isDefaultBillingAddress = signal(false);
   public isDefaultShippingAddress = signal(false);
-  public isDefaultBothAddress = signal(false);
+  public isShippingAddressAsDefault = signal(false);
+  public isBillingAddressAsDefault = signal(false);
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
@@ -95,12 +96,21 @@ export class RegistrationPageComponent {
   public toggleBillingAddress(): void {
     this.isDefaultBillingAddress.update((value) => !value);
   }
-  public toggleBothAddress(): void {
-    this.isDefaultBothAddress.update((value) => !value);
-    if (this.isDefaultBothAddress()) {
+  public toggleShippingAddressAsDefault(): void {
+    this.isShippingAddressAsDefault.update((value) => !value);
+    if (this.isShippingAddressAsDefault()) {
       this.form.get('billingAddress')?.disable();
     } else {
       this.form.get('billingAddress')?.enable();
+    }
+  }
+
+  public toggleBillingAddressAsDefault(): void {
+    this.isBillingAddressAsDefault.update((value) => !value);
+    if (this.isBillingAddressAsDefault()) {
+      this.form.get('shippingAddress')?.disable();
+    } else {
+      this.form.get('shippingAddress')?.enable();
     }
   }
 
