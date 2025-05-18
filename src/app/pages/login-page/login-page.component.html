@@ -40,10 +40,10 @@
 <div class="form-validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
   <small *ngIf="form.get('password')?.errors?.['required']">Password is required</small>
   <small *ngIf="form.get('password')?.errors?.['minlength']"
-    >Password must be at least 8 characters</small
+    >Password must be at least 8 characters latin alphabet</small
   >
   <small *ngIf="form.get('password')?.errors?.['pattern']">
-    Password must include uppercase, lowercase, number and special character.
+    Password must include uppercase, lowercase, number and special character latin alphabet.
   </small>
 </div>
 <div *ngIf="errorMessage" class="error-message">

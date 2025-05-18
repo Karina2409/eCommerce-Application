@@ -124,7 +124,7 @@
       >Password must be at least 8 characters.</small
     >
     <small *ngIf="form.get('password')?.errors?.['pattern']">
-      Password must include uppercase, lowercase, number and special character latin aplphabet.
+      Password must include uppercase, lowercase, number and special character latin alphabet.
     </small>
   </div>
 
@@ -134,7 +134,7 @@
   >
     <small *ngIf="form.get('firstName')?.errors?.['required']">First name is required.</small>
     <small *ngIf="form.get('firstName')?.errors?.['pattern']"
-      >Only letters allowed in First name.</small
+      >Only letters latin alphabet allowed in First name.</small
     >
   </div>
 
@@ -144,7 +144,7 @@
   >
     <small *ngIf="form.get('lastName')?.errors?.['required']">Last name is required.</small>
     <small *ngIf="form.get('lastName')?.errors?.['pattern']"
-      >Only letters allowed in Last name.</small
+      >Only letters latin alphabet allowed in Last name.</small
     >
   </div>
 
@@ -180,7 +180,7 @@
       >Shipping address city is required.</small
     >
     <small *ngIf="form.get('shippingAddress.city')?.errors?.['pattern']"
-      >Only letters allowed in shipping address.</small
+      >Only letters latin alphabet allowed in shipping address.</small
     >
   </div>
 
@@ -214,7 +214,7 @@
       >Billing address city is required.</small
     >
     <small *ngIf="form.get('billingAddress.city')?.errors?.['pattern']"
-      >Only letters allowed in shipping address.</small
+      >Only letters latin alphabet allowed in shipping address.</small
     >
   </div>
   <div
