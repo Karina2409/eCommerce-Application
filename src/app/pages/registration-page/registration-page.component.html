@@ -36,8 +36,8 @@
         >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
       /></label>
     </div>
-    @if (!isBillingAddressAsDefault()) {
-      <form formGroupName="shippingAddress" class="address-form">
+    @if (!isShippingBillingAddressDefault()) {
+      <form formGroupName="shippingAddresses" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Shipping address</legend>
           <label class="login-form__label"
@@ -62,18 +62,26 @@
           /></label>
         </fieldset>
         <label class="login-form__checkbox">
-          <input type="checkbox" (change)="toggleShippingAddress()" />
+          <input
+            type="checkbox"
+            formControlName="shippingDefault"
+            (change)="toggleShippingAddressDefault()"
+          />
           Use as default shipping address
         </label>
         <label class="login-form__checkbox">
-          <input type="checkbox" (change)="toggleShippingAddressAsDefault()" />
+          <input
+            type="checkbox"
+            formControlName="shippingBillingDefault"
+            (change)="toggleShippingBillingAddressDefault()"
+          />
           Use as default shipping and billing address
         </label>
       </form>
     }
 
-    @if (!isShippingAddressAsDefault()) {
-      <form formGroupName="billingAddress" class="address-form">
+    @if (!isBillingShippingAddressDefault()) {
+      <form formGroupName="billingAddresses" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>
           <label class="login-form__label"
@@ -98,11 +106,19 @@
           /></label>
         </fieldset>
         <label class="login-form__checkbox">
-          <input type="checkbox" (change)="toggleBillingAddress()" />
+          <input
+            type="checkbox"
+            formControlName="billingDefault"
+            (change)="toggleBillingAddressDefault()"
+          />
           Use as default billing address
         </label>
         <label class="login-form__checkbox">
-          <input type="checkbox" (change)="toggleBillingAddressAsDefault()" />
+          <input
+            type="checkbox"
+            formControlName="billingShippingDefault"
+            (change)="toggleBillingShippingAddressDefault()"
+          />
           Use as default shipping and billing address
         </label>
       </form>

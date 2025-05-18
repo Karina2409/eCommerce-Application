@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createApiBuilderFromCtpClient, CustomerDraft } from '@commercetools/platform-sdk';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
   // Import middlewares
@@ -15,6 +15,7 @@ import { SignUpResult } from '@models/types/sign-up-result';
 import { environment } from '@environments/environment.development';
 import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
 import { Session } from '@models/enums/session';
+import { CustomerDraft } from '@models/types';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,102 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
+        if (customerDraft.addresses[0].shippingBillingDefault) {
+          const shippingResponse = await this.apiRoot
+            .customers()
+            .withId({ ID: customerResponse.body.customer.id })
+            .post({
+              body: {
+                version: customerResponse.body.customer.version,
+                actions: [
+                  {
+                    action: 'setDefaultShippingAddress',
+                    addressId: customerResponse.body.customer.addresses[0].id,
+                  },
+                ],
+              },
+            })
+            .execute();
+          this.apiRoot
+            .customers()
+            .withId({ ID: shippingResponse.body.id })
+            .post({
+              body: {
+                version: shippingResponse.body.version,
+                actions: [
+                  {
+                    action: 'setDefaultBillingAddress',
+                    addressId: shippingResponse.body.addresses[0].id,
+                  },
+                ],
+              },
+            })
+            .execute();
+        } else if (customerDraft.addresses[1].billingShippingDefault) {
+          const shippingResponse = await this.apiRoot
+            .customers()
+            .withId({ ID: customerResponse.body.customer.id })
+            .post({
+              body: {
+                version: customerResponse.body.customer.version,
+                actions: [
+                  {
+                    action: 'setDefaultShippingAddress',
+                    addressId: customerResponse.body.customer.addresses[1].id,
+                  },
+                ],
+              },
+            })
+            .execute();
+          this.apiRoot
+            .customers()
+            .withId({ ID: shippingResponse.body.id })
+            .post({
+              body: {
+                version: shippingResponse.body.version,
+                actions: [
+                  {
+                    action: 'setDefaultBillingAddress',
+                    addressId: shippingResponse.body.addresses[1].id,
+                  },
+                ],
+              },
+            })
+            .execute();
+        } else if (customerDraft.addresses[0].shippingDefault) {
+          const shippingResponse = await this.apiRoot
+            .customers()
+            .withId({ ID: customerResponse.body.customer.id })
+            .post({
+              body: {
+                version: customerResponse.body.customer.version,
+                actions: [
+                  {
+                    action: 'setDefaultShippingAddress',
+                    addressId: customerResponse.body.customer.addresses[0].id,
+                  },
+                ],
+              },
+            })
+            .execute();
+          if (customerDraft.addresses[1].billingDefault) {
+            this.apiRoot
+              .customers()
+              .withId({ ID: shippingResponse.body.id })
+              .post({
+                body: {
+                  version: shippingResponse.body.version,
+                  actions: [
+                    {
+                      action: 'setDefaultBillingAddress',
+                      addressId: shippingResponse.body.addresses[1].id,
+                    },
+                  ],
+                },
+              })
+              .execute();
+          }
+        }
         return {
           result: true,
           message: 'you have successfully created an account',

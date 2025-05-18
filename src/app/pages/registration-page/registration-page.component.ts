@@ -8,7 +8,7 @@ import { Countries } from '@models/enums';
 import { signal } from '@angular/core';
 import { minAgeValidator } from '@validators/age';
 import { AuthService } from '@services/auth-service';
-import { CustomerDraft } from '@commercetools/platform-sdk';
+import { CustomerDraft } from '@models/types';
 
 @Component({
   selector: 'app-registration-page',
@@ -18,14 +18,23 @@ import { CustomerDraft } from '@commercetools/platform-sdk';
 })
 export class RegistrationPageComponent {
   constructor(private authService: AuthService) {}
-  public customer: CustomerDraft = { email: '' };
+  public customer: CustomerDraft = {
+    email: '',
+    addresses: [],
+    billingAddresses: [],
+    dateOfBirth: '',
+    firstName: '',
+    lastName: '',
+    password: '',
+    shippingAddresses: [],
+  };
   public router = inject(Router);
   public errorMessage = signal('');
   public isPasswordShown = signal(false);
-  public isDefaultBillingAddress = signal(false);
-  public isDefaultShippingAddress = signal(false);
-  public isShippingAddressAsDefault = signal(false);
-  public isBillingAddressAsDefault = signal(false);
+  public isShippingAddressDefault = signal(false);
+  public isBillingAddressDefault = signal(false);
+  public isShippingBillingAddressDefault = signal(false);
+  public isBillingShippingAddressDefault = signal(false);
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [
@@ -46,7 +55,7 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    shippingAddress: new FormGroup({
+    shippingAddresses: new FormGroup({
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
@@ -54,8 +63,10 @@ export class RegistrationPageComponent {
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
+      shippingDefault: new FormControl(''),
+      shippingBillingDefault: new FormControl(''),
     }),
-    billingAddress: new FormGroup({
+    billingAddresses: new FormGroup({
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
@@ -63,6 +74,8 @@ export class RegistrationPageComponent {
         Validators.required,
         Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
       ]),
+      billingDefault: new FormControl(''),
+      billingShippingDefault: new FormControl(''),
     }),
   });
 
@@ -71,21 +84,28 @@ export class RegistrationPageComponent {
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;
-      this.authService.signUp(this.customer).then((loginResponse) => {
-        if (loginResponse instanceof Object && loginResponse.result === true) {
-          this.authService
-            .signIn(this.form.value.email, this.form.value.password)
-            .then((loginResponse) => {
-              if (loginResponse instanceof Object && loginResponse.result === true) {
-                this.router.navigate(['main']);
-              } else if (typeof loginResponse === 'string') {
-                this.errorMessage.set(loginResponse);
-              }
-            });
-        } else if (typeof loginResponse === 'string') {
-          this.errorMessage.set(loginResponse);
-        }
-      });
+      this.authService
+        .signUp({
+          ...this.customer,
+          addresses: [this.form.value.shippingAddresses, this.form.value.billingAddresses],
+          billingAddresses: [],
+          shippingAddresses: [],
+        })
+        .then((loginResponse) => {
+          if (loginResponse instanceof Object && loginResponse.result === true) {
+            this.authService
+              .signIn(this.form.value.email, this.form.value.password)
+              .then((loginResponse) => {
+                if (loginResponse instanceof Object && loginResponse.result === true) {
+                  this.router.navigate(['main']);
+                } else if (typeof loginResponse === 'string') {
+                  this.errorMessage.set(loginResponse);
+                }
+              });
+          } else if (typeof loginResponse === 'string') {
+            this.errorMessage.set(loginResponse);
+          }
+        });
     }
   }
 
@@ -93,28 +113,29 @@ export class RegistrationPageComponent {
     this.isPasswordShown.update((value) => !value);
   }
 
-  public toggleBillingAddress(): void {
-    this.isDefaultBillingAddress.update((value) => !value);
+  public toggleBillingAddressDefault(): void {
+    this.isBillingAddressDefault.update((value) => !value);
   }
-  public toggleShippingAddressAsDefault(): void {
-    this.isShippingAddressAsDefault.update((value) => !value);
-    if (this.isShippingAddressAsDefault()) {
+
+  public toggleShippingAddressDefault(): void {
+    this.isShippingAddressDefault.update((value) => !value);
+  }
+
+  public toggleBillingShippingAddressDefault(): void {
+    this.isShippingBillingAddressDefault.update((value) => !value);
+    if (this.isShippingBillingAddressDefault()) {
       this.form.get('billingAddress')?.disable();
     } else {
       this.form.get('billingAddress')?.enable();
     }
   }
 
-  public toggleBillingAddressAsDefault(): void {
-    this.isBillingAddressAsDefault.update((value) => !value);
-    if (this.isBillingAddressAsDefault()) {
+  public toggleShippingBillingAddressDefault(): void {
+    this.isBillingShippingAddressDefault.update((value) => !value);
+    if (this.isBillingShippingAddressDefault()) {
       this.form.get('shippingAddress')?.disable();
     } else {
       this.form.get('shippingAddress')?.enable();
     }
-  }
-
-  public toggleShippingAddress(): void {
-    this.isDefaultShippingAddress.update((value) => !value);
   }
 }
