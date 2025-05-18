@@ -35,30 +35,30 @@
       <label class="login-form__label"
         >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
       /></label>
-      <label class="login-form__label"
-        >Country:
-        <select formControlName="country" class="login-form__input">
-          <option value="">Select</option>
-          <option *ngFor="let country of countries | keyvalue" [value]="country.value">
-            {{ country.value }}
-          </option>
-        </select></label
-      >
     </div>
 
     <form formGroupName="shippingAddress" class="address-form">
       <fieldset class="address-form__address">
         <legend class="address-legend">Shipping address</legend>
         <label class="login-form__label"
-          >City: <input formControlName="shippingCity" class="login-form__input"
+          >Country:
+          <select formControlName="country" class="login-form__input">
+            <option value="">Select</option>
+            <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+              {{ country.value }}
+            </option>
+          </select></label
+        >
+        <label class="login-form__label"
+          >City: <input formControlName="city" class="login-form__input"
         /></label>
 
         <label class="login-form__label"
-          >Street: <input formControlName="shippingStreet" class="login-form__input"
+          >Street: <input formControlName="streetName" class="login-form__input"
         /></label>
 
         <label class="login-form__label"
-          >Postal Code: <input formControlName="shippingPostalCode" class="login-form__input"
+          >Postal Code: <input formControlName="postalCode" class="login-form__input"
         /></label>
       </fieldset>
       <label class="login-form__checkbox">
@@ -75,15 +75,24 @@
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>
           <label class="login-form__label"
-            >City: <input formControlName="billingCity" class="login-form__input"
+            >Country:
+            <select formControlName="country" class="login-form__input">
+              <option value="">Select</option>
+              <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+                {{ country.value }}
+              </option>
+            </select></label
+          >
+          <label class="login-form__label"
+            >City: <input formControlName="city" class="login-form__input"
           /></label>
 
           <label class="login-form__label"
-            >Street: <input formControlName="billingStreet" class="login-form__input"
+            >Street: <input formControlName="streetName" class="login-form__input"
           /></label>
 
           <label class="login-form__label"
-            >Postal Code: <input formControlName="billingPostalCode" class="login-form__input"
+            >Postal Code: <input formControlName="postalCode" class="login-form__input"
           /></label>
         </fieldset>
         <label class="login-form__checkbox">
@@ -156,8 +165,11 @@
     <small *ngIf="form.get('dateOfBirth')?.errors?.['tooYoung']">You must be at least 13.</small>
   </div>
 
-  <div class="form-validation" *ngIf="form.get('country')?.invalid && form.get('country')?.touched">
-    <small>Country is required.</small>
+  <div
+    class="form-validation"
+    *ngIf="form.get('shippingAddress.country')?.invalid && form.get('country')?.touched"
+  >
+    <small>Country for shipping address is required.</small>
   </div>
 
   <div
@@ -192,6 +204,13 @@
     "
   >
     <small>Invalid postal code format.</small>
+  </div>
+
+  <div
+    class="form-validation"
+    *ngIf="form.get('billingAddress.country')?.invalid && form.get('country')?.touched"
+  >
+    <small>Country for billing address is required.</small>
   </div>
 
   <div

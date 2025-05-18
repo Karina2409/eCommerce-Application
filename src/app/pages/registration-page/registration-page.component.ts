@@ -45,8 +45,8 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    country: new FormControl('', [Validators.required]),
     shippingAddress: new FormGroup({
+      country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
       postalCode: new FormControl('', [
@@ -55,6 +55,7 @@ export class RegistrationPageComponent {
       ]),
     }),
     billingAddress: new FormGroup({
+      country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
       postalCode: new FormControl('', [
