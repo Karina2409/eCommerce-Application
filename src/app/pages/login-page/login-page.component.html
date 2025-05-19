@@ -9,10 +9,11 @@
       type="email"
       placeholder="Enter email"
       formControlName="email"
+      [class.invalid]="email?.invalid && (email?.dirty || !email?.untouched)"
       required
     />
     @if (email && email.invalid && (email.dirty || !email.untouched)) {
-      <div class="alert alert-danger">
+      <div class="alert alert-validation">
         @if (email.hasError('required')) {
           <div>Email is required.</div>
         } @else if (email.hasError('invalidEmailPattern')) {

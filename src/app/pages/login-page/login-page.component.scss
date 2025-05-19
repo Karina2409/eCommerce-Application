@@ -49,6 +49,9 @@
   border-radius: 0.8rem;
   border: 0.01rem solid var(--secondary-color);
   width: 100%;
+  &.invalid {
+    border-color: var(--error-color);
+  }
   &::placeholder {
     color: var(--secondary-text);
   }
@@ -75,10 +78,19 @@
 }
 
 .error-message {
-  color: red;
+  color: var(--error-color);
   margin-top: 10px;
 }
 
 .login-form__link {
   color: var(--secondary-color);
+}
+
+.alert {
+  color: var(--error-color);
+}
+
+.alert-validation {
+  width: 100%;
+  text-align: left;
 }
