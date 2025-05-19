@@ -112,9 +112,9 @@
           [attr.max]="maxDate"
           [class.invalid]="dateOfBirth?.invalid && (dateOfBirth?.dirty || !dateOfBirth?.untouched)"
         />
-        @if (lastName && lastName.invalid && (lastName.dirty || !lastName.untouched)) {
+        @if (dateOfBirth && dateOfBirth.invalid && (dateOfBirth.dirty || !dateOfBirth.untouched)) {
           <div class="alert alert-validation">
-            @if (lastName.hasError('required')) {
+            @if (dateOfBirth.hasError('required')) {
               Date of birth is required
             }
           </div>
