@@ -125,15 +125,34 @@
       <form formGroupName="shippingAddress" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Shipping address</legend>
-          <label class="login-form__label"
-            >Country:
-            <select formControlName="country" class="login-form__input">
+
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-country">Country:</label>
+            <select
+              formControlName="country"
+              class="login-form__input"
+              id="shipping-country"
+              [class.invalid]="
+                shippingCountry?.invalid && (shippingCountry?.dirty || !shippingCountry?.untouched)
+              "
+            >
               <option value="">Select</option>
               <option *ngFor="let country of countries | keyvalue" [value]="country.value">
                 {{ country.value }}
               </option>
             </select>
-          </label>
+            @if (
+              shippingCountry &&
+              shippingCountry.invalid &&
+              (shippingCountry.dirty || !shippingCountry.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingCountry.hasError('required')) {
+                  Shipping address country is required
+                }
+              </div>
+            }
+          </div>
 
           <div class="form-group">
             <label class="login-form__label" for="shipping-city">City: </label>
@@ -246,13 +265,6 @@
 </form>
 
 <div class="validation-container">
-  <div
-    class="form-validation"
-    *ngIf="form.get('shippingAddress.country')?.invalid && form.get('country')?.touched"
-  >
-    <small>Country for shipping address is required.</small>
-  </div>
-
   <div
     class="form-validation"
     *ngIf="

@@ -107,6 +107,11 @@ export class RegistrationPageComponent {
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get shippingCountry() {
+    return this.form.get('shippingAddress')?.get('country');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get shippingCity() {
     return this.form.get('shippingAddress')?.get('city');
   }
