@@ -40,7 +40,7 @@ export class RegistrationPageComponent {
   public isBillingShippingAddressDefault = signal(false);
 
   public form: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email, emailValidator]),
+    email: new FormControl('', [Validators.required, emailValidator]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),

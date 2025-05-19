@@ -38,23 +38,21 @@
     />
     @if (password && password.invalid && (password.dirty || !password.untouched)) {
       <div class="alert alert-validation">
-        <div>
-          @if (password.hasError('required')) {
-            Password is required
-          } @else if (password.hasError('noBigLetter')) {
-            Password must include uppercase latin letter
-          } @else if (password.hasError('noLowerLetter')) {
-            Password must include lowercase latin letter
-          } @else if (password.hasError('noDigit')) {
-            Password must include number
-          } @else if (password.hasError('noSpecialSymbol')) {
-            Password must include special symbol
-          } @else if (password.hasError('minlength')) {
-            Password must include minimum 8 characters
-          } @else if (password.hasError('invalidPasswordPattern')) {
-            Password is not valid
-          }
-        </div>
+        @if (password.hasError('required')) {
+          Password is required
+        } @else if (password.hasError('noBigLetter')) {
+          Password must include uppercase latin letter
+        } @else if (password.hasError('noLowerLetter')) {
+          Password must include lowercase latin letter
+        } @else if (password.hasError('noDigit')) {
+          Password must include number
+        } @else if (password.hasError('noSpecialSymbol')) {
+          Password must include special symbol
+        } @else if (password.hasError('minlength')) {
+          Password must include minimum 8 characters
+        } @else if (password.hasError('invalidPasswordPattern')) {
+          Password is not valid
+        }
       </div>
     }
   </div>
