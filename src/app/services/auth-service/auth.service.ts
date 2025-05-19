@@ -90,7 +90,7 @@ export class AuthService {
               },
             })
             .execute();
-        } else if (customerDraft.addresses[1].billingShippingDefault) {
+        } else if (customerDraft.addresses[1]?.billingShippingDefault) {
           const shippingResponse = await this.apiRoot
             .customers()
             .withId({ ID: customerResponse.body.customer.id })
@@ -137,7 +137,7 @@ export class AuthService {
               },
             })
             .execute();
-          if (customerDraft.addresses[1].billingDefault) {
+          if (customerDraft.addresses[1]?.billingDefault) {
             this.apiRoot
               .customers()
               .withId({ ID: shippingResponse.body.id })

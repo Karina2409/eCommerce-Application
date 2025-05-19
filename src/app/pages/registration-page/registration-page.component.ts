@@ -84,10 +84,19 @@ export class RegistrationPageComponent {
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;
+      const shippingAddresses = this.form.value.shippingAddresses;
+      const billingAddresses = this.form.value.billingAddresses;
+      const addresses = [];
+      if (shippingAddresses) {
+        addresses.push(shippingAddresses);
+      }
+      if (billingAddresses) {
+        addresses.push(billingAddresses);
+      }
       this.authService
         .signUp({
           ...this.customer,
-          addresses: [this.form.value.shippingAddresses, this.form.value.billingAddresses],
+          addresses: addresses,
           billingAddresses: [],
           shippingAddresses: [],
         })
@@ -124,18 +133,18 @@ export class RegistrationPageComponent {
   public toggleShippingBillingAddressDefault(): void {
     this.isShippingBillingAddressDefault.update((value) => !value);
     if (this.isShippingBillingAddressDefault()) {
-      this.form.get('billingAddress')?.disable();
+      this.form.get('billingAddresses')?.disable();
     } else {
-      this.form.get('billingAddress')?.enable();
+      this.form.get('billingAddresses')?.enable();
     }
   }
 
   public toggleBillingShippingAddressDefault(): void {
     this.isBillingShippingAddressDefault.update((value) => !value);
     if (this.isBillingShippingAddressDefault()) {
-      this.form.get('shippingAddress')?.disable();
+      this.form.get('shippingAddresses')?.disable();
     } else {
-      this.form.get('shippingAddress')?.enable();
+      this.form.get('shippingAddresses')?.enable();
     }
   }
 }
