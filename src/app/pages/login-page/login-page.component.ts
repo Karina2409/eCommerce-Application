@@ -5,6 +5,8 @@ import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { AuthService } from '@services/auth-service';
+import { emailValidator } from '@validators/email';
+import { passwordValidator } from '@validators/password';
 
 @Component({
   selector: 'app-login-page',
@@ -14,24 +16,16 @@ import { AuthService } from '@services/auth-service';
 })
 export class LoginPageComponent {
   constructor(private authService: AuthService) {}
+
   public router = inject(Router);
   public errorMessage = signal('');
   public isPasswordShown = signal(false);
   public form: FormGroup = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-      Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
-      Validators.pattern(/^\S+$/),
-    ]),
+    email: new FormControl('', [Validators.required, emailValidator]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(/[A-Z]/),
-      Validators.pattern(/[a-z]/),
-      Validators.pattern(/\d/),
-      Validators.pattern(/^\S+$/),
-      Validators.pattern(/[^A-Za-z0-9]/),
+      passwordValidator,
     ]),
   });
 
@@ -51,5 +45,15 @@ export class LoginPageComponent {
 
   public togglePassword(): void {
     this.isPasswordShown.update((value) => !value);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get email() {
+    return this.form.get('email');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get password() {
+    return this.form.get('password');
   }
 }

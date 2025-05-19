@@ -6,6 +6,9 @@ const eslintPluginPrettier = require('eslint-plugin-prettier/recommended');
 
 module.exports = tseslint.config(
   {
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**'],
+  },
+  {
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,

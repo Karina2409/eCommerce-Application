@@ -3,64 +3,236 @@
 
   <div class="login-form__container">
     <div class="login-form__info">
-      <label class="login-form__label">
-        Email:
+      <div class="form-group">
+        <label class="login-form__label" for="email">Email:</label>
         <input
           class="login-form__input"
           type="email"
+          id="email"
           placeholder="Enter email"
           formControlName="email"
+          [class.invalid]="email?.invalid && (email?.dirty || !email?.untouched)"
         />
-      </label>
+        @if (email && email.invalid && (email.dirty || !email.untouched)) {
+          <div class="alert alert-validation">
+            @if (email.hasError('required')) {
+              <div>Email is required</div>
+            } @else if (email.hasError('invalidEmailPattern')) {
+              <div>Invalid email format</div>
+            } @else if (email.hasError('containsWhitespace')) {
+              <div>Email shouldn't contain whitespaces</div>
+            }
+          </div>
+        }
+      </div>
 
-      <label class="login-form__label">
-        Password:
+      <div class="form-group">
+        <label class="login-form__label" for="password">Password:</label>
         <input
           class="login-form__input"
           [type]="isPasswordShown() ? 'text' : 'password'"
+          id="password"
           placeholder="Enter password"
           formControlName="password"
+          [class.invalid]="password?.invalid && (password?.dirty || !password?.untouched)"
         />
-      </label>
+        @if (password && password.invalid && (password.dirty || !password.untouched)) {
+          <div class="alert alert-validation">
+            @if (password.hasError('required')) {
+              Password is required
+            } @else if (password.hasError('noBigLetter')) {
+              Password must include uppercase latin letter
+            } @else if (password.hasError('noLowerLetter')) {
+              Password must include lowercase latin letter
+            } @else if (password.hasError('noDigit')) {
+              Password must include number
+            } @else if (password.hasError('noSpecialSymbol')) {
+              Password must include special symbol
+            } @else if (password.hasError('minlength')) {
+              Password must include minimum 8 characters
+            } @else if (password.hasError('invalidPasswordPattern')) {
+              Password is not valid
+            }
+          </div>
+        }
+      </div>
+
       <label class="login-form__checkbox">
         <input type="checkbox" (change)="togglePassword()" />
         Show Password
       </label>
-      <label class="login-form__label"
-        >First Name: <input formControlName="firstName" class="login-form__input"
-      /></label>
-      <label class="login-form__label"
-        >Last Name: <input formControlName="lastName" class="login-form__input"
-      /></label>
-      <label class="login-form__label"
-        >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
-      /></label>
+
+      <div class="form-group">
+        <label class="login-form__label" for="first-name">First Name:</label>
+        <input
+          formControlName="firstName"
+          class="login-form__input"
+          id="first-name"
+          placeholder="Enter first name"
+          [class.invalid]="firstName?.invalid && (firstName?.dirty || !firstName?.untouched)"
+        />
+        @if (firstName && firstName.invalid && (firstName.dirty || !firstName.untouched)) {
+          <div class="alert alert-validation">
+            @if (firstName.hasError('required')) {
+              First name is required
+            } @else if (firstName.hasError('pattern')) {
+              Must contain only latin letters
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="login-form__label" for="last-name">Last Name:</label>
+        <input
+          formControlName="lastName"
+          class="login-form__input"
+          id="last-name"
+          placeholder="Enter last name"
+          [class.invalid]="lastName?.invalid && (lastName?.dirty || !lastName?.untouched)"
+        />
+        @if (lastName && lastName.invalid && (lastName.dirty || !lastName.untouched)) {
+          <div class="alert alert-validation">
+            @if (lastName.hasError('required')) {
+              Last name is required
+            } @else if (lastName.hasError('pattern')) {
+              Must contain only latin letters
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="login-form__label" for="date">Date of birth: </label>
+        <input
+          type="date"
+          formControlName="dateOfBirth"
+          class="login-form__input"
+          id="date"
+          [attr.max]="maxDate"
+          [class.invalid]="dateOfBirth?.invalid && (dateOfBirth?.dirty || !dateOfBirth?.untouched)"
+        />
+        @if (dateOfBirth && dateOfBirth.invalid && (dateOfBirth.dirty || !dateOfBirth.untouched)) {
+          <div class="alert alert-validation">
+            @if (dateOfBirth.hasError('required')) {
+              Date of birth is required
+            }
+          </div>
+        }
+      </div>
     </div>
     @if (!isBillingShippingAddressDefault()) {
-      <form formGroupName="shippingAddress" class="address-form">
+      <form formGroupName="shippingAddress" class="address-form shipping">
         <fieldset class="address-form__address">
           <legend class="address-legend">Shipping address</legend>
-          <label class="login-form__label"
-            >Country:
-            <select formControlName="country" class="login-form__input">
+
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-country">Country:</label>
+            <select
+              formControlName="country"
+              class="login-form__input"
+              id="shipping-country"
+              [class.invalid]="
+                shippingCountry?.invalid && (shippingCountry?.dirty || !shippingCountry?.untouched)
+              "
+            >
               <option value="">Select</option>
               <option *ngFor="let country of countries | keyvalue" [value]="country.value">
                 {{ country.value }}
               </option>
-            </select></label
-          >
-          <label class="login-form__label"
-            >City: <input formControlName="city" class="login-form__input"
-          /></label>
+            </select>
+            @if (
+              shippingCountry &&
+              shippingCountry.invalid &&
+              (shippingCountry.dirty || !shippingCountry.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingCountry.hasError('required')) {
+                  Shipping address country is required
+                }
+              </div>
+            }
+          </div>
 
-          <label class="login-form__label"
-            >Street: <input formControlName="streetName" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-city">City: </label>
+            <input
+              formControlName="city"
+              class="login-form__input"
+              placeholder="Enter city"
+              id="shipping-city"
+              [class.invalid]="
+                shippingCity?.invalid && (shippingCity?.dirty || !shippingCity?.untouched)
+              "
+            />
+            @if (
+              shippingCity &&
+              shippingCity.invalid &&
+              (shippingCity.dirty || !shippingCity.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingCity.hasError('required')) {
+                  Shipping address city is required
+                } @else if (shippingCity.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
 
-          <label class="login-form__label"
-            >Postal Code: <input formControlName="postalCode" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-street">Street: </label>
+            <input
+              formControlName="streetName"
+              class="login-form__input"
+              id="shipping-street"
+              placeholder="Enter street"
+              [class.invalid]="
+                shippingStreet?.invalid && (shippingStreet?.dirty || !shippingStreet?.untouched)
+              "
+            />
+            @if (
+              shippingStreet &&
+              shippingStreet.invalid &&
+              (shippingStreet.dirty || !shippingStreet.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingStreet.hasError('required')) {
+                  Shipping address street is required
+                } @else if (shippingStreet.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-code">Postal Code: </label>
+            <input
+              formControlName="postalCode"
+              class="login-form__input"
+              id="shipping-code"
+              placeholder="Enter postal code"
+              [class.invalid]="
+                shippingCode?.invalid && (shippingCode?.dirty || !shippingCode?.untouched)
+              "
+            />
+            @if (
+              shippingCode &&
+              shippingCode.invalid &&
+              (shippingCode.dirty || !shippingCode.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingCode.hasError('required')) {
+                  Shipping postal code is required
+                } @else if (shippingCode.hasError('pattern')) {
+                  Invalid postal code format
+                }
+              </div>
+            }
+          </div>
         </fieldset>
+
         <label class="login-form__checkbox">
           <input
             type="checkbox"
@@ -69,6 +241,7 @@
           />
           Use as default shipping address
         </label>
+
         <label class="login-form__checkbox">
           <input
             type="checkbox"
@@ -80,29 +253,111 @@
       </form>
     }
     @if (!isShippingBillingAddressDefault()) {
-      <form formGroupName="billingAddress" class="address-form">
+      <form formGroupName="billingAddress" class="address-form billing">
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>
-          <label class="login-form__label"
-            >Country:
-            <select formControlName="country" class="login-form__input">
+
+          <div class="form-group">
+            <label class="login-form__label" for="billing-country">Country:</label>
+            <select
+              formControlName="country"
+              class="login-form__input"
+              id="billing-country"
+              [class.invalid]="
+                billingCountry?.invalid && (billingCountry?.dirty || !billingCountry?.untouched)
+              "
+            >
               <option value="">Select</option>
               <option *ngFor="let country of countries | keyvalue" [value]="country.value">
                 {{ country.value }}
               </option>
-            </select></label
-          >
-          <label class="login-form__label"
-            >City: <input formControlName="city" class="login-form__input"
-          /></label>
+            </select>
+            @if (
+              billingCountry &&
+              billingCountry.invalid &&
+              (billingCountry.dirty || !billingCountry.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingCountry.hasError('required')) {
+                  Billing address country is required
+                }
+              </div>
+            }
+          </div>
 
-          <label class="login-form__label"
-            >Street: <input formControlName="streetName" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="billing-city">City:</label>
+            <input
+              formControlName="city"
+              class="login-form__input"
+              id="billing-city"
+              placeholder="Enter city"
+              [class.invalid]="
+                billingCity?.invalid && (billingCity?.dirty || !billingCity?.untouched)
+              "
+            />
+            @if (
+              billingCity && billingCity.invalid && (billingCity.dirty || !billingCity.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingCity.hasError('required')) {
+                  Billing address city is required
+                } @else if (billingCity.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
 
-          <label class="login-form__label"
-            >Postal Code: <input formControlName="postalCode" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="billing-street">Street: </label>
+            <input
+              formControlName="streetName"
+              class="login-form__input"
+              id="billing-street"
+              placeholder="Enter street"
+              [class.invalid]="
+                billingStreet?.invalid && (billingStreet?.dirty || !billingStreet?.untouched)
+              "
+            />
+            @if (
+              billingStreet &&
+              billingStreet.invalid &&
+              (billingStreet.dirty || !billingStreet.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingStreet.hasError('required')) {
+                  Billing address street is required
+                } @else if (billingStreet.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="login-form__label" for="billing-code">Postal Code: </label>
+            <input
+              formControlName="postalCode"
+              class="login-form__input"
+              id="billing-code"
+              placeholder="Enter postal code"
+              [class.invalid]="
+                billingCode?.invalid && (billingCode?.dirty || !billingCode?.untouched)
+              "
+            />
+            @if (
+              billingCode && billingCode.invalid && (billingCode.dirty || !billingCode.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingCode.hasError('required')) {
+                  Billing postal code is required
+                } @else if (billingCode.hasError('pattern')) {
+                  Invalid postal code format
+                }
+              </div>
+            }
+          </div>
         </fieldset>
         <label class="login-form__checkbox">
           <input
@@ -136,134 +391,3 @@
     {{ errorMessage() }}
   </div>
 </form>
-
-<div class="validation-container">
-  <div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
-    <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
-    <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
-    <small *ngIf="form.get('email')?.errors?.['pattern']">
-      No whitespace or invalid email domain.</small
-    >
-  </div>
-  <div
-    class="form-validation"
-    *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
-  >
-    <small *ngIf="form.get('password')?.errors?.['required']">Password is required.</small>
-    <small *ngIf="form.get('password')?.errors?.['minlength']"
-      >Password must be at least 8 characters.</small
-    >
-    <small *ngIf="form.get('password')?.errors?.['pattern']">
-      Password must include uppercase, lowercase, number and special character latin alphabet.
-    </small>
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
-  >
-    <small *ngIf="form.get('firstName')?.errors?.['required']">First name is required.</small>
-    <small *ngIf="form.get('firstName')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in First name.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
-  >
-    <small *ngIf="form.get('lastName')?.errors?.['required']">Last name is required.</small>
-    <small *ngIf="form.get('lastName')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in Last name.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.invalid"
-  >
-    <small *ngIf="form.get('dateOfBirth')?.errors?.['required']">Date of birdth is required.</small>
-    <small *ngIf="form.get('dateOfBirth')?.errors?.['tooYoung']">You must be at least 13.</small>
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('shippingAddress.country')?.invalid && form.get('country')?.touched"
-  >
-    <small>Country for shipping address is required.</small>
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('shippingAddress.streetNamet')?.invalid &&
-      form.get('shippingAddress.streetName')?.touched
-    "
-  >
-    <small *ngIf="form.get('shippingAddress.streetName')?.errors?.['required']"
-      >Shipping address street is required.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('shippingAddress.city')?.invalid && form.get('shippingAddress.city')?.touched"
-  >
-    <small *ngIf="form.get('shippingAddress.city')?.errors?.['required']"
-      >Shipping address city is required.</small
-    >
-    <small *ngIf="form.get('shippingAddress.city')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in shipping address.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('shippingAddress.postalCode')?.invalid &&
-      form.get('shippingAddress.postalCode')?.touched
-    "
-  >
-    <small>Invalid postal code format.</small>
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('billingAddress.country')?.invalid && form.get('country')?.touched"
-  >
-    <small>Country for billing address is required.</small>
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('billingAddress.streetName')?.invalid &&
-      form.get('billingAddress.streetName')?.touched
-    "
-  >
-    <small *ngIf="form.get('billingAddress.streetName')?.errors?.['required']"
-      >Billing address street is required.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('billingAddress.city')?.invalid && form.get('billingAddress.city')?.touched"
-  >
-    <small *ngIf="form.get('billingAddress.city')?.errors?.['required']"
-      >Billing address city is required.</small
-    >
-    <small *ngIf="form.get('billingAddress.city')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in shipping address.</small
-    >
-  </div>
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('billingAddress.postalCode')?.invalid &&
-      form.get('billingAddress.postalCode')?.touched
-    "
-  >
-    <small>Invalid postal code format.</small>
-  </div>
-</div>
