@@ -180,9 +180,31 @@
             }
           </div>
 
-          <label class="login-form__label"
-            >Street: <input formControlName="streetName" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-street">Street: </label>
+            <input
+              formControlName="streetName"
+              class="login-form__input"
+              id="shipping-street"
+              placeholder="Enter street"
+              [class.invalid]="
+                shippingStreet?.invalid && (shippingStreet?.dirty || !shippingStreet?.untouched)
+              "
+            />
+            @if (
+              shippingStreet &&
+              shippingStreet.invalid &&
+              (shippingStreet.dirty || !shippingStreet.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingStreet.hasError('required')) {
+                  Shipping address street is required
+                } @else if (shippingStreet.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
 
           <label class="login-form__label"
             >Postal Code: <input formControlName="postalCode" class="login-form__input"
@@ -265,18 +287,6 @@
 </form>
 
 <div class="validation-container">
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('shippingAddress.streetNamet')?.invalid &&
-      form.get('shippingAddress.streetName')?.touched
-    "
-  >
-    <small *ngIf="form.get('shippingAddress.streetName')?.errors?.['required']"
-      >Shipping address street is required.</small
-    >
-  </div>
-
   <div
     class="form-validation"
     *ngIf="
