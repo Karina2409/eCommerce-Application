@@ -1,42 +1,57 @@
 <form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
   <h1>Log In</h1>
 
-  <label class="login-form__label">
+  <div class="form-group">
+    <label class="login-form__label" for="email">Email</label>
     <input
       class="login-form__input"
+      id="email"
       type="email"
       placeholder="Enter email"
       formControlName="email"
+      required
     />
-  </label>
+    @if (email && email.invalid && (email.dirty || !email.untouched)) {
+      <div class="alert alert-danger">
+        @if (email.hasError('required')) {
+          <div>Email is required.</div>
+        } @else if (email.hasError('invalidEmailPattern')) {
+          <div>Invalid email format.</div>
+        } @else if (email.hasError('containsWhitespace')) {
+          <div>Email shouldn't contain whitespaces.</div>
+        }
+      </div>
+    }
+  </div>
 
-  <label class="login-form__label">
+  <div class="form-group">
+    <label class="login-form__label" for="password">Password</label>
     <input
       class="login-form__input"
+      id="password"
       [type]="isPasswordShown() ? 'text' : 'password'"
       placeholder="Enter password"
       formControlName="password"
+      required
     />
-  </label>
+  </div>
+
   <label class="login-form__checkbox">
     <input type="checkbox" (change)="togglePassword()" />
     Show Password
   </label>
+
   <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
     Log In
   </button>
+
   <button class="login-form__button" mat-flat-button type="button" routerLink="/main">
     Cancel
   </button>
+
   <span class="login-form__link"> Don't have an account? <a href="/registration">Register</a></span>
 </form>
-<div class="form-validation" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
-  <small *ngIf="form.get('email')?.errors?.['required']"> Email is required.</small>
-  <small *ngIf="form.get('email')?.errors?.['email']"> Invalid email format.</small>
-  <small *ngIf="form.get('email')?.errors?.['pattern']">
-    No whitespace or invalid email domain.</small
-  >
-</div>
+
 <div class="form-validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
   <small *ngIf="form.get('password')?.errors?.['required']">Password is required</small>
   <small *ngIf="form.get('password')?.errors?.['minlength']"
