@@ -9,6 +9,8 @@ import { signal } from '@angular/core';
 import { minAgeValidator } from '@validators/age';
 import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
+import { emailValidator } from '@validators/email';
+import { passwordValidator } from '@validators/password';
 
 @Component({
   selector: 'app-registration-page',
@@ -18,6 +20,7 @@ import { CustomerDraft } from '@models/types';
 })
 export class RegistrationPageComponent {
   constructor(private authService: AuthService) {}
+
   public customer: CustomerDraft = {
     email: '',
     addresses: [],
@@ -37,20 +40,11 @@ export class RegistrationPageComponent {
   public isBillingShippingAddressDefault = signal(false);
 
   public form: FormGroup = new FormGroup({
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-      Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
-      Validators.pattern(/^\S+$/),
-    ]),
+    email: new FormControl('', [Validators.required, Validators.email, emailValidator]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(/[A-Z]/),
-      Validators.pattern(/[a-z]/),
-      Validators.pattern(/\d/),
-      Validators.pattern(/^\S+$/),
-      Validators.pattern(/[^A-Za-z0-9]/),
+      passwordValidator,
     ]),
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
@@ -146,5 +140,15 @@ export class RegistrationPageComponent {
     } else {
       this.form.get('shippingAddress')?.enable();
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get email() {
+    return this.form.get('email');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get password() {
+    return this.form.get('password');
   }
 }

@@ -1,3 +1,5 @@
+@import '../login-registration';
+
 :host {
   display: flex;
   flex-direction: column;
@@ -27,44 +29,6 @@
   }
 }
 
-.login-form_shadow {
-  box-shadow:
-    0 8px 16px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.login-form__label {
-  color: var(--secondary-color);
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.login-form__input {
-  color: var(--secondary-color);
-  padding: 0.5rem;
-  background-color: var(--primary-color);
-  border-radius: 0.8rem;
-  border: 0.01rem solid var(--secondary-color);
-  &::placeholder {
-    color: var(--secondary-text);
-  }
-  &:focus {
-    outline: none;
-  }
-}
-
-.login-form__checkbox {
-  display: flex;
-  color: var(--secondary-color);
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  align-self: flex-start;
-}
-
 .address-form {
   display: flex;
   flex-direction: column;
@@ -76,15 +40,6 @@
   display: flex;
   width: 50%;
   flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.form-validation {
-  font-size: 1.2rem;
-  color: var(--secondary-color);
-  display: grid;
-  grid-template-columns: 1fr;
-  text-align: center;
   gap: 1rem;
 }
 
@@ -108,10 +63,6 @@
   gap: 1rem;
 }
 
-.login-form__link {
-  color: var(--secondary-color);
-}
-
 .address-form__address {
   padding: 0.5rem;
   display: flex;
@@ -122,9 +73,4 @@
 .address-legend {
   color: var(--secondary-color);
   text-align: center;
-}
-
-.error-message {
-  color: red;
-  margin-top: 10px;
 }
