@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
@@ -20,12 +19,13 @@ import { passwordValidator } from '@validators/password';
 export class RegistrationPageComponent {
   public maxDate: string;
 
-  constructor(private authService: AuthService) {
-    const today = new Date();
-    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
-
-    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
-  }
+  public router = inject(Router);
+  public errorMessage = signal('');
+  public isPasswordShown = signal(false);
+  public isShippingAddressDefault = signal(false);
+  public isBillingAddressDefault = signal(false);
+  public isShippingBillingAddressDefault = signal(false);
+  public isBillingShippingAddressDefault = signal(false);
 
   public customer: CustomerDraft = {
     email: '',
@@ -37,13 +37,6 @@ export class RegistrationPageComponent {
     password: '',
     shippingAddresses: [],
   };
-  public router = inject(Router);
-  public errorMessage = signal('');
-  public isPasswordShown = signal(false);
-  public isShippingAddressDefault = signal(false);
-  public isBillingAddressDefault = signal(false);
-  public isShippingBillingAddressDefault = signal(false);
-  public isBillingShippingAddressDefault = signal(false);
 
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, emailValidator]),
@@ -80,6 +73,38 @@ export class RegistrationPageComponent {
   });
 
   protected readonly countries = Countries;
+
+  constructor(private authService: AuthService) {
+    const today = new Date();
+    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+
+    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get email() {
+    return this.form.get('email');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get password() {
+    return this.form.get('password');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get firstName() {
+    return this.form.get('firstName');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get lastName() {
+    return this.form.get('lastName');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get dateOfBirth() {
+    return this.form.get('dateOfBirth');
+  }
 
   public onSubmitAction(): void {
     if (this.form.valid) {
@@ -146,30 +171,5 @@ export class RegistrationPageComponent {
     } else {
       this.form.get('shippingAddress')?.enable();
     }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  public get email() {
-    return this.form.get('email');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  public get password() {
-    return this.form.get('password');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  public get firstName() {
-    return this.form.get('firstName');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  public get lastName() {
-    return this.form.get('lastName');
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  public get dateOfBirth() {
-    return this.form.get('dateOfBirth');
   }
 }
