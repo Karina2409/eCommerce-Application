@@ -36,7 +36,7 @@
         >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
       /></label>
     </div>
-    @if (!isShippingBillingAddressDefault()) {
+    @if (!isBillingShippingAddressDefault()) {
       <form formGroupName="shippingAddresses" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Shipping address</legend>
@@ -79,8 +79,7 @@
         </label>
       </form>
     }
-
-    @if (!isBillingShippingAddressDefault()) {
+    @if (!isShippingBillingAddressDefault()) {
       <form formGroupName="billingAddresses" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>

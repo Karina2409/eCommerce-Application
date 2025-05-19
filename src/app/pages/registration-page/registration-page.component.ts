@@ -121,7 +121,7 @@ export class RegistrationPageComponent {
     this.isShippingAddressDefault.update((value) => !value);
   }
 
-  public toggleBillingShippingAddressDefault(): void {
+  public toggleShippingBillingAddressDefault(): void {
     this.isShippingBillingAddressDefault.update((value) => !value);
     if (this.isShippingBillingAddressDefault()) {
       this.form.get('billingAddress')?.disable();
@@ -130,7 +130,7 @@ export class RegistrationPageComponent {
     }
   }
 
-  public toggleShippingBillingAddressDefault(): void {
+  public toggleBillingShippingAddressDefault(): void {
     this.isBillingShippingAddressDefault.update((value) => !value);
     if (this.isBillingShippingAddressDefault()) {
       this.form.get('shippingAddress')?.disable();
