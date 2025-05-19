@@ -106,6 +106,11 @@ export class RegistrationPageComponent {
     return this.form.get('dateOfBirth');
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get shippingCity() {
+    return this.form.get('shippingAddress')?.get('city');
+  }
+
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;

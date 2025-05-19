@@ -132,11 +132,34 @@
               <option *ngFor="let country of countries | keyvalue" [value]="country.value">
                 {{ country.value }}
               </option>
-            </select></label
-          >
-          <label class="login-form__label"
-            >City: <input formControlName="city" class="login-form__input"
-          /></label>
+            </select>
+          </label>
+
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-city">City: </label>
+            <input
+              formControlName="city"
+              class="login-form__input"
+              placeholder="Enter city"
+              id="shipping-city"
+              [class.invalid]="
+                shippingCity?.invalid && (shippingCity?.dirty || !shippingCity?.untouched)
+              "
+            />
+            @if (
+              shippingCity &&
+              shippingCity.invalid &&
+              (shippingCity.dirty || !shippingCity.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingCity.hasError('required')) {
+                  Shipping address city is required
+                } @else if (shippingCity.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
 
           <label class="login-form__label"
             >Street: <input formControlName="streetName" class="login-form__input"
@@ -239,18 +262,6 @@
   >
     <small *ngIf="form.get('shippingAddress.streetName')?.errors?.['required']"
       >Shipping address street is required.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('shippingAddress.city')?.invalid && form.get('shippingAddress.city')?.touched"
-  >
-    <small *ngIf="form.get('shippingAddress.city')?.errors?.['required']"
-      >Shipping address city is required.</small
-    >
-    <small *ngIf="form.get('shippingAddress.city')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in shipping address.</small
     >
   </div>
 
