@@ -129,6 +129,26 @@ export class RegistrationPageComponent {
     return this.form.get('shippingAddress')?.get('postalCode');
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get billingCountry() {
+    return this.form.get('billingAddress')?.get('country');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get billingCity() {
+    return this.form.get('billingAddress')?.get('city');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get billingStreet() {
+    return this.form.get('billingAddress')?.get('streetName');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get billingCode() {
+    return this.form.get('billingAddress')?.get('postalCode');
+  }
+
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;

@@ -232,6 +232,7 @@
             }
           </div>
         </fieldset>
+
         <label class="login-form__checkbox">
           <input
             type="checkbox"
@@ -240,6 +241,7 @@
           />
           Use as default shipping address
         </label>
+
         <label class="login-form__checkbox">
           <input
             type="checkbox"
@@ -254,15 +256,35 @@
       <form formGroupName="billingAddress" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>
-          <label class="login-form__label"
-            >Country:
-            <select formControlName="country" class="login-form__input">
+
+          <div class="form-group">
+            <label class="login-form__label" for="billing-country">Country:</label>
+            <select
+              formControlName="country"
+              class="login-form__input"
+              id="billing-country"
+              [class.invalid]="
+                billingCountry?.invalid && (billingCountry?.dirty || !billingCountry?.untouched)
+              "
+            >
               <option value="">Select</option>
               <option *ngFor="let country of countries | keyvalue" [value]="country.value">
                 {{ country.value }}
               </option>
-            </select></label
-          >
+            </select>
+            @if (
+              billingCountry &&
+              billingCountry.invalid &&
+              (billingCountry.dirty || !billingCountry.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingCountry.hasError('required')) {
+                  Billing address country is required
+                }
+              </div>
+            }
+          </div>
+
           <label class="login-form__label"
             >City: <input formControlName="city" class="login-form__input"
           /></label>
