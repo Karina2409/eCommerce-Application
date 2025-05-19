@@ -64,7 +64,10 @@ export class RegistrationPageComponent {
     }),
     billingAddress: new FormGroup({
       country: new FormControl('', [Validators.required]),
-      streetName: new FormControl('', [Validators.required]),
+      streetName: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
+      ]),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
       postalCode: new FormControl('', [
         Validators.required,

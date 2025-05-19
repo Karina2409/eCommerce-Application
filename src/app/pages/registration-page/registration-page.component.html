@@ -285,17 +285,55 @@
             }
           </div>
 
-          <label class="login-form__label"
-            >City: <input formControlName="city" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="billing-city">City:</label>
+            <input
+              formControlName="city"
+              class="login-form__input"
+              id="billing-city"
+              placeholder="Enter city"
+              [class.invalid]="
+                billingCity?.invalid && (billingCity?.dirty || !billingCity?.untouched)
+              "
+            />
+            @if (
+              billingCity && billingCity.invalid && (billingCity.dirty || !billingCity.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingCity.hasError('required')) {
+                  Billing address city is required
+                } @else if (billingCity.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
+          </div>
 
-          <label class="login-form__label"
-            >Street: <input formControlName="streetName" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="billing-street">Street: </label>
+            <input
+              formControlName="streetName"
+              class="login-form__input"
+              id="billing-street"
+              placeholder="Enter street"
+              [class.invalid]="
+                billingStreet?.invalid && (billingStreet?.dirty || !billingStreet?.untouched)
+              "
+            />
+          </div>
 
-          <label class="login-form__label"
-            >Postal Code: <input formControlName="postalCode" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="billing-code">Postal Code: </label>
+            <input
+              formControlName="postalCode"
+              class="login-form__input"
+              id="billing-code"
+              placeholder="Enter postal code"
+              [class.invalid]="
+                billingCode?.invalid && (billingCode?.dirty || !billingCode?.untouched)
+              "
+            />
+          </div>
         </fieldset>
         <label class="login-form__checkbox">
           <input
@@ -329,45 +367,3 @@
     {{ errorMessage() }}
   </div>
 </form>
-
-<div class="validation-container">
-  <div
-    class="form-validation"
-    *ngIf="form.get('billingAddress.country')?.invalid && form.get('country')?.touched"
-  >
-    <small>Country for billing address is required.</small>
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('billingAddress.streetName')?.invalid &&
-      form.get('billingAddress.streetName')?.touched
-    "
-  >
-    <small *ngIf="form.get('billingAddress.streetName')?.errors?.['required']"
-      >Billing address street is required.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('billingAddress.city')?.invalid && form.get('billingAddress.city')?.touched"
-  >
-    <small *ngIf="form.get('billingAddress.city')?.errors?.['required']"
-      >Billing address city is required.</small
-    >
-    <small *ngIf="form.get('billingAddress.city')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in shipping address.</small
-    >
-  </div>
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('billingAddress.postalCode')?.invalid &&
-      form.get('billingAddress.postalCode')?.touched
-    "
-  >
-    <small>Invalid postal code format.</small>
-  </div>
-</div>
