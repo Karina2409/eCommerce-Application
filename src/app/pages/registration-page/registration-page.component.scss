@@ -44,18 +44,44 @@
 }
 
 .login-form__container {
-  display: flex;
-  flex-direction: row;
+  display: grid;
   gap: 1rem;
-  @media (max-width: 900px) {
-    flex-direction: column;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'info shipping billing';
+
+  @media screen and (max-width: 980px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'info info'
+      'shipping billing';
   }
+
+  @media screen and (max-width: 730px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'info'
+      'shipping'
+      'billing';
+  }
+}
+
+.billing {
+  grid-area: billing;
+}
+
+.shipping {
+  grid-area: shipping;
 }
 
 .login-form__info {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  max-width: 290px;
+  grid-area: info;
+  @media screen and (max-width: 980px) {
+    max-width: 1000px;
+  }
 }
 
 .login-form__button-container {
