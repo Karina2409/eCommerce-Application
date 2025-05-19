@@ -327,7 +327,7 @@
             ) {
               <div class="alert alert-validation">
                 @if (billingStreet.hasError('required')) {
-                  Billing address city is required
+                  Billing address street is required
                 } @else if (billingStreet.hasError('pattern')) {
                   Must contain only latin letters
                 }
@@ -346,6 +346,17 @@
                 billingCode?.invalid && (billingCode?.dirty || !billingCode?.untouched)
               "
             />
+            @if (
+              billingCode && billingCode.invalid && (billingCode.dirty || !billingCode.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingCode.hasError('required')) {
+                  Billing postal code is required
+                } @else if (billingCode.hasError('pattern')) {
+                  Invalid postal code format
+                }
+              </div>
+            }
           </div>
         </fieldset>
         <label class="login-form__checkbox">
