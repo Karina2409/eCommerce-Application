@@ -56,13 +56,32 @@
           </div>
         }
       </div>
+
       <label class="login-form__checkbox">
         <input type="checkbox" (change)="togglePassword()" />
         Show Password
       </label>
-      <label class="login-form__label"
-        >First Name: <input formControlName="firstName" class="login-form__input"
-      /></label>
+
+      <div class="form-group">
+        <label class="login-form__label" for="first-name">First Name:</label>
+        <input
+          formControlName="firstName"
+          class="login-form__input"
+          id="first-name"
+          placeholder="Enter first name"
+          [class.invalid]="firstName?.invalid && (firstName?.dirty || !firstName?.untouched)"
+        />
+        @if (firstName && firstName.invalid && (firstName.dirty || !firstName.untouched)) {
+          <div class="alert alert-validation">
+            @if (firstName.hasError('required')) {
+              First name is required
+            } @else if (firstName.hasError('pattern')) {
+              Must contain only latin letters
+            }
+          </div>
+        }
+      </div>
+
       <label class="login-form__label"
         >Last Name: <input formControlName="lastName" class="login-form__input"
       /></label>
@@ -172,16 +191,6 @@
 </form>
 
 <div class="validation-container">
-  <div
-    class="form-validation"
-    *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid"
-  >
-    <small *ngIf="form.get('firstName')?.errors?.['required']">First name is required.</small>
-    <small *ngIf="form.get('firstName')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in First name.</small
-    >
-  </div>
-
   <div
     class="form-validation"
     *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"

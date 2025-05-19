@@ -151,4 +151,9 @@ export class RegistrationPageComponent {
   public get password() {
     return this.form.get('password');
   }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get firstName() {
+    return this.form.get('firstName');
+  }
 }
