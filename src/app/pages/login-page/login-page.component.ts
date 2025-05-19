@@ -6,6 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgIf } from '@angular/common';
 import { AuthService } from '@services/auth-service';
 import { emailValidator } from '@validators/email';
+import { validatePassword } from '@validators/password';
 
 @Component({
   selector: 'app-login-page',
@@ -15,16 +16,13 @@ import { emailValidator } from '@validators/email';
 })
 export class LoginPageComponent {
   constructor(private authService: AuthService) {}
+
   public router = inject(Router);
   public errorMessage = signal('');
   public isPasswordShown = signal(false);
   public form: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, emailValidator]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.pattern(/[^A-Za-z0-9]/),
-    ]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8), validatePassword]),
   });
 
   public onSubmitAction(): void {

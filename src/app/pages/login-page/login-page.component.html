@@ -38,11 +38,23 @@
     />
     @if (password && password.invalid && (password.dirty || !password.untouched)) {
       <div class="alert alert-validation">
-        @if (password.hasError('required')) {
-          <div>Password is required</div>
-        } @else if (password.hasError('minLength')) {
-          <div>Minimum 8 characters</div>
-        }
+        <div>
+          @if (password.hasError('required')) {
+            Password is required
+          } @else if (password.hasError('noBigLetter')) {
+            Password must include uppercase latin letter
+          } @else if (password.hasError('noLowerLetter')) {
+            Password must include lowercase latin letter
+          } @else if (password.hasError('noDigit')) {
+            Password must include number
+          } @else if (password.hasError('noSpecialSymbol')) {
+            Password must include special symbol
+          } @else if (password.hasError('minlength')) {
+            Password must include minimum 8 characters
+          } @else if (password.hasError('invalidPasswordPattern')) {
+            Password is not valid
+          }
+        </div>
       </div>
     }
   </div>
@@ -63,11 +75,6 @@
   <span class="login-form__link"> Don't have an account? <a href="/registration">Register</a></span>
 </form>
 
-<div class="form-validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-  <small *ngIf="form.get('password')?.errors?.['pattern']">
-    Password must include uppercase, lowercase, number and special character latin alphabet.
-  </small>
-</div>
 <div *ngIf="errorMessage" class="error-message">
   {{ errorMessage() }}
 </div>

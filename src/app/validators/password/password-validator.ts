@@ -11,7 +11,7 @@ export const validatePassword: ValidatorFn = (
   const bigLetterPattern = /[A-Z]/;
   const lowerLetterPattern = /[a-z]/;
   const digitPattern = /\d/;
-  const specialSymbolPattern = /^\S+$/;
+  const specialSymbolPattern = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/;
   const allowedPasswordPattern = /^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/;
 
   if (!bigLetterPattern.test(value)) {
