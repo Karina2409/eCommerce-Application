@@ -102,9 +102,24 @@
         }
       </div>
 
-      <label class="login-form__label"
-        >Date of birth: <input type="date" formControlName="dateOfBirth" class="login-form__input"
-      /></label>
+      <div class="form-group">
+        <label class="login-form__label" for="date">Date of birth: </label>
+        <input
+          type="date"
+          formControlName="dateOfBirth"
+          class="login-form__input"
+          id="date"
+          [attr.max]="maxDate"
+          [class.invalid]="dateOfBirth?.invalid && (dateOfBirth?.dirty || !dateOfBirth?.untouched)"
+        />
+        @if (lastName && lastName.invalid && (lastName.dirty || !lastName.untouched)) {
+          <div class="alert alert-validation">
+            @if (lastName.hasError('required')) {
+              Date of birth is required
+            }
+          </div>
+        }
+      </div>
     </div>
     @if (!isBillingShippingAddressDefault()) {
       <form formGroupName="shippingAddress" class="address-form">
@@ -208,24 +223,6 @@
 </form>
 
 <div class="validation-container">
-  <div
-    class="form-validation"
-    *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid"
-  >
-    <small *ngIf="form.get('lastName')?.errors?.['required']">Last name is required.</small>
-    <small *ngIf="form.get('lastName')?.errors?.['pattern']"
-      >Only letters latin alphabet allowed in Last name.</small
-    >
-  </div>
-
-  <div
-    class="form-validation"
-    *ngIf="form.get('dateOfBirth')?.touched && form.get('dateOfBirth')?.invalid"
-  >
-    <small *ngIf="form.get('dateOfBirth')?.errors?.['required']">Date of birdth is required.</small>
-    <small *ngIf="form.get('dateOfBirth')?.errors?.['tooYoung']">You must be at least 13.</small>
-  </div>
-
   <div
     class="form-validation"
     *ngIf="form.get('shippingAddress.country')?.invalid && form.get('country')?.touched"

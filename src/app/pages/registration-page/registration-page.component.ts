@@ -6,7 +6,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { Countries } from '@models/enums';
 import { signal } from '@angular/core';
-import { minAgeValidator } from '@validators/age';
 import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
 import { emailValidator } from '@validators/email';
@@ -19,7 +18,14 @@ import { passwordValidator } from '@validators/password';
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent {
-  constructor(private authService: AuthService) {}
+  public maxDate: string;
+
+  constructor(private authService: AuthService) {
+    const today = new Date();
+    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+
+    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
+  }
 
   public customer: CustomerDraft = {
     email: '',
@@ -48,7 +54,7 @@ export class RegistrationPageComponent {
     ]),
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
-    dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
+    dateOfBirth: new FormControl('', [Validators.required]),
     shippingAddress: new FormGroup({
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
@@ -160,5 +166,10 @@ export class RegistrationPageComponent {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get lastName() {
     return this.form.get('lastName');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get dateOfBirth() {
+    return this.form.get('dateOfBirth');
   }
 }
