@@ -23,10 +23,6 @@ export class LoginPageComponent {
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
-      Validators.pattern(/[A-Z]/),
-      Validators.pattern(/[a-z]/),
-      Validators.pattern(/\d/),
-      Validators.pattern(/^\S+$/),
       Validators.pattern(/[^A-Za-z0-9]/),
     ]),
   });

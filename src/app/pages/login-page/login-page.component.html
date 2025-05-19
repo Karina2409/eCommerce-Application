@@ -15,11 +15,11 @@
     @if (email && email.invalid && (email.dirty || !email.untouched)) {
       <div class="alert alert-validation">
         @if (email.hasError('required')) {
-          <div>Email is required.</div>
+          <div>Email is required</div>
         } @else if (email.hasError('invalidEmailPattern')) {
-          <div>Invalid email format.</div>
+          <div>Invalid email format</div>
         } @else if (email.hasError('containsWhitespace')) {
-          <div>Email shouldn't contain whitespaces.</div>
+          <div>Email shouldn't contain whitespaces</div>
         }
       </div>
     }
@@ -33,8 +33,18 @@
       [type]="isPasswordShown() ? 'text' : 'password'"
       placeholder="Enter password"
       formControlName="password"
+      [class.invalid]="password?.invalid && (password?.dirty || !password?.untouched)"
       required
     />
+    @if (password && password.invalid && (password.dirty || !password.untouched)) {
+      <div class="alert alert-validation">
+        @if (password.hasError('required')) {
+          <div>Password is required</div>
+        } @else if (password.hasError('minLength')) {
+          <div>Minimum 8 characters</div>
+        }
+      </div>
+    }
   </div>
 
   <label class="login-form__checkbox">
@@ -54,10 +64,6 @@
 </form>
 
 <div class="form-validation" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
-  <small *ngIf="form.get('password')?.errors?.['required']">Password is required</small>
-  <small *ngIf="form.get('password')?.errors?.['minlength']"
-    >Password must be at least 8 characters latin alphabet</small
-  >
   <small *ngIf="form.get('password')?.errors?.['pattern']">
     Password must include uppercase, lowercase, number and special character latin alphabet.
   </small>
