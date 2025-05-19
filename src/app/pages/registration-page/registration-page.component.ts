@@ -55,7 +55,7 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    shippingAddresses: new FormGroup({
+    shippingAddress: new FormGroup({
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
@@ -66,7 +66,7 @@ export class RegistrationPageComponent {
       shippingDefault: new FormControl(''),
       shippingBillingDefault: new FormControl(''),
     }),
-    billingAddresses: new FormGroup({
+    billingAddress: new FormGroup({
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', Validators.required),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
@@ -84,14 +84,14 @@ export class RegistrationPageComponent {
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;
-      const shippingAddresses = this.form.value.shippingAddresses;
-      const billingAddresses = this.form.value.billingAddresses;
+      const shippingAddress = this.form.value.shippingAddress;
+      const billingAddress = this.form.value.billingAddress;
       const addresses = [];
-      if (shippingAddresses) {
-        addresses.push(shippingAddresses);
+      if (shippingAddress) {
+        addresses.push(shippingAddress);
       }
-      if (billingAddresses) {
-        addresses.push(billingAddresses);
+      if (billingAddress) {
+        addresses.push(billingAddress);
       }
       this.authService
         .signUp({
@@ -133,18 +133,18 @@ export class RegistrationPageComponent {
   public toggleShippingBillingAddressDefault(): void {
     this.isShippingBillingAddressDefault.update((value) => !value);
     if (this.isShippingBillingAddressDefault()) {
-      this.form.get('billingAddresses')?.disable();
+      this.form.get('billingAddress')?.disable();
     } else {
-      this.form.get('billingAddresses')?.enable();
+      this.form.get('billingAddress')?.enable();
     }
   }
 
   public toggleBillingShippingAddressDefault(): void {
     this.isBillingShippingAddressDefault.update((value) => !value);
     if (this.isBillingShippingAddressDefault()) {
-      this.form.get('shippingAddresses')?.disable();
+      this.form.get('shippingAddress')?.disable();
     } else {
-      this.form.get('shippingAddresses')?.enable();
+      this.form.get('shippingAddress')?.enable();
     }
   }
 }

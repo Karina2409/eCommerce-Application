@@ -37,7 +37,7 @@
       /></label>
     </div>
     @if (!isBillingShippingAddressDefault()) {
-      <form formGroupName="shippingAddresses" class="address-form">
+      <form formGroupName="shippingAddress" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Shipping address</legend>
           <label class="login-form__label"
@@ -80,7 +80,7 @@
       </form>
     }
     @if (!isShippingBillingAddressDefault()) {
-      <form formGroupName="billingAddresses" class="address-form">
+      <form formGroupName="billingAddress" class="address-form">
         <fieldset class="address-form__address">
           <legend class="address-legend">Billing address</legend>
           <label class="login-form__label"

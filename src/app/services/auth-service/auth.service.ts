@@ -90,7 +90,7 @@ export class AuthService {
               },
             })
             .execute();
-        } else if (customerDraft.addresses[1]?.billingShippingDefault) {
+        } else if (customerDraft.addresses[0]?.billingShippingDefault) {
           const shippingResponse = await this.apiRoot
             .customers()
             .withId({ ID: customerResponse.body.customer.id })
@@ -100,7 +100,7 @@ export class AuthService {
                 actions: [
                   {
                     action: 'setDefaultShippingAddress',
-                    addressId: customerResponse.body.customer.addresses[1].id,
+                    addressId: customerResponse.body.customer.addresses[0].id,
                   },
                 ],
               },
@@ -115,7 +115,7 @@ export class AuthService {
                 actions: [
                   {
                     action: 'setDefaultBillingAddress',
-                    addressId: shippingResponse.body.addresses[1].id,
+                    addressId: shippingResponse.body.addresses[0].id,
                   },
                 ],
               },
