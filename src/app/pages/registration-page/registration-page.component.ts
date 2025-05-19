@@ -52,7 +52,7 @@ export class RegistrationPageComponent {
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', [
         Validators.required,
-        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]+$/),
+        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
       ]),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
       postalCode: new FormControl('', [
@@ -64,7 +64,7 @@ export class RegistrationPageComponent {
     }),
     billingAddress: new FormGroup({
       country: new FormControl('', [Validators.required]),
-      streetName: new FormControl('', Validators.required),
+      streetName: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
       postalCode: new FormControl('', [
         Validators.required,
@@ -122,6 +122,11 @@ export class RegistrationPageComponent {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get shippingStreet() {
     return this.form.get('shippingAddress')?.get('streetName');
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  public get shippingCode() {
+    return this.form.get('shippingAddress')?.get('postalCode');
   }
 
   public onSubmitAction(): void {

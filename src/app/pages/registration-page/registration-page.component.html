@@ -206,9 +206,31 @@
             }
           </div>
 
-          <label class="login-form__label"
-            >Postal Code: <input formControlName="postalCode" class="login-form__input"
-          /></label>
+          <div class="form-group">
+            <label class="login-form__label" for="shipping-code">Postal Code: </label>
+            <input
+              formControlName="postalCode"
+              class="login-form__input"
+              id="shipping-code"
+              placeholder="Enter postal code"
+              [class.invalid]="
+                shippingCode?.invalid && (shippingCode?.dirty || !shippingCode?.untouched)
+              "
+            />
+            @if (
+              shippingCode &&
+              shippingCode.invalid &&
+              (shippingCode.dirty || !shippingCode.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (shippingCode.hasError('required')) {
+                  Shipping postal code is required
+                } @else if (shippingCode.hasError('pattern')) {
+                  Invalid postal code format
+                }
+              </div>
+            }
+          </div>
         </fieldset>
         <label class="login-form__checkbox">
           <input
@@ -287,16 +309,6 @@
 </form>
 
 <div class="validation-container">
-  <div
-    class="form-validation"
-    *ngIf="
-      form.get('shippingAddress.postalCode')?.invalid &&
-      form.get('shippingAddress.postalCode')?.touched
-    "
-  >
-    <small>Invalid postal code format.</small>
-  </div>
-
   <div
     class="form-validation"
     *ngIf="form.get('billingAddress.country')?.invalid && form.get('country')?.touched"
