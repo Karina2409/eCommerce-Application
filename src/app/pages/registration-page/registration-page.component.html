@@ -320,6 +320,19 @@
                 billingStreet?.invalid && (billingStreet?.dirty || !billingStreet?.untouched)
               "
             />
+            @if (
+              billingStreet &&
+              billingStreet.invalid &&
+              (billingStreet.dirty || !billingStreet.untouched)
+            ) {
+              <div class="alert alert-validation">
+                @if (billingStreet.hasError('required')) {
+                  Billing address city is required
+                } @else if (billingStreet.hasError('pattern')) {
+                  Must contain only latin letters
+                }
+              </div>
+            }
           </div>
 
           <div class="form-group">
