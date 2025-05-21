@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { CartPageComponent } from '@pages/cart-page';
+import { CatalogPageComponent } from '@pages/catalog-page';
 import { LoginPageComponent } from '@pages/login-page';
 import { MainPageComponent } from '@pages/main-page';
 import { NotFoundPageComponent } from '@pages/not-found-page';
@@ -10,5 +12,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginPageComponent, canActivate: [canActivateAuth] },
   { path: 'registration', component: RegistrationPageComponent },
   { path: 'main', component: MainPageComponent },
+  { path: 'catalog', component: CatalogPageComponent },
+  { path: 'cart', component: CartPageComponent },
   { path: '**', component: NotFoundPageComponent },
 ];
