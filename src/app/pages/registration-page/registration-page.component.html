@@ -116,6 +116,8 @@
           <div class="alert alert-validation">
             @if (dateOfBirth.hasError('required')) {
               Date of birth is required
+            } @else if (dateOfBirth.hasError('tooYoung')) {
+              You must be at least {{ dateOfBirth.getError('tooYoung')?.age }} years old.
             }
           </div>
         }

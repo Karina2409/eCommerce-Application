@@ -9,6 +9,7 @@ import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
 import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
+import { minAgeValidator } from '@validators/age';
 
 @Component({
   selector: 'app-registration-page',
@@ -47,7 +48,7 @@ export class RegistrationPageComponent {
     ]),
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
-    dateOfBirth: new FormControl('', [Validators.required]),
+    dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
     shippingAddress: new FormGroup({
       country: new FormControl('', [Validators.required]),
       streetName: new FormControl('', [
