@@ -10,7 +10,7 @@ import { canActivateAuth } from '@services/auth-service';
 export const routes: Routes = [
   { path: '', component: MainPageComponent },
   { path: 'login', component: LoginPageComponent, canActivate: [canActivateAuth] },
-  { path: 'registration', component: RegistrationPageComponent },
+  { path: 'registration', component: RegistrationPageComponent, canActivate: [canActivateAuth] },
   { path: 'main', component: MainPageComponent },
   { path: 'catalog', component: CatalogPageComponent },
   { path: 'cart', component: CartPageComponent },
