@@ -7,6 +7,7 @@ import { NgIf } from '@angular/common';
 import { AuthService } from '@services/auth-service';
 import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
+import { LoginFormControlType } from '@models/types';
 
 @Component({
   selector: 'app-login-page',
@@ -20,13 +21,15 @@ export class LoginPageComponent {
   public router = inject(Router);
   public errorMessage = signal('');
   public isPasswordShown = signal(false);
-  public form: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, emailValidator]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      passwordValidator,
-    ]),
+  public form: FormGroup = new FormGroup<LoginFormControlType>({
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, emailValidator],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(8), passwordValidator],
+    }),
   });
 
   public onSubmitAction(): void {
