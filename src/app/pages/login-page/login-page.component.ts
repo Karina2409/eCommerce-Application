@@ -22,11 +22,11 @@ export class LoginPageComponent {
   public errorMessage = signal('');
   public isPasswordShown = signal(false);
   public form: FormGroup = new FormGroup<LoginFormControlType>({
-    email: new FormControl('', {
+    email: new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.required, emailValidator],
     }),
-    password: new FormControl('', {
+    password: new FormControl<string>('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(8), passwordValidator],
     }),
