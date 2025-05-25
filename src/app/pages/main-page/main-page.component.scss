@@ -3,6 +3,7 @@
 }
 
 .main-page__container {
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,5 +12,33 @@
   h1 {
     color: var(--secondary-color);
     font-size: 3rem;
+  }
+}
+
+.categories {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 5% 0;
+}
+
+.category-card {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 25vw;
+  height: 25vw;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--secondary-color);
+  p {
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    padding: 0.5rem 5rem;
+    border-top-right-radius: 1rem;
   }
 }
