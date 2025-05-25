@@ -47,12 +47,10 @@ export class LoginPageComponent {
     this.isPasswordShown.update((value) => !value);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get email() {
     return this.form.get('email');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get password() {
     return this.form.get('password');
   }
