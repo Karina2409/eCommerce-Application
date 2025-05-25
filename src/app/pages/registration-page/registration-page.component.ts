@@ -88,67 +88,54 @@ export class RegistrationPageComponent {
     this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get email() {
     return this.form.get('email');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get password() {
     return this.form.get('password');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get firstName() {
     return this.form.get('firstName');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get lastName() {
     return this.form.get('lastName');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get dateOfBirth() {
     return this.form.get('dateOfBirth');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get shippingCountry() {
     return this.form.get('shippingAddress')?.get('country');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get shippingCity() {
     return this.form.get('shippingAddress')?.get('city');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get shippingStreet() {
     return this.form.get('shippingAddress')?.get('streetName');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get shippingCode() {
     return this.form.get('shippingAddress')?.get('postalCode');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get billingCountry() {
     return this.form.get('billingAddress')?.get('country');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get billingCity() {
     return this.form.get('billingAddress')?.get('city');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get billingStreet() {
     return this.form.get('billingAddress')?.get('streetName');
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   public get billingCode() {
     return this.form.get('billingAddress')?.get('postalCode');
   }
