@@ -14,5 +14,6 @@ export const routes: Routes = [
   { path: 'main', component: MainPageComponent },
   { path: 'catalog', component: CatalogPageComponent },
   { path: 'cart', component: CartPageComponent },
+  { path: 'catalog/:categoryName', component: CatalogPageComponent },
   { path: '**', component: NotFoundPageComponent },
 ];
