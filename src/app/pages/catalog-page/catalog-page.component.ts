@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgForOf, NgOptimizedImage, TitleCasePipe } from '@angular/common';
-
-type Product = {
-  name: string;
-  price: number;
-  category: string;
-  image: string;
-};
+import { NgForOf, TitleCasePipe } from '@angular/common';
+import { Product } from '@models/types';
 
 @Component({
   selector: 'app-catalog-page',
-  imports: [NgForOf, TitleCasePipe, NgOptimizedImage],
+  imports: [NgForOf, TitleCasePipe],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',
 })
@@ -23,19 +17,25 @@ export class CatalogPageComponent implements OnInit {
       name: 'Nothing',
       price: 25,
       category: 'smartphones',
-      image: '',
+      image: [],
+      brand: 'Nothing',
+      color: 'black',
     },
     {
-      name: 'Lenovo Thinkpad',
+      name: 'Thinkpad',
       price: 300,
-      category: 'notebooks',
-      image: '',
+      category: 'laptops',
+      image: [],
+      brand: 'Lenovo',
+      color: 'black',
     },
     {
       name: 'IPad',
       price: 20,
       category: 'tablets',
-      image: '',
+      image: [],
+      brand: 'Apple',
+      color: 'white',
     },
   ];
 

@@ -16,7 +16,7 @@ export class MainPageComponent {
   public categories: CategoryDraft[] = [
     {
       name: {
-        en: 'Notebooks',
+        en: 'Laptops',
       },
       slug: {
         en: '',
