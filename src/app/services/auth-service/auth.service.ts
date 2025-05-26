@@ -133,8 +133,8 @@ export class AuthService {
     await this.apiRoot.get().execute();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   public isAuthorized(): boolean {
+    void this;
     return localStorage.getItem('authorized') === 'true';
   }
 
