@@ -1,5 +1,4 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { HeaderComponent } from '@components/header';
 import { AuthService } from '@services/auth-service';
 import { LowerCasePipe, NgForOf, NgStyle } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -7,7 +6,7 @@ import { CategoryDraft } from '@commercetools/platform-sdk';
 
 @Component({
   selector: 'app-main-page',
-  imports: [HeaderComponent, NgForOf, RouterLink, NgStyle, LowerCasePipe],
+  imports: [NgForOf, RouterLink, NgStyle, LowerCasePipe],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss',
 })
