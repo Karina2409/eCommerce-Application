@@ -44,6 +44,6 @@ export class MainPageComponent implements OnInit {
   private authService = inject(AuthService);
 
   public ngOnInit() {
-    this.isAuthorized.set(this.authService.isAuthorized() === 'true');
+    this.isAuthorized.set(this.authService.isAuthorized());
   }
 }

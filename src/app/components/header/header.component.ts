@@ -10,8 +10,8 @@ import { AuthService } from '@services/auth-service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  public authService = inject(AuthService);
-  public isAuthorized = signal(this.authService.isAuthorized() === 'true');
+  public authService: AuthService = inject(AuthService);
+  public isAuthorized = signal(this.authService.isAuthorized());
 
   public async logout(): Promise<void> {
     await this.authService.logout();

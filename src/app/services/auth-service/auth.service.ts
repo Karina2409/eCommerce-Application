@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
+import {
+  createApiBuilderFromCtpClient,
+  Customer,
+  CustomerSignInResult,
+} from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
   // Import middlewares
@@ -8,6 +12,7 @@ import {
   type HttpMiddlewareOptions,
   Client,
   RefreshAuthMiddlewareOptions,
+  ClientResponse,
 } from '@commercetools/ts-client';
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
 
@@ -59,100 +64,16 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
-        if (customerDraft.addresses[0].shippingBillingDefault) {
-          const shippingResponse = await this.apiRoot
-            .customers()
-            .withId({ ID: customerResponse.body.customer.id })
-            .post({
-              body: {
-                version: customerResponse.body.customer.version,
-                actions: [
-                  {
-                    action: 'setDefaultShippingAddress',
-                    addressId: customerResponse.body.customer.addresses[0].id,
-                  },
-                ],
-              },
-            })
-            .execute();
-          this.apiRoot
-            .customers()
-            .withId({ ID: shippingResponse.body.id })
-            .post({
-              body: {
-                version: shippingResponse.body.version,
-                actions: [
-                  {
-                    action: 'setDefaultBillingAddress',
-                    addressId: shippingResponse.body.addresses[0].id,
-                  },
-                ],
-              },
-            })
-            .execute();
+        if (customerDraft.addresses[0]?.shippingBillingDefault) {
+          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
+          await this.setDefaultBillingAddress(shippingResponse, 0);
         } else if (customerDraft.addresses[0]?.billingShippingDefault) {
-          const shippingResponse = await this.apiRoot
-            .customers()
-            .withId({ ID: customerResponse.body.customer.id })
-            .post({
-              body: {
-                version: customerResponse.body.customer.version,
-                actions: [
-                  {
-                    action: 'setDefaultShippingAddress',
-                    addressId: customerResponse.body.customer.addresses[0].id,
-                  },
-                ],
-              },
-            })
-            .execute();
-          this.apiRoot
-            .customers()
-            .withId({ ID: shippingResponse.body.id })
-            .post({
-              body: {
-                version: shippingResponse.body.version,
-                actions: [
-                  {
-                    action: 'setDefaultBillingAddress',
-                    addressId: shippingResponse.body.addresses[0].id,
-                  },
-                ],
-              },
-            })
-            .execute();
-        } else if (customerDraft.addresses[0].shippingDefault) {
-          const shippingResponse = await this.apiRoot
-            .customers()
-            .withId({ ID: customerResponse.body.customer.id })
-            .post({
-              body: {
-                version: customerResponse.body.customer.version,
-                actions: [
-                  {
-                    action: 'setDefaultShippingAddress',
-                    addressId: customerResponse.body.customer.addresses[0].id,
-                  },
-                ],
-              },
-            })
-            .execute();
+          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
+          await this.setDefaultBillingAddress(shippingResponse, 0);
+        } else if (customerDraft.addresses[0]?.shippingDefault) {
+          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
           if (customerDraft.addresses[1]?.billingDefault) {
-            this.apiRoot
-              .customers()
-              .withId({ ID: shippingResponse.body.id })
-              .post({
-                body: {
-                  version: shippingResponse.body.version,
-                  actions: [
-                    {
-                      action: 'setDefaultBillingAddress',
-                      addressId: shippingResponse.body.addresses[1].id,
-                    },
-                  ],
-                },
-              })
-              .execute();
+            await this.setDefaultBillingAddress(shippingResponse, 1);
           }
         }
         return {
@@ -161,7 +82,7 @@ export class AuthService {
           customer: customerResponse.body.customer,
         };
       } else {
-        return { result: false, message: 'Account creation failed.' };
+        throw Error('Account creation failed.');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -196,7 +117,7 @@ export class AuthService {
           customer: customerResponse.body.customer,
         };
       } else {
-        return { result: false, message: 'Login to account failed.' };
+        throw Error('Login to account failed.');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -208,12 +129,13 @@ export class AuthService {
 
   public async logout(): Promise<void> {
     localStorage.clear();
-    await this.sessionStateHandler();
+    this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+    await this.apiRoot.get().execute();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  public isAuthorized(): string | null {
-    return localStorage.getItem('authorized');
+  public isAuthorized(): boolean {
+    return localStorage.getItem('authorized') === 'true';
   }
 
   public getRefreshMiddlewareOptions(refreshToken: string): RefreshAuthMiddlewareOptions {
@@ -305,5 +227,47 @@ export class AuthService {
       return '';
     }
     return JSON.parse(token).refreshToken;
+  }
+
+  private async setDefaultBillingAddress(
+    shippingResponse: ClientResponse<Customer>,
+    index: number,
+  ) {
+    await this.apiRoot
+      .customers()
+      .withId({ ID: shippingResponse.body!.id })
+      .post({
+        body: {
+          version: shippingResponse.body!.version,
+          actions: [
+            {
+              action: 'setDefaultBillingAddress',
+              addressId: shippingResponse.body!.addresses[index].id,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  private async setDefaultShippingAddress(
+    customerResponse: ClientResponse<CustomerSignInResult>,
+    index: number,
+  ): Promise<ClientResponse<Customer>> {
+    return await this.apiRoot
+      .customers()
+      .withId({ ID: customerResponse.body!.customer.id })
+      .post({
+        body: {
+          version: customerResponse.body!.customer.version,
+          actions: [
+            {
+              action: 'setDefaultShippingAddress',
+              addressId: customerResponse.body!.customer.addresses[index].id,
+            },
+          ],
+        },
+      })
+      .execute();
   }
 }
