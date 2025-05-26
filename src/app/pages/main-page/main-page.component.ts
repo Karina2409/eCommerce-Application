@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { HeaderComponent } from '@components/header';
 import { AuthService } from '@services/auth-service';
 import { LowerCasePipe, NgForOf, NgStyle } from '@angular/common';
@@ -11,8 +11,9 @@ import { CategoryDraft } from '@commercetools/platform-sdk';
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss',
 })
-export class MainPageComponent {
-  public isAuthorized = signal(inject(AuthService).isAuthorized() === 'true');
+export class MainPageComponent implements OnInit {
+  public isAuthorized = signal(false);
+
   public categories: CategoryDraft[] = [
     {
       name: {
@@ -39,4 +40,10 @@ export class MainPageComponent {
       },
     },
   ];
+
+  private authService = inject(AuthService);
+
+  public ngOnInit() {
+    this.isAuthorized.set(this.authService.isAuthorized() === 'true');
+  }
 }
