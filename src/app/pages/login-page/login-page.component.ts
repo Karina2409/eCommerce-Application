@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
@@ -31,6 +30,14 @@ export class LoginPageComponent {
     }),
   });
 
+  public get email() {
+    return this.form.get('email');
+  }
+
+  public get password() {
+    return this.form.get('password');
+  }
+
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.authService
@@ -47,13 +54,5 @@ export class LoginPageComponent {
 
   public togglePassword(): void {
     this.isPasswordShown.update((value) => !value);
-  }
-
-  public get email() {
-    return this.form.get('email');
-  }
-
-  public get password() {
-    return this.form.get('password');
   }
 }
