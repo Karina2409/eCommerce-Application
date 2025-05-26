@@ -15,7 +15,7 @@ export class HeaderComponent {
   private authService: AuthService = inject(AuthService);
 
   constructor() {
-    this.isAuthorized.set(this.authService.isAuthorized() === 'true');
+    this.isAuthorized.set(this.authService.isAuthorized());
   }
 
   public async logout(): Promise<void> {

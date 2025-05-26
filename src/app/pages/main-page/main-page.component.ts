@@ -42,6 +42,6 @@ export class MainPageComponent {
   private authService: AuthService = inject(AuthService);
 
   constructor() {
-    this.isAuthorized.set(this.authService.isAuthorized() === 'true');
+    this.isAuthorized.set(this.authService.isAuthorized());
   }
 }
