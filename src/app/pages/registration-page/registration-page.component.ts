@@ -21,12 +21,12 @@ export class RegistrationPageComponent {
   public maxDate: string;
 
   public router = inject(Router);
-  public errorMessage = signal('');
-  public isPasswordShown = signal(false);
-  public isShippingAddressDefault = signal(false);
-  public isBillingAddressDefault = signal(false);
-  public isShippingBillingAddressDefault = signal(false);
-  public isBillingShippingAddressDefault = signal(false);
+  public readonly errorMessage = signal('');
+  public readonly isPasswordShown = signal(false);
+  public readonly isShippingAddressDefault = signal(false);
+  public readonly isBillingAddressDefault = signal(false);
+  public readonly isShippingBillingAddressDefault = signal(false);
+  public readonly isBillingShippingAddressDefault = signal(false);
 
   public customer: CustomerDraft = {
     email: '',

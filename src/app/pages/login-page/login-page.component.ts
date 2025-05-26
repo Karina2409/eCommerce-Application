@@ -19,8 +19,8 @@ export class LoginPageComponent {
   constructor(private authService: AuthService) {}
 
   public router = inject(Router);
-  public errorMessage = signal('');
-  public isPasswordShown = signal(false);
+  public readonly errorMessage = signal('');
+  public readonly isPasswordShown = signal(false);
   public form: FormGroup = new FormGroup<LoginFormControlType>({
     email: new FormControl<string>('', {
       nonNullable: true,
