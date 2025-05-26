@@ -12,7 +12,7 @@ import { CategoryDraft } from '@commercetools/platform-sdk';
   styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
-  public isAuthorized = signal(false);
+  public isAuthorized = signal(inject(AuthService).isAuthorized() === 'true');
   public categories: CategoryDraft[] = [
     {
       name: {
@@ -39,9 +39,4 @@ export class MainPageComponent {
       },
     },
   ];
-  private authService: AuthService = inject(AuthService);
-
-  constructor() {
-    this.isAuthorized.set(this.authService.isAuthorized() === 'true');
-  }
 }

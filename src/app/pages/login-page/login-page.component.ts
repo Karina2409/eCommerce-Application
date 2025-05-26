@@ -16,8 +16,7 @@ import { LoginFormControlType } from '@models/types';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  constructor(private authService: AuthService) {}
-
+  public authService = inject(AuthService);
   public router = inject(Router);
   public readonly errorMessage = signal('');
   public readonly isPasswordShown = signal(false);
