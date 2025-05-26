@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -183,29 +183,17 @@ export class RegistrationPageComponent implements OnInit {
     this.isPasswordShown.update((value) => !value);
   }
 
-  public toggleBillingAddressDefault(): void {
-    this.isBillingAddressDefault.update((value) => !value);
-  }
+  public toggleAddress(flag: WritableSignal<boolean>, controlPathToToggle?: string): void {
+    flag.update((value) => !value);
 
-  public toggleShippingAddressDefault(): void {
-    this.isShippingAddressDefault.update((value) => !value);
-  }
-
-  public toggleShippingBillingAddressDefault(): void {
-    this.isShippingBillingAddressDefault.update((value) => !value);
-    if (this.isShippingBillingAddressDefault()) {
-      this.form.get('billingAddress')?.disable();
-    } else {
-      this.form.get('billingAddress')?.enable();
-    }
-  }
-
-  public toggleBillingShippingAddressDefault(): void {
-    this.isBillingShippingAddressDefault.update((value) => !value);
-    if (this.isBillingShippingAddressDefault()) {
-      this.form.get('shippingAddress')?.disable();
-    } else {
-      this.form.get('shippingAddress')?.enable();
+    if (controlPathToToggle) {
+      const control = this.form.get(controlPathToToggle);
+      if (!control) return;
+      if (flag()) {
+        control.disable();
+      } else {
+        control.enable();
+      }
     }
   }
 }

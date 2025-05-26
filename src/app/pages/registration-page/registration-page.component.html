@@ -239,7 +239,7 @@
           <input
             type="checkbox"
             formControlName="shippingDefault"
-            (change)="toggleShippingAddressDefault()"
+            (change)="toggleAddress(isShippingAddressDefault)"
           />
           Use as default shipping address
         </label>
@@ -248,7 +248,7 @@
           <input
             type="checkbox"
             formControlName="shippingBillingDefault"
-            (change)="toggleShippingBillingAddressDefault()"
+            (change)="toggleAddress(isShippingBillingAddressDefault, 'billingAddress')"
           />
           Use as default shipping and billing address
         </label>
@@ -365,7 +365,7 @@
           <input
             type="checkbox"
             formControlName="billingDefault"
-            (change)="toggleBillingAddressDefault()"
+            (change)="toggleAddress(isBillingAddressDefault)"
           />
           Use as default billing address
         </label>
@@ -373,7 +373,7 @@
           <input
             type="checkbox"
             formControlName="billingShippingDefault"
-            (change)="toggleBillingShippingAddressDefault()"
+            (change)="toggleAddress(isBillingShippingAddressDefault, 'shippingAddress')"
           />
           Use as default shipping and billing address
         </label>
