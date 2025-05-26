@@ -4,7 +4,7 @@ import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Countries } from '@models/enums';
-import { signal } from '@angular/core';
+import { signal, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
 import { emailValidator } from '@validators/email';
@@ -17,8 +17,8 @@ import { minAgeValidator } from '@validators/age';
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
-export class RegistrationPageComponent {
-  public maxDate: string;
+export class RegistrationPageComponent implements OnInit {
+  public maxDate = '';
 
   public router = inject(Router);
   public readonly errorMessage = signal('');
@@ -81,12 +81,7 @@ export class RegistrationPageComponent {
 
   protected readonly countries = Countries;
 
-  constructor(private authService: AuthService) {
-    const today = new Date();
-    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
-
-    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
-  }
+  private authService: AuthService = inject(AuthService);
 
   public get email() {
     return this.form.get('email');
@@ -138,6 +133,13 @@ export class RegistrationPageComponent {
 
   public get billingCode() {
     return this.form.get('billingAddress')?.get('postalCode');
+  }
+
+  public ngOnInit(): void {
+    const today = new Date();
+    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+
+    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
   }
 
   public onSubmitAction(): void {
