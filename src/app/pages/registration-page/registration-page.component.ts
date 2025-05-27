@@ -1,23 +1,26 @@
 import { Component, inject, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Countries } from '@models/enums';
 import { signal, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
 import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
+import { AddressComponent } from '@components/address-form';
 
 @Component({
   selector: 'app-registration-page',
-  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, NgForOf, KeyValuePipe],
+  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, AddressComponent],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
 export class RegistrationPageComponent implements OnInit {
+  public shippingAddressFormGroup!: FormGroup;
+  public billingAddressFormGroup!: FormGroup;
+
   public maxDate = '';
 
   public router = inject(Router);
@@ -49,37 +52,10 @@ export class RegistrationPageComponent implements OnInit {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    shippingAddress: new FormGroup({
-      country: new FormControl('', [Validators.required]),
-      streetName: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
-      ]),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      postalCode: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
-      ]),
-      shippingDefault: new FormControl(''),
-      shippingBillingDefault: new FormControl(''),
-    }),
-    billingAddress: new FormGroup({
-      country: new FormControl('', [Validators.required]),
-      streetName: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
-      ]),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      postalCode: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
-      ]),
-      billingDefault: new FormControl(''),
-      billingShippingDefault: new FormControl(''),
-    }),
-  });
 
-  protected readonly countries = Countries;
+    shippingAddress: new FormGroup({}),
+    billingAddress: new FormGroup({}),
+  });
 
   private authService: AuthService = inject(AuthService);
 
@@ -103,38 +79,6 @@ export class RegistrationPageComponent implements OnInit {
     return this.form.get('dateOfBirth');
   }
 
-  public get shippingCountry() {
-    return this.form.get('shippingAddress')?.get('country');
-  }
-
-  public get shippingCity() {
-    return this.form.get('shippingAddress')?.get('city');
-  }
-
-  public get shippingStreet() {
-    return this.form.get('shippingAddress')?.get('streetName');
-  }
-
-  public get shippingCode() {
-    return this.form.get('shippingAddress')?.get('postalCode');
-  }
-
-  public get billingCountry() {
-    return this.form.get('billingAddress')?.get('country');
-  }
-
-  public get billingCity() {
-    return this.form.get('billingAddress')?.get('city');
-  }
-
-  public get billingStreet() {
-    return this.form.get('billingAddress')?.get('streetName');
-  }
-
-  public get billingCode() {
-    return this.form.get('billingAddress')?.get('postalCode');
-  }
-
   public ngOnInit(): void {
     const today = new Date();
     const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
@@ -142,18 +86,32 @@ export class RegistrationPageComponent implements OnInit {
     this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
   }
 
+  public onShippingAddressInit(addressForm: FormGroup) {
+    this.shippingAddressFormGroup = addressForm;
+    this.form.setControl('shippingAddress', this.shippingAddressFormGroup);
+  }
+
+  public onBillingAddressInit(addressForm: FormGroup) {
+    this.billingAddressFormGroup = addressForm;
+    this.form.setControl('billingAddress', this.billingAddressFormGroup);
+  }
+
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;
-      const shippingAddress = this.form.value.shippingAddress;
-      const billingAddress = this.form.value.billingAddress;
+
+      const shippingAddress = this.form.get('shippingAddress')?.value;
+      const billingAddress = this.form.get('billingAddress')?.value;
+
       const addresses = [];
-      if (shippingAddress) {
+
+      if (shippingAddress.country) {
         addresses.push(shippingAddress);
       }
-      if (billingAddress) {
+      if (billingAddress.country) {
         addresses.push(billingAddress);
       }
+
       this.authService
         .signUp({
           ...this.customer,
