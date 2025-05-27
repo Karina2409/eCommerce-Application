@@ -104,12 +104,14 @@ export class RegistrationPageComponent implements OnInit {
       const billingAddress = this.form.get('billingAddress')?.value;
 
       const addresses = [];
+      console.log(shippingAddress);
+      console.log(billingAddress);
 
-      if (shippingAddress.country) {
-        addresses.push(shippingAddress);
+      if (shippingAddress && shippingAddress.country) {
+        addresses[0] = shippingAddress;
       }
-      if (billingAddress.country) {
-        addresses.push(billingAddress);
+      if (billingAddress && billingAddress.country) {
+        addresses[1] = billingAddress;
       }
 
       this.authService

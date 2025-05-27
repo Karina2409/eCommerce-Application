@@ -56,6 +56,7 @@ export class AuthService {
     if (this.isAuthorized()) {
       await this.logout();
     }
+    console.log(customerDraft);
     try {
       const customerResponse = await this.apiRoot
         .customers()
@@ -64,16 +65,30 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
-        if (customerDraft.addresses[0]?.shippingBillingDefault) {
-          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
+        const addresses = customerDraft.addresses ?? [];
+        const bothDefaultIndex = addresses.findIndex((addr) => addr.bothAddressesDefault);
+        const shippingDefaultIndex = addresses.findIndex(
+          (addr, i) => addr.addressDefault && i === 0,
+        );
+        const billingDefaultIndex = addresses.findIndex(
+          (addr, i) => addr.addressDefault && i === 1,
+        );
+
+        if (bothDefaultIndex !== -1) {
+          const shippingResponse = await this.setDefaultShippingAddress(
+            customerResponse,
+            bothDefaultIndex,
+          );
           await this.setDefaultBillingAddress(shippingResponse, 0);
-        } else if (customerDraft.addresses[0]?.billingShippingDefault) {
-          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
-          await this.setDefaultBillingAddress(shippingResponse, 0);
-        } else if (customerDraft.addresses[0]?.shippingDefault) {
-          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
-          if (customerDraft.addresses[1]?.billingDefault) {
-            await this.setDefaultBillingAddress(shippingResponse, 1);
+        } else {
+          if (shippingDefaultIndex !== -1) {
+            const shippingResponse = await this.setDefaultShippingAddress(
+              customerResponse,
+              shippingDefaultIndex,
+            );
+            if (customerDraft.addresses[1].addressDefault) {
+              await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
+            }
           }
         }
         return {
