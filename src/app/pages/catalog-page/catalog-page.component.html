@@ -1,9 +1,40 @@
-<h2>Товары из категории: {{ category | titlecase }}</h2>
-
-<div class="product-grid">
-  <div class="card" *ngFor="let product of filteredProducts">
-    <!-- <img ngSrc="{{ product.image }}" alt="{{ product.name }}" /> -->
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.price }} USD</p>
-  </div>
-</div>
+<main>
+  <section class="catalog-panel">
+    <div class="catalog-panel__info">
+      <h1>Category: {{ category | titlecase }}</h1>
+    </div>
+    <div class="catalog-panel__options">
+      <div class="select-container">
+        <mat-label class="select-container__label">Sort by</mat-label>
+        <mat-select id="sort" [(ngModel)]="sortOption" class="select-container__options">
+          <mat-option value="name">Name</mat-option>
+          <mat-option value="price">Price</mat-option>
+          <mat-option value="brand">Brand</mat-option>
+        </mat-select>
+      </div>
+    </div>
+  </section>
+  <section class="cards-grid">
+    <div class="card-container">
+      <div class="card" *ngFor="let product of sortedProducts">
+        <img src="{{ product.image }}" alt="{{ product.name }}" class="card__img" />
+        <h3>{{ product.name }}</h3>
+        <div class="card-text">
+          <p><span>Brand:</span></p>
+          <p>{{ product.brand }}</p>
+        </div>
+        <div class="card-text">
+          <p><span>Price:</span></p>
+          <p>
+            <span>{{ product.price }} USD</span>
+          </p>
+        </div>
+        <div class="card-text">
+          <p><span>Color:</span></p>
+          <p>{{ product.color }}</p>
+        </div>
+        <button mat-flat-button class="card__button">Add to cart</button>
+      </div>
+    </div>
+  </section>
+</main>
