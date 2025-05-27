@@ -1,0 +1,105 @@
+<form [formGroup]="addressForm" [ngClass]="['address-form', addressDefaultInput]">
+  <fieldset class="address-form__address">
+    <legend class="address-legend">{{ addressDefaultInput | titlecase }} address</legend>
+
+    <div class="form-group">
+      <label class="login-form__label" [for]="addressDefaultInput + '-country'">Country:</label>
+      <select
+        formControlName="country"
+        class="login-form__input"
+        [id]="addressDefaultInput + '-country'"
+        [class.invalid]="country?.invalid && (country?.dirty || !country?.untouched)"
+      >
+        <option value="">Select</option>
+        <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+          {{ country.value }}
+        </option>
+      </select>
+      @if (country && country.invalid && (country.dirty || !country.untouched)) {
+        <div class="alert alert-validation">
+          @if (country.hasError('required')) {
+            {{ addressDefaultInput | titlecase }} address country is required
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="login-form__label" [for]="addressDefaultInput + '-city'">City: </label>
+      <input
+        formControlName="city"
+        class="login-form__input"
+        placeholder="Enter city"
+        [id]="addressDefaultInput + '-city'"
+        [class.invalid]="city?.invalid && (city?.dirty || !city?.untouched)"
+      />
+      @if (city && city.invalid && (city.dirty || !city.untouched)) {
+        <div class="alert alert-validation">
+          @if (city.hasError('required')) {
+            Shipping address city is required
+          } @else if (city.hasError('pattern')) {
+            Must contain only latin letters
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="login-form__label" [for]="addressDefaultInput + '-street'">Street: </label>
+      <input
+        formControlName="streetName"
+        class="login-form__input"
+        [id]="addressDefaultInput + '-street'"
+        placeholder="Enter street"
+        [class.invalid]="street?.invalid && (street?.dirty || !street?.untouched)"
+      />
+      @if (street && street.invalid && (street.dirty || !street.untouched)) {
+        <div class="alert alert-validation">
+          @if (street.hasError('required')) {
+            {{ addressDefaultInput | titlecase }} address street is required
+          } @else if (street.hasError('pattern')) {
+            Must contain only latin letters
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="login-form__label" [for]="addressDefaultInput + '-code'">Postal Code: </label>
+      <input
+        formControlName="postalCode"
+        class="login-form__input"
+        [id]="addressDefaultInput + '-code'"
+        placeholder="Enter postal code"
+        [class.invalid]="code?.invalid && (code?.dirty || !code?.untouched)"
+      />
+      @if (code && code.invalid && (code.dirty || !code.untouched)) {
+        <div class="alert alert-validation">
+          @if (code.hasError('required')) {
+            {{ addressDefaultInput | titlecase }} postal code is required
+          } @else if (code.hasError('pattern')) {
+            Invalid postal code format
+          }
+        </div>
+      }
+    </div>
+  </fieldset>
+
+  <label class="login-form__checkbox">
+    <input
+      type="checkbox"
+      formControlName="addressDefault"
+      (change)="registrationPage.toggleAddress(isAddressDefault)"
+    />
+    Use as default {{ addressDefaultInput }} address
+  </label>
+
+  <label class="login-form__checkbox">
+    <input
+      type="checkbox"
+      formControlName="bothAddressesDefault"
+      (change)="registrationPage.toggleAddress(isBothAddressDefault, addressDefault)"
+    />
+    Use as default {{ addressDefaultInput }} and billing address
+  </label>
+</form>

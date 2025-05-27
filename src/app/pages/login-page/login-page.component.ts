@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, RouterLink } from '@angular/router';
@@ -16,11 +15,10 @@ import { LoginFormControlType } from '@models/types';
   styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
-  constructor(private authService: AuthService) {}
-
+  public authService = inject(AuthService);
   public router = inject(Router);
-  public errorMessage = signal('');
-  public isPasswordShown = signal(false);
+  public readonly errorMessage = signal('');
+  public readonly isPasswordShown = signal(false);
   public form: FormGroup = new FormGroup<LoginFormControlType>({
     email: new FormControl<string>('', {
       nonNullable: true,
@@ -31,6 +29,14 @@ export class LoginPageComponent {
       validators: [Validators.required, Validators.minLength(8), passwordValidator],
     }),
   });
+
+  public get email() {
+    return this.form.get('email');
+  }
+
+  public get password() {
+    return this.form.get('password');
+  }
 
   public onSubmitAction(): void {
     if (this.form.valid) {
@@ -48,13 +54,5 @@ export class LoginPageComponent {
 
   public togglePassword(): void {
     this.isPasswordShown.update((value) => !value);
-  }
-
-  public get email() {
-    return this.form.get('email');
-  }
-
-  public get password() {
-    return this.form.get('password');
   }
 }

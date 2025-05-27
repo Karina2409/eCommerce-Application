@@ -1,32 +1,35 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Countries } from '@models/enums';
-import { signal } from '@angular/core';
+import { signal, OnInit } from '@angular/core';
 import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
 import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
+import { AddressComponent } from '@components/address-form';
 
 @Component({
   selector: 'app-registration-page',
-  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, NgForOf, KeyValuePipe],
+  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, AddressComponent],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
-export class RegistrationPageComponent {
-  public maxDate: string;
+export class RegistrationPageComponent implements OnInit {
+  public shippingAddressFormGroup!: FormGroup;
+  public billingAddressFormGroup!: FormGroup;
+
+  public maxDate = '';
 
   public router = inject(Router);
-  public errorMessage = signal('');
-  public isPasswordShown = signal(false);
-  public isShippingAddressDefault = signal(false);
-  public isBillingAddressDefault = signal(false);
-  public isShippingBillingAddressDefault = signal(false);
-  public isBillingShippingAddressDefault = signal(false);
+  public readonly errorMessage = signal('');
+  public readonly isPasswordShown = signal(false);
+  public readonly isShippingAddressDefault = signal(false);
+  public readonly isBillingAddressDefault = signal(false);
+  public readonly isShippingBillingAddressDefault = signal(false);
+  public readonly isBillingShippingAddressDefault = signal(false);
 
   public customer: CustomerDraft = {
     email: '',
@@ -49,44 +52,12 @@ export class RegistrationPageComponent {
     firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
-    shippingAddress: new FormGroup({
-      country: new FormControl('', [Validators.required]),
-      streetName: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
-      ]),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      postalCode: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
-      ]),
-      shippingDefault: new FormControl(''),
-      shippingBillingDefault: new FormControl(''),
-    }),
-    billingAddress: new FormGroup({
-      country: new FormControl('', [Validators.required]),
-      streetName: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
-      ]),
-      city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-      postalCode: new FormControl('', [
-        Validators.required,
-        Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
-      ]),
-      billingDefault: new FormControl(''),
-      billingShippingDefault: new FormControl(''),
-    }),
+
+    shippingAddress: new FormGroup({}),
+    billingAddress: new FormGroup({}),
   });
 
-  protected readonly countries = Countries;
-
-  constructor(private authService: AuthService) {
-    const today = new Date();
-    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
-
-    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
-  }
+  private authService: AuthService = inject(AuthService);
 
   public get email() {
     return this.form.get('email');
@@ -108,50 +79,39 @@ export class RegistrationPageComponent {
     return this.form.get('dateOfBirth');
   }
 
-  public get shippingCountry() {
-    return this.form.get('shippingAddress')?.get('country');
+  public ngOnInit(): void {
+    const today = new Date();
+    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+
+    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
   }
 
-  public get shippingCity() {
-    return this.form.get('shippingAddress')?.get('city');
+  public onShippingAddressInit(addressForm: FormGroup) {
+    this.shippingAddressFormGroup = addressForm;
+    this.form.setControl('shippingAddress', this.shippingAddressFormGroup);
   }
 
-  public get shippingStreet() {
-    return this.form.get('shippingAddress')?.get('streetName');
-  }
-
-  public get shippingCode() {
-    return this.form.get('shippingAddress')?.get('postalCode');
-  }
-
-  public get billingCountry() {
-    return this.form.get('billingAddress')?.get('country');
-  }
-
-  public get billingCity() {
-    return this.form.get('billingAddress')?.get('city');
-  }
-
-  public get billingStreet() {
-    return this.form.get('billingAddress')?.get('streetName');
-  }
-
-  public get billingCode() {
-    return this.form.get('billingAddress')?.get('postalCode');
+  public onBillingAddressInit(addressForm: FormGroup) {
+    this.billingAddressFormGroup = addressForm;
+    this.form.setControl('billingAddress', this.billingAddressFormGroup);
   }
 
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.customer = this.form.value;
-      const shippingAddress = this.form.value.shippingAddress;
-      const billingAddress = this.form.value.billingAddress;
+
+      const shippingAddress = this.form.get('shippingAddress')?.value;
+      const billingAddress = this.form.get('billingAddress')?.value;
+
       const addresses = [];
-      if (shippingAddress) {
-        addresses.push(shippingAddress);
+
+      if (shippingAddress && shippingAddress.country) {
+        addresses[0] = shippingAddress;
       }
-      if (billingAddress) {
-        addresses.push(billingAddress);
+      if (billingAddress && billingAddress.country) {
+        addresses[1] = billingAddress;
       }
+
       this.authService
         .signUp({
           ...this.customer,
@@ -181,29 +141,17 @@ export class RegistrationPageComponent {
     this.isPasswordShown.update((value) => !value);
   }
 
-  public toggleBillingAddressDefault(): void {
-    this.isBillingAddressDefault.update((value) => !value);
-  }
+  public toggleAddress(flag: WritableSignal<boolean>, controlPathToToggle?: string): void {
+    flag.update((value) => !value);
 
-  public toggleShippingAddressDefault(): void {
-    this.isShippingAddressDefault.update((value) => !value);
-  }
-
-  public toggleShippingBillingAddressDefault(): void {
-    this.isShippingBillingAddressDefault.update((value) => !value);
-    if (this.isShippingBillingAddressDefault()) {
-      this.form.get('billingAddress')?.disable();
-    } else {
-      this.form.get('billingAddress')?.enable();
-    }
-  }
-
-  public toggleBillingShippingAddressDefault(): void {
-    this.isBillingShippingAddressDefault.update((value) => !value);
-    if (this.isBillingShippingAddressDefault()) {
-      this.form.get('shippingAddress')?.disable();
-    } else {
-      this.form.get('shippingAddress')?.enable();
+    if (controlPathToToggle) {
+      const control = this.form.get(controlPathToToggle);
+      if (!control) return;
+      if (flag()) {
+        control.disable();
+      } else {
+        control.enable();
+      }
     }
   }
 }

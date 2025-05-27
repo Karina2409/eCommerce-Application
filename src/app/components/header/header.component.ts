@@ -1,8 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@services/auth-service';
-import { MainPageComponent } from '@pages/main-page';
 
 @Component({
   selector: 'app-header',
@@ -11,15 +10,10 @@ import { MainPageComponent } from '@pages/main-page';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  public isAuthorized = inject(MainPageComponent).isAuthorized;
-  private authService: AuthService = inject(AuthService);
-
-  constructor() {
-    this.isAuthorized.set(this.authService.isAuthorized());
-  }
+  public authService: AuthService = inject(AuthService);
+  public isAuthorized = computed(() => this.authService.isAuthorized());
 
   public async logout(): Promise<void> {
     await this.authService.logout();
-    this.isAuthorized.update((value) => !value);
   }
 }

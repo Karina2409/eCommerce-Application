@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   createApiBuilderFromCtpClient,
   Customer,
@@ -26,6 +26,8 @@ import { CustomerDraft } from '@models/types';
   providedIn: 'root',
 })
 export class AuthService {
+  public isAuthorized = signal<boolean>(!!localStorage.getItem('authorized'));
+
   public apiRoot: ByProjectKeyRequestBuilder;
   protected PROJECT_KEY = environment.projectKey;
   protected API_URL = environment.apiUrl;
@@ -64,18 +66,33 @@ export class AuthService {
         })
         .execute();
       if (customerResponse.statusCode === 201) {
-        if (customerDraft.addresses[0]?.shippingBillingDefault) {
-          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
+        const addresses = customerDraft.addresses ?? [];
+        const bothDefaultIndex = addresses.findIndex((addr) => addr.bothAddressesDefault);
+        const shippingDefaultIndex = addresses.findIndex(
+          (addr, i) => addr.addressDefault && i === 0,
+        );
+        const billingDefaultIndex = addresses.findIndex(
+          (addr, i) => addr.addressDefault && i === 1,
+        );
+
+        if (bothDefaultIndex !== -1) {
+          const shippingResponse = await this.setDefaultShippingAddress(
+            customerResponse,
+            bothDefaultIndex,
+          );
           await this.setDefaultBillingAddress(shippingResponse, 0);
-        } else if (customerDraft.addresses[0]?.billingShippingDefault) {
-          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
-          await this.setDefaultBillingAddress(shippingResponse, 0);
-        } else if (customerDraft.addresses[0]?.shippingDefault) {
-          const shippingResponse = await this.setDefaultShippingAddress(customerResponse, 0);
-          if (customerDraft.addresses[1]?.billingDefault) {
-            await this.setDefaultBillingAddress(shippingResponse, 1);
+        } else {
+          if (shippingDefaultIndex !== -1) {
+            const shippingResponse = await this.setDefaultShippingAddress(
+              customerResponse,
+              shippingDefaultIndex,
+            );
+            if (customerDraft.addresses[1].addressDefault) {
+              await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
+            }
           }
         }
+        this.isAuthorized.set(true);
         return {
           result: true,
           message: 'you have successfully created an account',
@@ -111,6 +128,7 @@ export class AuthService {
       if (customerResponse.statusCode === 200) {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
+        this.isAuthorized.set(true);
         return {
           result: true,
           message: 'You are logged in',
@@ -130,12 +148,8 @@ export class AuthService {
   public async logout(): Promise<void> {
     localStorage.clear();
     this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+    this.isAuthorized.set(false);
     await this.apiRoot.get().execute();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  public isAuthorized(): boolean {
-    return localStorage.getItem('authorized') === 'true';
   }
 
   public getRefreshMiddlewareOptions(refreshToken: string): RefreshAuthMiddlewareOptions {
