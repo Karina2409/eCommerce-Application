@@ -56,7 +56,6 @@ export class AuthService {
     if (this.isAuthorized()) {
       await this.logout();
     }
-    console.log(customerDraft);
     try {
       const customerResponse = await this.apiRoot
         .customers()
