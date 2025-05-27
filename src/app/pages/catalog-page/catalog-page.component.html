@@ -1,0 +1,9 @@
+<h2>Товары из категории: {{ category | titlecase }}</h2>
+
+<div class="product-grid">
+  <div class="card" *ngFor="let product of filteredProducts">
+    <!-- <img ngSrc="{{ product.image }}" alt="{{ product.name }}" /> -->
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.price }} USD</p>
+  </div>
+</div>

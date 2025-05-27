@@ -1,4 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@import './reset.scss';
+@import './fonts.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  --primary-color: #d6e2fd;
+  --secondary-color: #0c62bf;
+  --light-color: #fffdf6;
+  --error-color: #d80000;
+}
+
+html,
+body {
+  height: 100%;
+}

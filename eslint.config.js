@@ -6,6 +6,9 @@ const eslintPluginPrettier = require('eslint-plugin-prettier/recommended');
 
 module.exports = tseslint.config(
   {
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**'],
+  },
+  {
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
@@ -33,7 +36,7 @@ module.exports = tseslint.config(
         },
       ],
       'no-inline-comments': 'error',
-      'no-console': 'warn',
+      'no-console': 'error',
       'prefer-const': 'error',
       'class-methods-use-this': 'error',
 
@@ -42,17 +45,14 @@ module.exports = tseslint.config(
         'error',
         { accessibility: 'explicit', overrides: { constructors: 'off' } },
       ],
-      '@typescript-eslint/explicit-function-return-type': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/member-ordering': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
   },
   {
     files: ['**/*.html'],
-    extends: [
-      ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility,
-    ],
+    extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {},
   },
 );

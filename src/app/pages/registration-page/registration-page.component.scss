@@ -1,0 +1,76 @@
+@import '../login-registration';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  color: var(--secondary-text);
+  padding: 0 20px;
+
+  @media screen and (max-width: 901px) {
+    padding: 20px 0;
+  }
+}
+
+.login-form {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  border-radius: 0.5rem;
+  gap: 1rem;
+  h1 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+  }
+}
+
+.validation-container {
+  margin: 0 auto;
+  display: flex;
+  width: 50%;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.login-form__container {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'info shipping billing';
+
+  @media screen and (max-width: 980px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'info info'
+      'shipping billing';
+  }
+
+  @media screen and (max-width: 730px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'info'
+      'shipping'
+      'billing';
+  }
+}
+
+.login-form__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 290px;
+  grid-area: info;
+  @media screen and (max-width: 980px) {
+    max-width: 1000px;
+  }
+}
+
+.login-form__button-container {
+  display: flex;
+  gap: 1rem;
+}
