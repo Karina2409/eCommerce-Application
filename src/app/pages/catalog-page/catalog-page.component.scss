@@ -11,10 +11,11 @@ main {
   justify-content: center;
   align-items: center;
   gap: 3rem;
-  h1 {
-    font-size: 1.5rem;
-    color: var(--secondary-color);
-  }
+}
+
+.catalog-panel__options {
+  display: flex;
+  gap: 1rem;
 }
 
 .cards-grid {
@@ -71,7 +72,7 @@ main {
 }
 
 .select-container__options {
-  width: 7rem;
+  width: 10rem;
   border: 1px solid var(--secondary-color);
   padding: 0.2rem;
   border-radius: 0.5rem;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgForOf, TitleCasePipe } from '@angular/common';
 import { Product } from '@models/types';
 import { MatButton } from '@angular/material/button';
@@ -18,13 +18,18 @@ import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
     MatSelect,
     MatOption,
     MatLabel,
+    RouterLink,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',
 })
 export class CatalogPageComponent implements OnInit {
-  public category: string | null = null;
   public sortOption: keyof Product = 'name';
+
+  public search = '';
+  public selectedCategory: string | null = '';
+  public selectedBrand = '';
+  public selectedColor = '';
 
   public products: Product[] = [
     {
@@ -71,12 +76,29 @@ export class CatalogPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
-  public get sortedProducts(): Product[] {
-    if (!this.sortOption) return this.products;
+  public get categories(): string[] {
+    return [...new Set(this.products.map((product) => product.category))];
+  }
 
-    return this.products
-      .filter((product) => product.category === this.category)
-      .sort((a, b) => {
+  public get brands(): string[] {
+    return [...new Set(this.products.map((product) => product.brand))];
+  }
+
+  public get colors(): string[] {
+    return [...new Set(this.products.map((product) => product.color))];
+  }
+
+  public get filteredProducts(): Product[] {
+    let filteredProducts = this.products.filter(
+      (product) =>
+        (!this.search || product.name.toLowerCase().includes(this.search.toLowerCase())) &&
+        (!this.selectedCategory || product.category === this.selectedCategory) &&
+        (!this.selectedBrand || product.brand === this.selectedBrand) &&
+        (!this.selectedColor || product.color === this.selectedColor),
+    );
+
+    if (this.sortOption) {
+      filteredProducts = filteredProducts.sort((a, b) => {
         const option = this.sortOption;
 
         if (typeof a[option] === 'number' && typeof b[option] === 'number') {
@@ -85,11 +107,14 @@ export class CatalogPageComponent implements OnInit {
 
         return String(a[option]).localeCompare(String(b[option]));
       });
+    }
+
+    return filteredProducts;
   }
 
   public ngOnInit() {
     this.route.paramMap.subscribe((params) => {
-      this.category = params.get('categoryName');
+      this.selectedCategory = params.get('categoryName');
     });
   }
 }
