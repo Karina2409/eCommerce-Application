@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '@services/auth-service';
@@ -11,10 +11,9 @@ import { AuthService } from '@services/auth-service';
 })
 export class HeaderComponent {
   public authService: AuthService = inject(AuthService);
-  public isAuthorized = signal(this.authService.isAuthorized());
+  public isAuthorized = computed(() => this.authService.isAuthorized());
 
   public async logout(): Promise<void> {
     await this.authService.logout();
-    this.isAuthorized.update((value) => !value);
   }
 }

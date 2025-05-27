@@ -1,5 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
-import { AuthService } from '@services/auth-service';
+import { Component } from '@angular/core';
 import { LowerCasePipe, NgForOf, NgStyle } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CategoryDraft } from '@commercetools/platform-sdk';
@@ -10,9 +9,7 @@ import { CategoryDraft } from '@commercetools/platform-sdk';
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss',
 })
-export class MainPageComponent implements OnInit {
-  public isAuthorized = signal(false);
-
+export class MainPageComponent {
   public categories: CategoryDraft[] = [
     {
       name: {
@@ -39,10 +36,4 @@ export class MainPageComponent implements OnInit {
       },
     },
   ];
-
-  private authService = inject(AuthService);
-
-  public ngOnInit() {
-    this.isAuthorized.set(this.authService.isAuthorized());
-  }
 }

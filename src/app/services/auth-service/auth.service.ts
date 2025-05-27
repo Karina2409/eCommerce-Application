@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   createApiBuilderFromCtpClient,
   Customer,
@@ -26,6 +26,8 @@ import { CustomerDraft } from '@models/types';
   providedIn: 'root',
 })
 export class AuthService {
+  public isAuthorized = signal<boolean>(!!localStorage.getItem('authorized'));
+
   public apiRoot: ByProjectKeyRequestBuilder;
   protected PROJECT_KEY = environment.projectKey;
   protected API_URL = environment.apiUrl;
@@ -90,6 +92,7 @@ export class AuthService {
             }
           }
         }
+        this.isAuthorized.set(true);
         return {
           result: true,
           message: 'you have successfully created an account',
@@ -125,6 +128,7 @@ export class AuthService {
       if (customerResponse.statusCode === 200) {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
+        this.isAuthorized.set(true);
         return {
           result: true,
           message: 'You are logged in',
@@ -144,12 +148,8 @@ export class AuthService {
   public async logout(): Promise<void> {
     localStorage.clear();
     this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+    this.isAuthorized.set(false);
     await this.apiRoot.get().execute();
-  }
-
-  public isAuthorized(): boolean {
-    void this;
-    return localStorage.getItem('authorized') === 'true';
   }
 
   public getRefreshMiddlewareOptions(refreshToken: string): RefreshAuthMiddlewareOptions {
