@@ -1,0 +1,21 @@
+<div class="card-container">
+  <div class="card" *ngFor="let product of parent?.filteredProducts">
+    <img src="{{ product.image }}" alt="{{ product.name }}" class="card__img" />
+    <h3>{{ product.name }}</h3>
+    <div class="card-text">
+      <p><span>Brand:</span></p>
+      <p>{{ product.brand }}</p>
+    </div>
+    <div class="card-text">
+      <p><span>Price:</span></p>
+      <p>
+        <span>{{ product.price }} USD</span>
+      </p>
+    </div>
+    <div class="card-text">
+      <p><span>Color:</span></p>
+      <p>{{ product.color }}</p>
+    </div>
+    <button mat-flat-button class="card__button">Add to cart</button>
+  </div>
+</div>
