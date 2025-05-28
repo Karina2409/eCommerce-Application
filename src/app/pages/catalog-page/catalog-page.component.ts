@@ -6,6 +6,7 @@ import { MatButton } from '@angular/material/button';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
+import { ProductCardComponent } from '@components/product-card';
 
 @Component({
   selector: 'app-catalog-page',
@@ -19,6 +20,7 @@ import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
     MatOption,
     MatLabel,
     RouterLink,
+    ProductCardComponent,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',

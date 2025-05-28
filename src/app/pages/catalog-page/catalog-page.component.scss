@@ -20,47 +20,10 @@ main {
 
 .cards-grid {
   display: flex;
-}
-
-.card-container {
-  display: flex;
   flex-direction: row;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 1rem;
-  padding: 0.5rem;
-  width: 100%;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  border: 0.1rem solid var(--secondary-color);
-  border-radius: 0.5rem;
-  padding-bottom: 0.5rem;
-  color: var(--secondary-color);
-  span {
-    color: black;
-  }
-}
-
-.card__img {
-  border-radius: 0.5rem;
-}
-
-.card__button {
-  width: 8rem;
-}
-
-.card-text {
-  width: 60%;
-  display: flex;
-  justify-content: space-between;
-  span {
-    color: var(--dark-color);
-  }
 }
 
 .select-container {
