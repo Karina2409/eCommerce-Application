@@ -14,8 +14,6 @@ export class ProductService {
   public subcategories: Record<string, { id: string; parentId: string }> = {};
 
   private authService: AuthService = inject(AuthService);
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  constructor() {}
 
   public async getCategories(): Promise<ClientResponse<CategoryPagedQueryResponse> | string> {
     try {
@@ -39,14 +37,10 @@ export class ProductService {
 
         results.forEach((result) => {
           if (!result.ancestors.length) {
-            const categoryKey = result.key;
-            const categoryId = result.id;
-            this.categories[categoryKey!] = categoryId;
+            this.categories[result.key!] = result.id;
           } else {
-            const categoryKey = result.key;
-            const categoryId = result.id;
-            this.subcategories[categoryKey!] = {
-              id: categoryId,
+            this.subcategories[result.key!] = {
+              id: result.id,
               parentId: result.parent?.id as string,
             };
           }
