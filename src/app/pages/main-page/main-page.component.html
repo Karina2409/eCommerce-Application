@@ -1,17 +1,17 @@
 <div class="main-page__container">
   <section class="categories">
     <a
-      *ngFor="let category of categories"
-      [routerLink]="['/catalog', category.name['en'] | lowercase]"
+      *ngFor="let category of categories | keyvalue"
+      [routerLink]="['/catalog', category.key | lowercase]"
     >
       <div
         class="category-card"
         [ngStyle]="{
           'background-image':
-            'url(\'assets/images/categories/' + (category.name['en'] | lowercase) + '.jpeg\')',
+            'url(\'assets/images/categories/' + (category.key | lowercase) + '.jpeg\')',
         }"
       >
-        <p class="category-card__name">{{ category.name['en'] }}</p>
+        <p class="category-card__name">{{ category.key | titlecase }}</p>
       </div>
     </a>
   </section>

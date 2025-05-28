@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { NgForOf, TitleCasePipe } from '@angular/common';
 import { Product } from '@models/types';
-import { MatButton } from '@angular/material/button';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
@@ -13,13 +12,11 @@ import { ProductCardComponent } from '@components/product-card';
   imports: [
     NgForOf,
     TitleCasePipe,
-    MatButton,
     MatButtonModule,
     FormsModule,
     MatSelect,
     MatOption,
     MatLabel,
-    RouterLink,
     ProductCardComponent,
   ],
   templateUrl: './catalog-page.component.html',
