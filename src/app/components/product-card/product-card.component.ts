@@ -1,7 +1,7 @@
-import { Component, Optional, SkipSelf } from '@angular/core';
+import { Component, Input, Signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
-import { CatalogPageComponent } from '@pages/catalog-page';
+import { ProductProjection } from '@commercetools/platform-sdk';
 
 @Component({
   selector: 'app-product-card',
@@ -10,5 +10,5 @@ import { CatalogPageComponent } from '@pages/catalog-page';
   styleUrl: './product-card.component.scss',
 })
 export class ProductCardComponent {
-  constructor(@Optional() @SkipSelf() public parent?: CatalogPageComponent) {}
+  @Input({ required: true }) public products!: Signal<ProductProjection[]>;
 }

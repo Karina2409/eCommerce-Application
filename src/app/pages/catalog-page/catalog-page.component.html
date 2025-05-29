@@ -1,35 +1,35 @@
 <main>
-  <section class="catalog-panel">
-    <div class="catalog-panel__options">
-      <div class="select-container">
-        <mat-label class="select-container__label">Category</mat-label>
-        <mat-select [(ngModel)]="selectedCategory" class="select-container__options">
-          <mat-option value="">All categories</mat-option>
-          <mat-option *ngFor="let category of categories" [value]="category">
-            {{ category | titlecase }}
-          </mat-option>
-        </mat-select>
-      </div>
-      <div class="select-container">
-        <mat-label class="select-container__label">Brand</mat-label>
-        <mat-select [(ngModel)]="selectedBrand" class="select-container__options">
-          <mat-option value="">All brands</mat-option>
-          <mat-option *ngFor="let brand of brands" [value]="brand">
-            {{ brand }}
-          </mat-option>
-        </mat-select>
-      </div>
-      <div class="select-container">
-        <mat-label class="select-container__label">Sort by</mat-label>
-        <mat-select id="sort" [(ngModel)]="sortOption" class="select-container__options">
-          <mat-option value="name">Name</mat-option>
-          <mat-option value="price">Price</mat-option>
-          <mat-option value="brand">Brand</mat-option>
-        </mat-select>
-      </div>
-    </div>
-  </section>
+  <!--  <section class="catalog-panel">-->
+  <!--    <div class="catalog-panel__options">-->
+  <!--      <div class="select-container">-->
+  <!--        <mat-label class="select-container__label">Category</mat-label>-->
+  <!--        <mat-select [(ngModel)]="selectedCategory" class="select-container__options">-->
+  <!--          <mat-option value="">All categories</mat-option>-->
+  <!--          <mat-option *ngFor="let category of categories" [value]="category">-->
+  <!--            {{ category | titlecase }}-->
+  <!--          </mat-option>-->
+  <!--        </mat-select>-->
+  <!--      </div>-->
+  <!--      <div class="select-container">-->
+  <!--        <mat-label class="select-container__label">Brand</mat-label>-->
+  <!--        <mat-select [(ngModel)]="selectedBrand" class="select-container__options">-->
+  <!--          <mat-option value="">All brands</mat-option>-->
+  <!--          <mat-option *ngFor="let brand of brands" [value]="brand">-->
+  <!--            {{ brand }}-->
+  <!--          </mat-option>-->
+  <!--        </mat-select>-->
+  <!--      </div>-->
+  <!--      <div class="select-container">-->
+  <!--        <mat-label class="select-container__label">Sort by</mat-label>-->
+  <!--        <mat-select id="sort" [(ngModel)]="sortOption" class="select-container__options">-->
+  <!--          <mat-option value="name">Name</mat-option>-->
+  <!--          <mat-option value="price">Price</mat-option>-->
+  <!--          <mat-option value="brand">Brand</mat-option>-->
+  <!--        </mat-select>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </section>-->
   <section class="cards-grid">
-    <app-product-card></app-product-card>
+    <app-product-card [products]="products"></app-product-card>
   </section>
 </main>

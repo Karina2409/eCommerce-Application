@@ -1,0 +1,17 @@
+<section class="categories">
+  @for (subcategory of productService.subcategories | keyvalue; track subcategory.key) {
+    @if (subcategory.value.parentId === parentId) {
+      <a [routerLink]="['/category', category | lowercase, subcategory.key | lowercase]">
+        <div
+          class="category-card"
+          [ngStyle]="{
+            'background-image':
+              'url(\'assets/images/categories/' + (subcategory.key | lowercase) + '.jpeg\')',
+          }"
+        >
+          <p class="category-card__name">{{ subcategory.key | titlecase }}</p>
+        </div>
+      </a>
+    }
+  }
+</section>
