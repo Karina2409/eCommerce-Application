@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   border: 0.1rem solid var(--secondary-color);
   border-radius: 0.5rem;
@@ -22,11 +23,27 @@
   }
 }
 
-.card__img {
-  border-radius: 0.5rem;
+.card-variant {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.card__button {
+.image-container {
+  border-radius: 0.5rem;
+  width: 20rem;
+  height: 20rem;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.card-button {
   width: 8rem;
 }
 

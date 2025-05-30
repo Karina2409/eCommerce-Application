@@ -2,7 +2,7 @@
   <section class="categories">
     <a
       *ngFor="let category of productService.categories | keyvalue"
-      [routerLink]="['/category', category.key | lowercase]"
+      [routerLink]="['/catalog', category.key | lowercase]"
     >
       <div
         class="category-card"

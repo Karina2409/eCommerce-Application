@@ -1,7 +1,7 @@
 <section class="categories">
   @for (subcategory of productService.subcategories | keyvalue; track subcategory.key) {
     @if (subcategory.value.parentId === parentId) {
-      <a [routerLink]="['/category', category | lowercase, subcategory.key | lowercase]">
+      <a [routerLink]="['/catalog', category | lowercase, subcategory.key | lowercase]">
         <div
           class="category-card"
           [ngStyle]="{

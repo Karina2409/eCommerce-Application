@@ -1,22 +1,18 @@
 <div class="card-container">
-  <div class="card" *ngFor="let product of products()">
-    <!--    <img src="{{ product.image }}" alt="{{ product.name['en'] }}" class="card__img" />-->
-    <h3>{{ product.name['en-US'] }}</h3>
-    <!--    <div class="card-text">-->
-    <!--      <p><span>Brand:</span></p>-->
-    <!--      <p>{{ product.brand }}</p>-->
-    <!--    </div>-->
-    <!--    <div class="card-text">-->
-    <!--      <p><span>Price:</span></p>-->
-    <!--      <p>-->
-    <!--        <span>{{ product.price }} USD</span>-->
-    <!--      </p>-->
-    <!--    </div>-->
-    <!--    <div class="card-text">-->
-    <!--      <p><span>Color:</span></p>-->
-    <!--      <p>{{ product.color }}</p>-->
-    <!--    </div>-->
-    <!--    <button mat-flat-button class="card__button">Add to cart</button>-->
-    <!--  </div>-->
+  <div class="card" *ngFor="let variant of allVariants; index as i">
+    <div class="image-container">
+      <img [src]="variant.images?.[0]?.url" [alt]="name" class="card-img" />
+    </div>
+    <h3>{{ name }}</h3>
+    <p>{{ getDescription() }}</p>
+
+    <ng-container *ngIf="variant.prices?.[0] as price">
+      <div class="card-text">
+        <span>Price:</span> {{ price.value.centAmount / 100 }} {{ price.value.currencyCode }}
+      </div>
+    </ng-container>
+    <div class="card-text"><span>Brand:</span> {{ getAttribute(variant, 'brand') }}</div>
+    <div class="card-text"><span>Color:</span> {{ getAttribute(variant, 'color') }}</div>
+    <button mat-flat-button class="card-button">Add to cart</button>
   </div>
 </div>
