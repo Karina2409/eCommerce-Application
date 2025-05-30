@@ -19,11 +19,8 @@ export class ProductCardComponent {
     return [this.product.masterVariant, ...this.product.variants];
   }
 
-  public static getAttribute(
-    variant: ProductVariant,
-    attribute: string,
-    locale = 'en-US',
-  ): string | null {
+  /* eslint-disable class-methods-use-this */
+  public getAttribute(variant: ProductVariant, attribute: string, locale = 'en-US'): string | null {
     const attr = variant.attributes?.find((a) => a.name === attribute);
     if (!attr) return null;
 
