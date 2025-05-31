@@ -64,7 +64,7 @@ export class ProductService {
       staged: true,
     };
     if (categoryId) {
-      queryArgs.filter = [`categories.id:"${categoryId}"`];
+      queryArgs.where = `categories(id="${categoryId}")`;
     }
 
     try {
