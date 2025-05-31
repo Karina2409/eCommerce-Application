@@ -5,6 +5,7 @@ import {
   ProductProjection,
 } from '@commercetools/platform-sdk';
 import { AuthService } from '@services/auth-service';
+import { ProductQueryArgs } from '@models/types/product/product-query-args.type';
 
 @Injectable({
   providedIn: 'root',
@@ -54,18 +55,20 @@ export class ProductService {
     }
   }
 
-  public async getAllProductsByCategory(categoryId: string): Promise<ProductProjection[] | string> {
+  public async getAllProductsByCategory(
+    categoryId?: string,
+  ): Promise<ProductProjection[] | string> {
     let products: ProductProjection[] = [];
+    const queryArgs: ProductQueryArgs = {
+      limit: 50,
+      staged: true,
+    };
+    if (categoryId) {
+      queryArgs.filter = [`categories.id:"${categoryId}"`];
+    }
 
     try {
-      const data = await this.authService.apiRoot
-        .productProjections()
-        .get({
-          queryArgs: {
-            where: `categories(id="${categoryId}")`,
-          },
-        })
-        .execute();
+      const data = await this.authService.apiRoot.productProjections().get({ queryArgs }).execute();
       products = data.body.results;
       return products;
     } catch (error) {
