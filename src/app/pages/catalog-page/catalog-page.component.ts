@@ -7,6 +7,7 @@ import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { ProductCardComponent } from '@components/product-card';
 import { ProductService } from '@services/product-service';
 import { ProductProjection } from '@commercetools/platform-sdk';
+import { FilterService } from '@services/filter-service';
 
 @Component({
   selector: 'app-catalog-page',
@@ -25,6 +26,7 @@ import { ProductProjection } from '@commercetools/platform-sdk';
 })
 export class CatalogPageComponent implements OnInit {
   public productService: ProductService = inject(ProductService);
+  public filterService: FilterService = inject(FilterService);
   public category: string | null = '';
   public subcategory: string | null = '';
   public categories: Record<string, string> = {};
@@ -38,8 +40,23 @@ export class CatalogPageComponent implements OnInit {
   public parentId = '';
   public targetId = '';
   public products = signal<ProductProjection[]>([]);
+  public allAttributeValues = new Set();
+  public brands: string[] = [];
+  public selectedBrand = '';
 
   constructor(private route: ActivatedRoute) {}
+
+  public onValueChange(selectedValue: string) {
+    this.getProducts(selectedValue);
+  }
+
+  public async getProducts(selectedValue: string) {
+    const products = await this.filterService.getProductsByQuery(selectedValue, this.targetId);
+
+    if (Array.isArray(products)) {
+      this.products.set(products);
+    }
+  }
 
   public ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -66,6 +83,23 @@ export class CatalogPageComponent implements OnInit {
         this.productService.getAllProductsByCategory(this.targetId).then((products) => {
           if (Array.isArray(products)) {
             this.products.set(products);
+          }
+
+          this.products().forEach((product) => {
+            if (product.masterVariant && product.masterVariant.attributes) {
+              const attributeValue = product.masterVariant.attributes.find(
+                (attr) => attr.name === 'brand',
+              )?.value;
+              if (attributeValue !== undefined) {
+                this.allAttributeValues.add(attributeValue);
+              }
+            }
+          });
+
+          for (const value of this.allAttributeValues) {
+            if (Array.isArray(value)) {
+              this.brands.push(value[0].key);
+            }
           }
         });
       });
