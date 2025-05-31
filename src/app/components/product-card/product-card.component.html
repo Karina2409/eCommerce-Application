@@ -1,0 +1,13 @@
+<div class="card-list-container">
+  <div class="card" *ngFor="let variant of allVariants">
+    <div class="image-container">
+      <img [src]="variant.images?.[0]?.url" alt="product image" class="card-img" />
+    </div>
+    <h3>{{ getName() }}</h3>
+    <p>{{ getDescription() }}</p>
+    <div class="card-text"><span>Brand:</span> {{ getAttribute(variant, 'brand') }}</div>
+    <div class="card-text"><span>Color:</span> {{ getAttribute(variant, 'color') }}</div>
+    <div class="card-text"><span>Price:</span> {{ getAttribute(variant, 'price') }}</div>
+    <button mat-flat-button class="card-button">Add to cart</button>
+  </div>
+</div>
