@@ -36,7 +36,7 @@ module.exports = tseslint.config(
         },
       ],
       'no-inline-comments': 'error',
-      'no-console': 'warn',
+      'no-console': 'error',
       'prefer-const': 'error',
       'class-methods-use-this': 'error',
 

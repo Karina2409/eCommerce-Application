@@ -1,7 +1,7 @@
-<div class="card-container">
+<div class="card-list-container">
   <div class="card" *ngFor="let variant of allVariants; index as i">
     <div class="image-container">
-      <img [src]="variant.images?.[0]?.url" [alt]="getName()" class="card-img" />
+      <img [src]="variant.images?.[0]?.url" alt="product image" class="card-img" />
     </div>
     <h3>{{ getName() }}</h3>
     <p>{{ getDescription() }}</p>
