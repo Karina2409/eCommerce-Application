@@ -46,11 +46,11 @@ export class CatalogPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {}
 
-  public onValueChange(newValue: string) {
-    this.myFunction(newValue);
+  public onValueChange(selectedValue: string) {
+    this.getProducts(selectedValue);
   }
 
-  public async myFunction(selectedValue: string) {
+  public async getProducts(selectedValue: string) {
     const products = await this.filterService.getProductsByQuery(selectedValue, this.targetId);
 
     if (Array.isArray(products)) {
