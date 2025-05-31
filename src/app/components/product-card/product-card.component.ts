@@ -12,11 +12,12 @@ import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
 export class ProductCardComponent {
   @Input({ required: true }) public product!: ProductProjection;
 
-  public get name(): string {
-    return this.product.name['en-US'] || Object.values(this.product.name)[0];
-  }
   public get allVariants(): ProductVariant[] {
     return [this.product.masterVariant, ...this.product.variants];
+  }
+
+  public getName(locale = 'en-US'): string {
+    return this.product.name[locale] || Object.values(this.product.name)[0];
   }
 
   /* eslint-disable class-methods-use-this */
@@ -33,7 +34,15 @@ export class ProductCardComponent {
       }
       return firstItem.key || null;
     }
-
+    if (
+      value.type === 'centPrecision' &&
+      'centAmount' in value &&
+      'currencyCode' in value &&
+      'fractionDigits' in value
+    ) {
+      const amount = value.centAmount / Math.pow(10, value.fractionDigits);
+      return `${amount.toFixed(value.fractionDigits)} ${value.currencyCode}`;
+    }
     if (value && typeof value === 'object') {
       if ('label' in value) return value.label[locale] || value.key || null;
       if ('key' in value) return value.key;
