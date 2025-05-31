@@ -20,8 +20,8 @@ export class ProductCardComponent {
     return this.product.name[locale] || Object.values(this.product.name)[0];
   }
 
-  /* eslint-disable class-methods-use-this */
   public getAttribute(variant: ProductVariant, attribute: string, locale = 'en-US'): string | null {
+    void this;
     const attr = variant.attributes?.find((a) => a.name === attribute);
     if (!attr) return null;
 

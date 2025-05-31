@@ -67,7 +67,6 @@ export class CatalogPageComponent implements OnInit {
           if (Array.isArray(products)) {
             this.products.set(products);
           }
-          console.log(products);
         });
       });
   }

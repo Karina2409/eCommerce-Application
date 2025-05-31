@@ -5,7 +5,7 @@ import {
   ProductProjection,
 } from '@commercetools/platform-sdk';
 import { AuthService } from '@services/auth-service';
-import { ProductQueryArgs } from '@models/types/product/product-query-args.type';
+import { ProductQueryArgs } from '@models/types';
 
 @Injectable({
   providedIn: 'root',
