@@ -78,4 +78,8 @@ export class ProductService {
       return String(error);
     }
   }
+
+  public async getProductByName(name: string) {
+    return this.authService.apiRoot.productProjections().withKey({ key: name }).get().execute();
+  }
 }
