@@ -1,41 +1,52 @@
-<div class="image-gallery">
-  <div class="main-image">
-    <button mat-button (click)="prevImg()" [disabled]="currentImgIndex === 0">◀</button>
-    <div *ngIf="variant.images?.length > 0" class="image-container">
-      <img
-        [src]="images[currentImgIndex]?.url"
-        [alt]="images[currentImgIndex]?.label || 'Product image'"
-        class="card-img"
-      />
+<ng-container *ngIf="product() as product" class="product-container">
+  <div class="image-gallery">
+    <div class="main-image">
+      <button mat-button (click)="prevImg()" [disabled]="currentImgIndex === 0">◀</button>
+      <div class="image-container">
+        <img
+          tabindex="0"
+          [src]="images[currentImgIndex]?.url"
+          [alt]="images[currentImgIndex]?.label || 'Product image'"
+          class="card-img"
+          (click)="openModal(images)"
+          (keydown.enter)="openModal(images)"
+        />
+      </div>
+      <button mat-button (click)="nextImg()" [disabled]="currentImgIndex === images.length - 1">
+        ▶
+      </button>
     </div>
-    <button mat-button (click)="nextImg()" [disabled]="currentImgIndex === images.length - 1">
-      ▶
-    </button>
-  </div>
-  <div class="thumbnail-row">
-    <div *ngFor="let img of images; let i = index" class="thumb-container">
-      <img
-        [src]="img.url"
-        class="thumb"
-        tabindex="0"
-        [class.selected]="i === currentImgIndex"
-        (click)="selectImg(i)"
-        [alt]="images[currentImgIndex]?.label || 'Product image'"
-        (keydown.enter)="selectImg(i)"
-      />
+    <div class="thumbnail-row">
+      <div *ngFor="let img of images; let i = index" class="thumb-container">
+        <img
+          [src]="img.url"
+          class="thumb"
+          tabindex="0"
+          [class.selected]="i === currentImgIndex"
+          (click)="selectImg(i)"
+          [alt]="images[currentImgIndex]?.label || 'Product image'"
+          (keydown.enter)="selectImg(i)"
+        />
+      </div>
     </div>
   </div>
-</div>
-<div class="card-info">
-  <mat-dialog-content class="card-info__details">
-    <h2 mat-dialog-title>{{ data.name }}</h2>
-    <div class="card-text"><span>Price:</span>{{ data.price }}</div>
-    <div class="card-text"><span>Brand:</span>{{ data.brand }}</div>
-    <div class="card-text"><span>Color:</span>{{ data.color }}</div>
-    <div class="card-text"><span>Description:</span>{{ data.description }}</div>
-  </mat-dialog-content>
-  <mat-dialog-actions class="buttons-container">
-    <button mat-flat-button class="product-detail__button">Add to cart</button>
-    <button mat-flat-button [mat-dialog-close]="true" class="product-detail__button">Close</button>
-  </mat-dialog-actions>
-</div>
+  <div class="card-info">
+    <div class="card-info__details" *ngIf="variantId">
+      <h2>{{ product.name[locale] }}</h2>
+      <div class="card-text">
+        <span>Price:</span>{{ getAttribute(allVariants[variantId - 1], 'price') }}
+      </div>
+      <div class="card-text" *ngIf="variantId">
+        <span>Brand:</span>{{ getAttribute(allVariants[variantId - 1], 'brand') }}
+      </div>
+      <div class="card-text">
+        <span>Color:</span>{{ getAttribute(allVariants[variantId - 1], 'color') }}
+      </div>
+      <div class="card-text"><span>Description:</span>{{ product.description?.[locale] }}</div>
+    </div>
+    <div class="buttons-container">
+      <button mat-flat-button class="product-detail__button">Add to cart</button>
+      <button mat-flat-button class="product-detail__button" (click)="goBack()">Back</button>
+    </div>
+  </div>
+</ng-container>

@@ -1,10 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
-import { MatDialog } from '@angular/material/dialog';
 import { ProductDetailComponent } from '@components/product-detail';
-
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   MatCard,
   MatCardActions,
@@ -24,32 +23,43 @@ import {
     MatCardContent,
     MatCardImage,
     MatCardActions,
+    ProductDetailComponent,
   ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnInit {
   @Input({ required: true }) public product!: ProductProjection;
+  public category: string | null = '';
+  public subcategory: string | null = '';
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   public get allVariants(): ProductVariant[] {
     return [this.product.masterVariant, ...this.product.variants];
   }
 
-  public openDialog(variant: ProductVariant) {
+  public slugify(text: string): string {
+    void this;
+    if (!text) return '';
+    return text
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]+/g, '');
+  }
+
+  public openProductPage(variant: ProductVariant): void {
     const name = this.getName();
-    const description = this.getDescription();
-    const price = this.getAttribute(variant, 'price');
-    const color = this.getAttribute(variant, 'color');
-    const brand = this.getAttribute(variant, 'brand');
-    this.dialog.open(ProductDetailComponent, {
-      width: '60vw',
-      height: '80vh',
-      maxWidth: '100vw',
-      panelClass: 'fullscreen-dialog',
-      data: { variant, description, price, name, color, brand },
-    });
+    this.router.navigate([
+      '/catalog',
+      this.category,
+      this.subcategory,
+      this.slugify(name),
+      variant.id,
+    ]);
   }
 
   public getName(locale = 'en-US'): string {
@@ -89,5 +99,12 @@ export class ProductCardComponent {
 
   public getDescription(locale = 'en-US'): string {
     return this.product.description?.[locale] || '';
+  }
+
+  public ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      this.category = params.get('categoryName');
+      this.subcategory = params.get('subcategoryName');
+    });
   }
 }

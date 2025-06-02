@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgForOf, TitleCasePipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValuePipe, NgForOf, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
@@ -21,6 +21,7 @@ import { SortService } from '@services/sort-service';
     MatOption,
     MatLabel,
     ProductCardComponent,
+    KeyValuePipe,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',
@@ -47,7 +48,10 @@ export class CatalogPageComponent implements OnInit {
   public selectedBrand = '';
   public sortOption = 'name.en-US asc';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   public onValueFilterChange(filterValue: string) {
     this.getFilterProducts(filterValue);
@@ -75,6 +79,17 @@ export class CatalogPageComponent implements OnInit {
       selectedValue,
       this.selectedBrand,
     );
+
+  public onCategoryChange(category: string) {
+    this.router.navigate(['/catalog', category]);
+  }
+
+  public onSubcategoryChange(subcategory: string) {
+    this.router.navigate(['/catalog', subcategory]);
+  }
+
+  public async getProducts(selectedValue: string) {
+    const products = await this.filterService.getProductsByQuery(selectedValue, this.targetId);
 
     if (Array.isArray(products)) {
       this.products.set(products);
