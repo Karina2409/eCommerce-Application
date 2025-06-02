@@ -1,61 +1,30 @@
 import { Component, effect, OnInit, signal } from '@angular/core';
-import {
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf, Location } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
-import { ActivatedRoute } from '@angular/router';
+import { Image, ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '@services/product-service';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [
-    MatButton,
-    NgForOf,
-    NgIf,
-    MatDialogClose,
-    MatDialogActions,
-    MatDialogTitle,
-    MatDialogContent,
-  ],
+  imports: [MatButton, NgForOf, NgIf, RouterLink],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
   public locale = 'en-US';
-  // // public data = inject(MAT_DIALOG_DATA);
-  // // public variant = inject(MAT_DIALOG_DATA).variant;
-  // public images = this.variant?.images ?? [];
-  // public currentImgIndex = 0;
-
-  // public selectImg(index: number) {
-  //   this.currentImgIndex = index;
-  // }
-  //
-  // public prevImg() {
-  //   if (this.currentImgIndex > 0) {
-  //     this.currentImgIndex--;
-  //   }
-  // }
-  //
-  // public nextImg() {
-  //   if (this.currentImgIndex < this.images.length - 1) {
-  //     this.currentImgIndex++;
-  //   }
-  // }
-
+  public images: Image[] = [];
+  public currentImgIndex = 0;
   public slug = signal<string | null>(null);
   public product = signal<ProductProjection | null>(null);
-  public variantId: number | undefined;
+  public variantId = 1;
+  public allVariants: ProductVariant[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
+    private location: Location,
   ) {
     effect(() => {
       const currentSlug = this.slug();
@@ -65,9 +34,25 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  public selectImg(index: number) {
+    this.currentImgIndex = index;
+  }
+
+  public prevImg() {
+    if (this.currentImgIndex > 0) {
+      this.currentImgIndex--;
+    }
+  }
+
+  public nextImg() {
+    if (this.currentImgIndex < this.images.length - 1) {
+      this.currentImgIndex++;
+    }
+  }
+
   public ngOnInit() {
     const slugFromRoute = this.route.snapshot.paramMap.get('name');
-    const idFromRoute = this.route.snapshot.paramMap.get('name');
+    const idFromRoute = this.route.snapshot.paramMap.get('id');
     this.slug.set(slugFromRoute);
     if (idFromRoute) this.variantId = Number(idFromRoute);
   }
@@ -103,10 +88,16 @@ export class ProductDetailComponent implements OnInit {
     return null;
   }
 
+  public goBack() {
+    this.location.back();
+  }
+
   private async fetchProductBySlug(slug: string) {
     try {
       const response = await this.productService.getProductBySlug(slug);
       this.product.set(response.body.results[0] ?? null);
+      this.allVariants = [this.product()!.masterVariant, ...this.product()!.variants];
+      this.images = this.allVariants[this.variantId - 1].images ?? [];
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
