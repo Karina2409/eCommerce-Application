@@ -8,7 +8,7 @@ import { ProductCardComponent } from '@components/product-card';
 import { ProductService } from '@services/product-service';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { FilterService } from '@services/filter-service';
-import { SortService } from '@services/sort-service/sort.service';
+import { SortService } from '@services/sort-service';
 
 @Component({
   selector: 'app-catalog-page',
