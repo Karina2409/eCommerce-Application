@@ -7,3 +7,16 @@
   gap: 1rem;
   padding: 1rem;
 }
+
+.profile-button {
+  border-radius: 50%;
+  background-color: inherit;
+  border: 2px solid var(--secondary-color);
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+}
+
+.profile-button__image {
+  padding: 10px;
+}
