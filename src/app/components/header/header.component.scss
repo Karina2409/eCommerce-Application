@@ -1,9 +1,26 @@
 :host {
   background-color: var(--primary-color);
   display: flex;
-  flex-direction: row;
+  padding: 1rem;
+}
+
+.wrapper {
+  display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
-  padding: 1rem;
+  width: 1200px;
+}
+
+.profile-button {
+  border-radius: 50%;
+  background-color: inherit;
+  border: 2px solid var(--secondary-color);
+  height: 48px;
+  width: 48px;
+  cursor: pointer;
+}
+
+.profile-button__image {
+  padding: 10px;
 }

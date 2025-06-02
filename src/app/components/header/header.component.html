@@ -1,9 +1,15 @@
-<button mat-flat-button routerLink="/catalog">Catalog</button>
-<button mat-flat-button routerLink="/cart">Cart</button>
+<div class="wrapper">
+  <button mat-flat-button routerLink="/main">Home</button>
+  <button mat-flat-button routerLink="/catalog">Catalog</button>
+  <button mat-flat-button routerLink="/cart">Cart</button>
 
-@if (isAuthorized()) {
-  <button mat-flat-button (click)="logout()">Log Out</button>
-} @else {
-  <button mat-flat-button routerLink="/login">Log In</button>
-  <button mat-flat-button routerLink="/registration">Sign Up</button>
-}
+  @if (isAuthorized()) {
+    <button class="profile-button" routerLink="/profile">
+      <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
+    </button>
+    <button mat-flat-button (click)="logout()">Log Out</button>
+  } @else {
+    <button mat-flat-button routerLink="/login">Log In</button>
+    <button mat-flat-button routerLink="/registration">Sign Up</button>
+  }
+</div>
