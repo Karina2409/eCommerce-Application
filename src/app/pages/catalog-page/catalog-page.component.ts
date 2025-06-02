@@ -8,6 +8,7 @@ import { ProductCardComponent } from '@components/product-card';
 import { ProductService } from '@services/product-service';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { FilterService } from '@services/filter-service';
+import { SortService } from '@services/sort-service/sort.service';
 
 @Component({
   selector: 'app-catalog-page',
@@ -27,6 +28,7 @@ import { FilterService } from '@services/filter-service';
 export class CatalogPageComponent implements OnInit {
   public productService: ProductService = inject(ProductService);
   public filterService: FilterService = inject(FilterService);
+  public sortService: SortService = inject(SortService);
   public category: string | null = '';
   public subcategory: string | null = '';
   public categories: Record<string, string> = {};
@@ -43,15 +45,36 @@ export class CatalogPageComponent implements OnInit {
   public allAttributeValues = new Set();
   public brands: string[] = [];
   public selectedBrand = '';
+  public sortOption = 'name.en-US asc';
 
   constructor(private route: ActivatedRoute) {}
 
-  public onValueChange(selectedValue: string) {
-    this.getProducts(selectedValue);
+  public onValueFilterChange(filterValue: string) {
+    this.getFilterProducts(filterValue);
   }
 
-  public async getProducts(selectedValue: string) {
-    const products = await this.filterService.getProductsByQuery(selectedValue, this.targetId);
+  public async getFilterProducts(selectedValue: string) {
+    const products = await this.filterService.getProductsByQuery(
+      selectedValue,
+      this.targetId,
+      this.sortOption,
+    );
+
+    if (Array.isArray(products)) {
+      this.products.set(products);
+    }
+  }
+
+  public onValueSortChange(sortValue: string) {
+    this.getSortProducts(sortValue);
+  }
+
+  public async getSortProducts(selectedValue: string) {
+    const products = await this.sortService.getProductsByQuery(
+      this.targetId,
+      selectedValue,
+      this.selectedBrand,
+    );
 
     if (Array.isArray(products)) {
       this.products.set(products);

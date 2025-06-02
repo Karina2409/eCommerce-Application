@@ -6,13 +6,13 @@ import { AuthService } from '@services/auth-service';
 @Injectable({
   providedIn: 'root',
 })
-export class FilterService {
+export class SortService {
   private authService: AuthService = inject(AuthService);
 
   public async getProductsByQuery(
-    query?: string,
     categoryId?: string,
     sort = 'name.en-US asc',
+    query?: string,
   ): Promise<ProductProjection[] | string> {
     let products: ProductProjection[] = [];
     const queryArgs: ProductQueryArgs = {
@@ -26,7 +26,7 @@ export class FilterService {
       queryArgs.sort = `${sort}`;
     } else if (query === '' && categoryId) {
       queryArgs.filter = [`categories.id:"${categoryId}"`];
-      queryArgs.where = `categories(id="${categoryId}")`;
+      queryArgs.where = `categories(id = "${categoryId}")`;
       queryArgs.sort = `${sort}`;
     } else if (query) {
       queryArgs.where = `masterVariant(attributes(value(key="${query}")))`;
