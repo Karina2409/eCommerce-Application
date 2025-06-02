@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  padding: 2rem 0;
+}
+
+.heading {
+  font-size: 2rem;
+}
+
+.profile__section {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  &.user-information {
+    width: 400px;
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  width: 100%;
+  gap: 1rem;
+}
+
+.user-info__row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user-info__title {
+  width: 40%;
+}
+
+.user-info__info {
+  width: 60%;
+}

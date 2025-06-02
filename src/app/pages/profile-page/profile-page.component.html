@@ -1,3 +1,21 @@
-<main>
-  <h1>Information</h1>
-</main>
+<section class="user-information profile__section">
+  <h2 class="heading">Information</h2>
+  <ul class="user-info">
+    <li class="user-info__row">
+      <div class="user-info__title">Name</div>
+      <div class="user-info__info">{{ user.firstName }}</div>
+    </li>
+    <li class="user-info__row">
+      <div class="user-info__title">Surname</div>
+      <div class="user-info__info">{{ user.lastName }}</div>
+    </li>
+    <li class="user-info__row">
+      <div class="user-info__title">Date of birth</div>
+      <div class="user-info__info">{{ user.dateOfBirth }}</div>
+    </li>
+  </ul>
+</section>
+
+<section class="addresses-information profile__section">
+  <h2 class="heading">Addresses</h2>
+</section>
