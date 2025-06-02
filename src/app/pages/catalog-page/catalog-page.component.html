@@ -1,21 +1,38 @@
 <main>
   <section class="catalog-panel">
     <div class="catalog-panel__options">
-      <!-- <div class="select-container">
+      <div class="select-container">
         <mat-label class="select-container__label">Category</mat-label>
-        <mat-select [(ngModel)]="selectedCategory" class="select-container__options">
+        <mat-select
+          [(ngModel)]="category"
+          class="select-container__options"
+          (selectionChange)="onCategoryChange($event.value)"
+        >
           <mat-option value="">All categories</mat-option>
-          <mat-option *ngFor="let category of categories" [value]="category">
-            {{ category | titlecase }}
+          <mat-option *ngFor="let category of categories | keyvalue" [value]="category.key">
+            {{ category.key }}
           </mat-option>
         </mat-select>
-      </div> -->
+      </div>
+      <div class="select-container">
+        <mat-label class="select-container__label">Subcategory</mat-label>
+        <mat-select
+          [(ngModel)]="category"
+          class="select-container__options"
+          (selectionChange)="onSubcategoryChange($event.value)"
+        >
+          <mat-option value="">All subcategories</mat-option>
+          <mat-option *ngFor="let category of subcategories | keyvalue" [value]="category.key">
+            {{ category.key }}
+          </mat-option>
+        </mat-select>
+      </div>
       <div class="select-container">
         <mat-label class="select-container__label">Brand</mat-label>
         <mat-select
           [(ngModel)]="selectedBrand"
           class="select-container__options"
-          (ngModelChange)="onValueChange($event)"
+          (ngModelChange)="onValueFilterChange($event)"
         >
           <mat-option value="">All brands</mat-option>
           <mat-option *ngFor="let brand of brands" [value]="brand">
@@ -23,14 +40,20 @@
           </mat-option>
         </mat-select>
       </div>
-      <!-- <div class="select-container">
+      <div class="select-container">
         <mat-label class="select-container__label">Sort by</mat-label>
-        <mat-select id="sort" [(ngModel)]="sortOption" class="select-container__options">
-          <mat-option value="name">Name</mat-option>
-          <mat-option value="price">Price</mat-option>
-          <mat-option value="brand">Brand</mat-option>
+        <mat-select
+          id="sort"
+          [(ngModel)]="sortOption"
+          class="select-container__options"
+          (ngModelChange)="onValueSortChange($event)"
+        >
+          <mat-option value="name.en-US asc">Name A-Z</mat-option>
+          <mat-option value="name.en-US desc">Name Z-A</mat-option>
+          <mat-option value="variants.attributes.price.centAmount asc">Price⬆️</mat-option>
+          <mat-option value="variants.attributes.price.centAmount desc">Price⬇️</mat-option>
         </mat-select>
-      </div> -->
+      </div>
     </div>
   </section>
   <section class="cards-grid">

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgForOf, TitleCasePipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValuePipe, NgForOf, TitleCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
@@ -8,6 +8,7 @@ import { ProductCardComponent } from '@components/product-card';
 import { ProductService } from '@services/product-service';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { FilterService } from '@services/filter-service';
+import { SortService } from '@services/sort-service';
 
 @Component({
   selector: 'app-catalog-page',
@@ -20,6 +21,7 @@ import { FilterService } from '@services/filter-service';
     MatOption,
     MatLabel,
     ProductCardComponent,
+    KeyValuePipe,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',
@@ -27,6 +29,7 @@ import { FilterService } from '@services/filter-service';
 export class CatalogPageComponent implements OnInit {
   public productService: ProductService = inject(ProductService);
   public filterService: FilterService = inject(FilterService);
+  public sortService: SortService = inject(SortService);
   public category: string | null = '';
   public subcategory: string | null = '';
   public categories: Record<string, string> = {};
@@ -43,11 +46,49 @@ export class CatalogPageComponent implements OnInit {
   public allAttributeValues = new Set();
   public brands: string[] = [];
   public selectedBrand = '';
+  public sortOption = 'name.en-US asc';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
-  public onValueChange(selectedValue: string) {
-    this.getProducts(selectedValue);
+  public onValueFilterChange(filterValue: string) {
+    this.getFilterProducts(filterValue);
+  }
+
+  public onValueSortChange(sortValue: string) {
+    this.getSortProducts(sortValue);
+  }
+
+  public async getFilterProducts(selectedValue: string) {
+    const products = await this.filterService.getProductsByQuery(
+      selectedValue,
+      this.targetId,
+      this.sortOption,
+    );
+
+    if (Array.isArray(products)) {
+      this.products.set(products);
+    }
+  }
+
+  public async getSortProducts(selectedValue: string) {
+    const products = await this.sortService.getProductsByQuery(
+      this.targetId,
+      selectedValue,
+      this.selectedBrand,
+    );
+    if (Array.isArray(products)) {
+      this.products.set(products);
+    }
+  }
+  public onCategoryChange(category: string) {
+    this.router.navigate(['/catalog', category]);
+  }
+
+  public onSubcategoryChange(subcategory: string) {
+    this.router.navigate(['/catalog', subcategory]);
   }
 
   public async getProducts(selectedValue: string) {

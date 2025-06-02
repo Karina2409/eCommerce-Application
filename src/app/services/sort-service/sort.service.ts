@@ -6,34 +6,32 @@ import { AuthService } from '@services/auth-service';
 @Injectable({
   providedIn: 'root',
 })
-export class FilterService {
+export class SortService {
   private authService: AuthService = inject(AuthService);
 
   public async getProductsByQuery(
-    query?: string,
     categoryId?: string,
-    sort = 'name.en-US asc',
+    sort = '',
+    query?: string,
   ): Promise<ProductProjection[] | string> {
     let products: ProductProjection[] = [];
     const queryArgs: ProductQueryArgs = {
       limit: 50,
       staged: true,
     };
+
     const brand = String(query).charAt(0).toUpperCase() + String(query).slice(1);
     if (categoryId && query) {
       queryArgs.filter = [
         `categories.id:"${categoryId}"`,
         `variants.attributes.brand.label.en-US:"${brand}"`,
       ];
-
       queryArgs.sort = `${sort}`;
-    } else if (categoryId && query === '') {
+    } else if (query === '' && categoryId) {
       queryArgs.filter = [`categories.id:"${categoryId}"`];
-
       queryArgs.sort = `${sort}`;
     } else if (query) {
       queryArgs.filter = [`variants.attributes.brand.label.en-US:"${brand}"`];
-
       queryArgs.sort = `${sort}`;
     } else if (query === '') {
       queryArgs.sort = `${sort}`;

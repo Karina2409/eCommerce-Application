@@ -7,7 +7,8 @@ import { NotFoundPageComponent } from '@pages/not-found-page';
 import { RegistrationPageComponent } from '@pages/registration-page';
 import { canActivateAuth } from '@services/auth-service';
 import { CategoryPageComponent } from '@pages/category-page';
-import { ProfilePageComponent } from '@pages/profile-page/profile-page.component';
+import { ProductDetailComponent } from '@components/product-detail';
+import { ProfilePageComponent } from '@pages/profile-page';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfilePageComponent },
   { path: 'catalog/:categoryName', component: CategoryPageComponent },
   { path: 'catalog/:categoryName/:subcategoryName', component: CatalogPageComponent },
+  { path: 'catalog/:categoryName/:subcategoryName/:name/:id', component: ProductDetailComponent },
   { path: '**', component: NotFoundPageComponent },
 ];
