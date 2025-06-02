@@ -19,37 +19,34 @@ export class FilterService {
       limit: 50,
       staged: true,
     };
-
+    const brand = String(query).charAt(0).toUpperCase() + String(query).slice(1);
     if (categoryId && query) {
-      queryArgs.filter = [`categories.id:"${categoryId}"`];
-      queryArgs.where = `categories(id = "${categoryId}") and masterVariant(attributes(value(key="${query}")))`;
+      queryArgs.filter = [
+        `categories.id:"${categoryId}"`,
+        `variants.attributes.brand.label.en-US:"${brand}"`,
+      ];
+
       queryArgs.sort = `${sort}`;
-    } else if (query === '' && categoryId) {
+    } else if (categoryId && query === '') {
       queryArgs.filter = [`categories.id:"${categoryId}"`];
-      queryArgs.where = `categories(id="${categoryId}")`;
+
       queryArgs.sort = `${sort}`;
     } else if (query) {
-      queryArgs.where = `masterVariant(attributes(value(key="${query}")))`;
+      queryArgs.filter = [`variants.attributes.brand.label.en-US:"${brand}"`];
+
       queryArgs.sort = `${sort}`;
     } else if (query === '') {
       queryArgs.sort = `${sort}`;
     }
 
     try {
-      if (sort === 'name.en-US asc' || sort === 'name.en-US desc') {
-        const data = await this.authService.apiRoot
-          .productProjections()
-          .get({ queryArgs })
-          .execute();
-        products = data.body.results;
-      } else {
-        const data = await this.authService.apiRoot
-          .productProjections()
-          .search()
-          .get({ queryArgs })
-          .execute();
-        products = data.body.results;
-      }
+      const data = await this.authService.apiRoot
+        .productProjections()
+        .search()
+        .get({ queryArgs })
+        .execute();
+      products = data.body.results;
+
       return products;
     } catch (error) {
       if (error instanceof Error) {

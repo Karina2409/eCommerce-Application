@@ -53,6 +53,10 @@ export class CatalogPageComponent implements OnInit {
     this.getFilterProducts(filterValue);
   }
 
+  public onValueSortChange(sortValue: string) {
+    this.getSortProducts(sortValue);
+  }
+
   public async getFilterProducts(selectedValue: string) {
     const products = await this.filterService.getProductsByQuery(
       selectedValue,
@@ -63,10 +67,6 @@ export class CatalogPageComponent implements OnInit {
     if (Array.isArray(products)) {
       this.products.set(products);
     }
-  }
-
-  public onValueSortChange(sortValue: string) {
-    this.getSortProducts(sortValue);
   }
 
   public async getSortProducts(selectedValue: string) {
