@@ -3,15 +3,15 @@
   <ul class="user-info">
     <li class="user-info__row">
       <div class="user-info__title">Name</div>
-      <div class="user-info__info">{{ user.firstName }}</div>
+      <div class="user-info__info">{{ user?.firstName ?? 'Unknown' }}</div>
     </li>
     <li class="user-info__row">
       <div class="user-info__title">Surname</div>
-      <div class="user-info__info">{{ user.lastName }}</div>
+      <div class="user-info__info">{{ user?.lastName ?? 'Unknown' }}</div>
     </li>
     <li class="user-info__row">
       <div class="user-info__title">Date of birth</div>
-      <div class="user-info__info">{{ user.dateOfBirth }}</div>
+      <div class="user-info__info">{{ user?.dateOfBirth ?? 'Unknown' }}</div>
     </li>
   </ul>
 </section>
@@ -30,7 +30,7 @@
         <li>Address type</li>
       </ul>
       <app-address-card
-        *ngFor="let address of user.addresses"
+        *ngFor="let address of user?.addresses"
         [address]="address"
       ></app-address-card>
     </div>

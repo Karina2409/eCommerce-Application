@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AddressCardComponent } from '@components/address-card';
 import { NgForOf } from '@angular/common';
+import { ProfileService } from '@services/profile-service';
+import { AddressResponse } from '@models/types';
+import { Customer } from '@commercetools/platform-sdk';
 
 @Component({
   selector: 'app-profile-page',
@@ -8,24 +11,35 @@ import { NgForOf } from '@angular/common';
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
-export class ProfilePageComponent {
-  public user;
+export class ProfilePageComponent implements OnInit {
+  public user!: Customer;
+  public addresses!: AddressResponse[];
+  public profileService = inject(ProfileService);
 
-  constructor() {
-    this.user = {
-      email: 'kserduk@mail.ru',
-      firstName: 'Karina',
-      lastName: 'Siardziuk',
-      dateOfBirth: '2004-09-24',
-      addresses: [
-        {
-          id: '_ZcEfF0Q',
-          streetName: 'prospekt N 43, apt. 1',
-          postalCode: '220022',
-          city: 'Minsk',
-          country: 'BY',
-        },
-      ],
-    };
+  public async ngOnInit() {
+    await this.profileService.getCustomerInfo().then((info) => {
+      if (info.customer) {
+        this.user = info.customer;
+        this.addresses = this.setAddresses(info.customer);
+      }
+    });
+  }
+
+  public setAddresses(customer: Customer): AddressResponse[] {
+    void this;
+    const {
+      addresses,
+      billingAddressIds,
+      shippingAddressIds,
+      defaultBillingAddressId,
+      defaultShippingAddressId,
+    } = customer;
+    return addresses.map((address) => ({
+      ...address,
+      billingAddressIds,
+      shippingAddressIds,
+      defaultBillingAddressId,
+      defaultShippingAddressId,
+    }));
   }
 }
