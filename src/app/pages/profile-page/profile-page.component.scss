@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
+  gap: 2rem;
   padding: 2rem 0;
 }
 
@@ -12,15 +12,16 @@
 }
 
 .profile__section {
-  width: 600px;
+  width: 100%;
+  max-width: 900px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-
-  &.user-information {
-    width: 400px;
-  }
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
 }
 
 .user-info {
@@ -29,17 +30,44 @@
   text-decoration: none;
   width: 100%;
   gap: 1rem;
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__title {
+    width: 40%;
+  }
+
+  &__info {
+    width: 60%;
+  }
 }
 
-.user-info__row {
+.user-addresses {
   display: flex;
-  justify-content: space-between;
-}
+  flex-direction: column;
 
-.user-info__title {
-  width: 40%;
-}
+  &__list-container {
+    width: 100%;
+    overflow-x: auto;
+  }
 
-.user-info__info {
-  width: 60%;
+  &__list {
+  }
+
+  &__head {
+    width: calc(900px - 2rem);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+    font-weight: bold;
+    padding-bottom: 0.5rem;
+
+    li {
+      padding: 0.5rem;
+      white-space: nowrap;
+    }
+  }
 }

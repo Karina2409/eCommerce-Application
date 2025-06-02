@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { AddressCardComponent } from '@components/address-card';
+import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [],
+  imports: [AddressCardComponent, NgForOf],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })

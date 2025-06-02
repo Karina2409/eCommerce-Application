@@ -16,6 +16,23 @@
   </ul>
 </section>
 
-<section class="addresses-information profile__section">
+<section class="user-addresses profile__section">
   <h2 class="heading">Addresses</h2>
+
+  <div class="user-addresses__list-container">
+    <div class="user-addresses__list">
+      <ul class="user-addresses__head">
+        <li>Address</li>
+        <li>City</li>
+        <li>Postal code</li>
+        <li>State</li>
+        <li>Country</li>
+        <li>Address type</li>
+      </ul>
+      <app-address-card
+        *ngFor="let address of user.addresses"
+        [address]="address"
+      ></app-address-card>
+    </div>
+  </div>
 </section>
