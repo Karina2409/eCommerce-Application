@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { KeyValuePipe, LowerCasePipe, NgForOf, NgStyle, TitleCasePipe } from '@angular/common';
+import { KeyValuePipe, LowerCasePipe, NgStyle, TitleCasePipe } from '@angular/common';
 import { ProductService } from '@services/product-service';
 
 @Component({
   selector: 'app-category-page',
-  imports: [KeyValuePipe, LowerCasePipe, NgForOf, TitleCasePipe, RouterLink, NgStyle],
+  imports: [KeyValuePipe, LowerCasePipe, TitleCasePipe, RouterLink, NgStyle],
   templateUrl: './category-page.component.html',
   styleUrl: './category-page.component.scss',
 })

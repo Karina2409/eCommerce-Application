@@ -82,4 +82,16 @@ export class ProductService {
   public async getProductByName(name: string) {
     return this.authService.apiRoot.productProjections().withKey({ key: name }).get().execute();
   }
+
+  public async getProductBySlug(slug: string, locale = 'en-US') {
+    return this.authService.apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          where: `slug(${locale}="${slug}")`,
+          limit: 1,
+        },
+      })
+      .execute();
+  }
 }
