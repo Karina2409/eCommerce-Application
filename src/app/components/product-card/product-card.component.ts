@@ -3,7 +3,8 @@ import { MatButton } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
 import { MatDialog } from '@angular/material/dialog';
-import { ProductDetailComponent } from '@components/product-detail/product-detail.component';
+import { ProductDetailComponent } from '@components/product-detail';
+
 import {
   MatCard,
   MatCardActions,
