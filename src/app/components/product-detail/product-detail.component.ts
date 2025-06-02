@@ -1,9 +1,11 @@
 import { Component, effect, OnInit, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgForOf, NgIf, Location } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { Image, ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '@services/product-service';
+import { ImagesModalComponent } from '@components/images-modal';
 
 @Component({
   selector: 'app-product-detail',
@@ -25,6 +27,7 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private location: Location,
+    private dialog: MatDialog,
   ) {
     effect(() => {
       const currentSlug = this.slug();
@@ -90,6 +93,14 @@ export class ProductDetailComponent implements OnInit {
 
   public goBack() {
     this.location.back();
+  }
+
+  public openModal(images: Image[]) {
+    this.dialog.open(ImagesModalComponent, {
+      maxWidth: '100vw',
+      panelClass: 'fullscreen-dialog',
+      data: { images },
+    });
   }
 
   private async fetchProductBySlug(slug: string) {

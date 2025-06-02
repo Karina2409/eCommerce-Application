@@ -4,9 +4,12 @@
       <button mat-button (click)="prevImg()" [disabled]="currentImgIndex === 0">◀</button>
       <div class="image-container">
         <img
+          tabindex="0"
           [src]="images[currentImgIndex]?.url"
           [alt]="images[currentImgIndex]?.label || 'Product image'"
           class="card-img"
+          (click)="openModal(images)"
+          (keydown.enter)="openModal(images)"
         />
       </div>
       <button mat-button (click)="nextImg()" [disabled]="currentImgIndex === images.length - 1">

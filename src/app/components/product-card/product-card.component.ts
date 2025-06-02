@@ -42,21 +42,6 @@ export class ProductCardComponent implements OnInit {
     return [this.product.masterVariant, ...this.product.variants];
   }
 
-  // public openDialog(variant: ProductVariant) {
-  //   // const name = this.getName();
-  //   // const description = this.getDescription();
-  //   // const price = this.getAttribute(variant, 'price');
-  //   // const color = this.getAttribute(variant, 'color');
-  //   // const brand = this.getAttribute(variant, 'brand');
-  //   // this.dialog.open(ProductDetailComponent, {
-  //   //   width: '60vw',
-  //   //   height: '80vh',
-  //   //   maxWidth: '100vw',
-  //   //   panelClass: 'fullscreen-dialog',
-  //   //   data: { variant, description, price, name, color, brand },
-  //   // });
-  // }
-
   public slugify(text: string): string {
     void this;
     if (!text) return '';
