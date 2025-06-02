@@ -62,6 +62,7 @@ export class ProductService {
     const queryArgs: ProductQueryArgs = {
       limit: 50,
       staged: true,
+      priceCurrency: 'USD',
     };
     if (categoryId) {
       queryArgs.where = `categories(id="${categoryId}")`;
