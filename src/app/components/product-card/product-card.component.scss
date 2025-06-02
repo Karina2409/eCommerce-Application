@@ -1,6 +1,7 @@
 .card-list-container {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 1rem;
@@ -21,16 +22,12 @@
   span {
     color: black;
   }
+  &:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--secondary-color);
+  }
 }
-
-.card-variant {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .image-container {
   border-radius: 0.5rem;
   width: 20rem;
@@ -42,6 +39,14 @@
   height: 100%;
   object-fit: contain;
   border-radius: 0.5rem;
+}
+
+.card__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
 }
 
 .card-button {

@@ -2,18 +2,54 @@ import { Component, Input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductDetailComponent } from '@components/product-detail';
+
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardImage,
+  MatCardTitle,
+} from '@angular/material/card';
 
 @Component({
   selector: 'app-product-card',
-  imports: [MatButton, NgForOf, NgIf],
+  imports: [
+    MatButton,
+    NgForOf,
+    NgIf,
+    MatCard,
+    MatCardTitle,
+    MatCardContent,
+    MatCardImage,
+    MatCardActions,
+  ],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
 })
 export class ProductCardComponent {
   @Input({ required: true }) public product!: ProductProjection;
 
+  constructor(private dialog: MatDialog) {}
+
   public get allVariants(): ProductVariant[] {
     return [this.product.masterVariant, ...this.product.variants];
+  }
+
+  public openDialog(variant: ProductVariant) {
+    const name = this.getName();
+    const description = this.getDescription();
+    const price = this.getAttribute(variant, 'price');
+    const color = this.getAttribute(variant, 'color');
+    const brand = this.getAttribute(variant, 'brand');
+    this.dialog.open(ProductDetailComponent, {
+      width: '60vw',
+      height: '80vh',
+      maxWidth: '100vw',
+      panelClass: 'fullscreen-dialog',
+      data: { variant, description, price, name, color, brand },
+    });
   }
 
   public getName(locale = 'en-US'): string {
