@@ -1,5 +1,5 @@
 <div class="card-list-container">
-  <mat-card class="card" *ngFor="let variant of allVariants" (click)="openDialog(variant)">
+  <mat-card class="card" *ngFor="let variant of allVariants" (click)="openProductPage(variant)">
     <div class="image-container">
       <img mat-card-image [src]="variant.images?.[0]?.url" alt="product image" class="card-img" />
     </div>
