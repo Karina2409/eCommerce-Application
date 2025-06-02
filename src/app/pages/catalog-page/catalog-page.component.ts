@@ -79,7 +79,10 @@ export class CatalogPageComponent implements OnInit {
       selectedValue,
       this.selectedBrand,
     );
-
+    if (Array.isArray(products)) {
+      this.products.set(products);
+    }
+  }
   public onCategoryChange(category: string) {
     this.router.navigate(['/catalog', category]);
   }
