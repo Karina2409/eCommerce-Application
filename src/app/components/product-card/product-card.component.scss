@@ -54,10 +54,13 @@
 }
 
 .card-text {
-  width: 60%;
+  width: 115%;
   display: flex;
   justify-content: space-between;
   span {
     color: var(--dark-color);
   }
+}
+.card-text .discounted {
+  color: var(--error-color);
 }

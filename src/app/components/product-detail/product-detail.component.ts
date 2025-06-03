@@ -60,6 +60,24 @@ export class ProductDetailComponent implements OnInit {
     if (idFromRoute) this.variantId = Number(idFromRoute);
   }
 
+  public getDiscountedPrice(variant: ProductVariant): string | undefined {
+    void this;
+    const priceArray = variant?.prices;
+    let result;
+    if (priceArray) {
+      const centAmount = priceArray[0].discounted?.value.centAmount;
+      const fractionDigits = priceArray[0].discounted?.value?.fractionDigits;
+      const currencyCode = priceArray[0].discounted?.value?.currencyCode;
+      let amount;
+      if (centAmount && fractionDigits) {
+        amount = centAmount / Math.pow(10, fractionDigits);
+      }
+      result = `${amount?.toFixed(fractionDigits)} ${currencyCode}`;
+    }
+
+    return result;
+  }
+
   public getAttribute(variant: ProductVariant, attribute: string, locale = 'en-US'): string | null {
     void this;
     const attr = variant.attributes?.find((a) => a.name === attribute);

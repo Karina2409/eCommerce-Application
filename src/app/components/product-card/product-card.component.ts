@@ -52,6 +52,8 @@ export class ProductCardComponent implements OnInit {
   }
 
   public openProductPage(variant: ProductVariant): void {
+    // eslint-disable-next-line no-console
+    console.log(variant);
     const name = this.getName();
     this.router.navigate([
       '/catalog',
@@ -64,6 +66,18 @@ export class ProductCardComponent implements OnInit {
 
   public getName(locale = 'en-US'): string {
     return this.product.name[locale] || Object.values(this.product.name)[0];
+  }
+
+  public getDiscountedPrice(variant: ProductVariant): string | undefined {
+    void this;
+    const centAmount = variant?.price?.discounted?.value?.centAmount;
+    const fractionDigits = variant?.price?.discounted?.value?.fractionDigits;
+    const currencyCode = variant?.price?.discounted?.value?.currencyCode;
+    let amount;
+    if (centAmount && fractionDigits) {
+      amount = centAmount / Math.pow(10, fractionDigits);
+    }
+    return `${amount?.toFixed(fractionDigits)} ${currencyCode}`;
   }
 
   public getAttribute(variant: ProductVariant, attribute: string, locale = 'en-US'): string | null {
