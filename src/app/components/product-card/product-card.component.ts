@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
@@ -11,6 +11,7 @@ import {
   MatCardImage,
   MatCardTitle,
 } from '@angular/material/card';
+import { ProductService } from '@services/product-service';
 
 @Component({
   selector: 'app-product-card',
@@ -32,6 +33,7 @@ export class ProductCardComponent implements OnInit {
   @Input({ required: true }) public product!: ProductProjection;
   public category: string | null = '';
   public subcategory: string | null = '';
+  public productService: ProductService = inject(ProductService);
 
   constructor(
     private router: Router,
@@ -52,14 +54,22 @@ export class ProductCardComponent implements OnInit {
   }
 
   public openProductPage(variant: ProductVariant): void {
-    const name = this.getName();
-    this.router.navigate([
-      '/catalog',
-      this.category,
-      this.subcategory,
-      this.slugify(name),
-      variant.id,
-    ]);
+    const slugifiedName = this.slugify(this.getName());
+    this.productService
+      .getCategoryBySlug(slugifiedName)
+      .then((result) => {
+        this.category = result.categoryName.toLowerCase();
+        this.subcategory = result.subcategoryName.toLowerCase();
+      })
+      .then(() => {
+        this.router.navigate([
+          '/catalog',
+          this.category,
+          this.subcategory,
+          slugifiedName,
+          variant.id,
+        ]);
+      });
   }
 
   public getName(locale = 'en-US'): string {
