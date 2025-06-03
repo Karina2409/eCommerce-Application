@@ -52,8 +52,6 @@ export class ProductCardComponent implements OnInit {
   }
 
   public openProductPage(variant: ProductVariant): void {
-    // eslint-disable-next-line no-console
-    console.log(variant);
     const name = this.getName();
     this.router.navigate([
       '/catalog',
