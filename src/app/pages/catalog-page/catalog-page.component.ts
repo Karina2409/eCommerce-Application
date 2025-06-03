@@ -83,12 +83,18 @@ export class CatalogPageComponent implements OnInit {
       this.products.set(products);
     }
   }
-  public onCategoryChange(category: string) {
-    this.router.navigate(['/catalog', category]);
+  public onCategoryChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const category = selectElement.innerText;
+    if (category === '') {
+      this.router.navigate(['/catalog']);
+    } else {
+      this.router.navigate(['/catalog', category]);
+    }
   }
 
   public onSubcategoryChange(subcategory: string) {
-    this.router.navigate(['/catalog', subcategory]);
+    this.router.navigate([`/catalog/${this.category}`, `${subcategory}`]);
   }
 
   public async getProducts(selectedValue: string) {
@@ -102,7 +108,13 @@ export class CatalogPageComponent implements OnInit {
   public ngOnInit() {
     this.route.paramMap.subscribe((params) => {
       this.category = params.get('categoryName');
+      if (this.category === null) {
+        this.category = '';
+      }
       this.subcategory = params.get('subcategoryName');
+      if (this.subcategory === null) {
+        this.subcategory = 'All';
+      }
     });
     this.productService
       .getCategoriesData()
