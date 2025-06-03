@@ -1,7 +1,7 @@
 .address-card {
   width: calc(900px - 2rem);
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr) 1.8fr;
   gap: 0.5rem;
 
   &__label {
@@ -17,26 +17,26 @@
     display: flex;
   }
 
-  &--default {
-    border: 2px solid #007bff;
-    background-color: #e6f0ff;
+  &__type-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    align-items: flex-start;
+    gap: 0.2rem;
   }
 
-  &--billing {
-    border-color: #28a745;
-    background-color: #e9f9ee;
+  &__type {
+    padding: 0.2rem;
+    background-color: var(--address-type-color);
+    color: var(--address-type-text-color);
+    border-radius: 0.5rem;
 
-    .address-card__label {
-      color: #218838;
-    }
-  }
-
-  &--shipping {
-    border-color: #17a2b8;
-    background-color: #e2f3f7;
-
-    .address-card__label {
-      color: #117a8b;
+    &_default {
+      border-radius: 0.5rem;
+      padding: 0.2rem;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
     }
   }
 }
