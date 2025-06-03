@@ -68,14 +68,20 @@ export class ProductCardComponent implements OnInit {
 
   public getDiscountedPrice(variant: ProductVariant): string | undefined {
     void this;
-    const centAmount = variant?.price?.discounted?.value?.centAmount;
-    const fractionDigits = variant?.price?.discounted?.value?.fractionDigits;
-    const currencyCode = variant?.price?.discounted?.value?.currencyCode;
-    let amount;
-    if (centAmount && fractionDigits) {
-      amount = centAmount / Math.pow(10, fractionDigits);
+    const priceArray = variant?.prices;
+    let result;
+    if (priceArray) {
+      const centAmount = priceArray[0].discounted?.value.centAmount;
+      const fractionDigits = priceArray[0].discounted?.value?.fractionDigits;
+      const currencyCode = priceArray[0].discounted?.value?.currencyCode;
+      let amount;
+      if (centAmount && fractionDigits) {
+        amount = centAmount / Math.pow(10, fractionDigits);
+      }
+      result = `${amount?.toFixed(fractionDigits)} ${currencyCode}`;
     }
-    return `${amount?.toFixed(fractionDigits)} ${currencyCode}`;
+
+    return result;
   }
 
   public getAttribute(variant: ProductVariant, attribute: string, locale = 'en-US'): string | null {
