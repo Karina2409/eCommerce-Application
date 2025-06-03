@@ -29,10 +29,7 @@
         <li>Country</li>
         <li>Address type</li>
       </ul>
-      <app-address-card
-        *ngFor="let address of user?.addresses"
-        [address]="address"
-      ></app-address-card>
+      <app-address-card *ngFor="let address of addresses" [address]="address"></app-address-card>
     </div>
   </div>
 </section>
