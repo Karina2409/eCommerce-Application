@@ -38,7 +38,11 @@
         >{{ productDetailService.getAttribute(allVariants[variantId - 1], 'price') }}
       </div>
       <div class="card-text">
-        <span class="discounted">Discounted price: </span
+        <span
+          class="discounted"
+          *ngIf="allVariants[variantId - 1]?.prices?.[0]?.discounted?.value?.centAmount"
+          >Discounted price: </span
+        >{{ getDiscountedPrice(allVariants[variantId - 1]) }}
         >{{ productDetailService.getDiscountedPrice(allVariants[variantId - 1]) }}
       </div>
       <div class="card-text" *ngIf="variantId">

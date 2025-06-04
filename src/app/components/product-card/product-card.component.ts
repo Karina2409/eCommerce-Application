@@ -78,6 +78,7 @@ export class ProductCardComponent implements OnInit {
     return this.product.name[locale] || Object.values(this.product.name)[0];
   }
 
+
   public getDescription(locale = 'en-US'): string {
     return this.product.description?.[locale] || '';
   }
