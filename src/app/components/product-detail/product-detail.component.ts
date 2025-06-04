@@ -1,4 +1,4 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForOf, NgIf, Location } from '@angular/common';
 import { MatButton } from '@angular/material/button';
@@ -6,6 +6,7 @@ import { Image, ProductProjection, ProductVariant } from '@commercetools/platfor
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '@services/product-service';
 import { ImagesModalComponent } from '@components/images-modal';
+import { ProductDetailService } from '@services/product-detail-service';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,6 +23,7 @@ export class ProductDetailComponent implements OnInit {
   public product = signal<ProductProjection | null>(null);
   public variantId = 1;
   public allVariants: ProductVariant[] = [];
+  public productDetailService: ProductDetailService = inject(ProductDetailService);
 
   constructor(
     private route: ActivatedRoute,
@@ -58,58 +60,6 @@ export class ProductDetailComponent implements OnInit {
     const idFromRoute = this.route.snapshot.paramMap.get('id');
     this.slug.set(slugFromRoute);
     if (idFromRoute) this.variantId = Number(idFromRoute);
-  }
-
-  public getDiscountedPrice(variant: ProductVariant): string | undefined {
-    void this;
-    const priceArray = variant?.prices;
-    let result;
-    if (priceArray) {
-      const centAmount = priceArray[0].discounted?.value.centAmount;
-      if (centAmount === undefined) {
-        return '';
-      }
-      const fractionDigits = priceArray[0].discounted?.value?.fractionDigits;
-      const currencyCode = priceArray[0].discounted?.value?.currencyCode;
-      let amount;
-      if (centAmount && fractionDigits) {
-        amount = centAmount / Math.pow(10, fractionDigits);
-      }
-      result = `${amount?.toFixed(fractionDigits)} ${currencyCode}`;
-    }
-
-    return result;
-  }
-
-  public getAttribute(variant: ProductVariant, attribute: string, locale = 'en-US'): string | null {
-    void this;
-    const attr = variant.attributes?.find((a) => a.name === attribute);
-    if (!attr) return null;
-
-    const value = attr.value;
-
-    if (Array.isArray(value) && value.length > 0) {
-      const firstItem = value[0];
-      if (firstItem.label && typeof firstItem.label === 'object') {
-        return firstItem.label[locale] || firstItem.key || null;
-      }
-      return firstItem.key || null;
-    }
-    if (
-      value.type === 'centPrecision' &&
-      'centAmount' in value &&
-      'currencyCode' in value &&
-      'fractionDigits' in value
-    ) {
-      const amount = value.centAmount / Math.pow(10, value.fractionDigits);
-      return `${amount.toFixed(value.fractionDigits)} ${value.currencyCode}`;
-    }
-    if (value && typeof value === 'object') {
-      if ('label' in value) return value.label[locale] || value.key || null;
-      if ('key' in value) return value.key;
-    }
-
-    return null;
   }
 
   public goBack() {

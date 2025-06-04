@@ -34,7 +34,8 @@
     <div class="card-info__details" *ngIf="variantId">
       <h2>{{ product.name[locale] }}</h2>
       <div class="card-text">
-        <span>Price:</span>{{ getAttribute(allVariants[variantId - 1], 'price') }}
+        <span>Price:</span
+        >{{ productDetailService.getAttribute(allVariants[variantId - 1], 'price') }}
       </div>
       <div class="card-text">
         <span
@@ -42,12 +43,15 @@
           *ngIf="allVariants[variantId - 1]?.prices?.[0]?.discounted?.value?.centAmount"
           >Discounted price: </span
         >{{ getDiscountedPrice(allVariants[variantId - 1]) }}
+        >{{ productDetailService.getDiscountedPrice(allVariants[variantId - 1]) }}
       </div>
       <div class="card-text" *ngIf="variantId">
-        <span>Brand:</span>{{ getAttribute(allVariants[variantId - 1], 'brand') }}
+        <span>Brand:</span
+        >{{ productDetailService.getAttribute(allVariants[variantId - 1], 'brand') }}
       </div>
       <div class="card-text">
-        <span>Color:</span>{{ getAttribute(allVariants[variantId - 1], 'color') }}
+        <span>Color:</span
+        >{{ productDetailService.getAttribute(allVariants[variantId - 1], 'color') }}
       </div>
       <div class="card-text"><span>Description:</span>{{ product.description?.[locale] }}</div>
     </div>
