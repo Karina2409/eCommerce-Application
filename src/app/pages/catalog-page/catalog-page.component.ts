@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { KeyValuePipe, NgForOf, TitleCasePipe } from '@angular/common';
+import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
@@ -9,12 +9,12 @@ import { ProductService } from '@services/product-service';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import { FilterService } from '@services/filter-service';
 import { SortService } from '@services/sort-service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-catalog-page',
   imports: [
     NgForOf,
-    TitleCasePipe,
     MatButtonModule,
     FormsModule,
     MatSelect,
@@ -22,6 +22,8 @@ import { SortService } from '@services/sort-service';
     MatLabel,
     ProductCardComponent,
     KeyValuePipe,
+    NgIf,
+    MatIcon,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',
@@ -47,11 +49,16 @@ export class CatalogPageComponent implements OnInit {
   public brands: string[] = [];
   public selectedBrand = '';
   public sortOption = 'name.en-US asc';
+  public searchQuery = signal('');
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
   ) {}
+
+  public clearSearchQuery() {
+    this.searchQuery.set('');
+  }
 
   public onValueFilterChange(filterValue: string) {
     this.getFilterProducts(filterValue);
