@@ -6,12 +6,18 @@
     <mat-card-content class="card__info">
       <h3>{{ getName() }}</h3>
       <p>{{ getDescription() }}</p>
-      <div class="card-text"><span>Brand:</span> {{ getAttribute(variant, 'brand') }}</div>
-      <div class="card-text"><span>Color:</span> {{ getAttribute(variant, 'color') }}</div>
-      <div class="card-text"><span>Price:</span> {{ getAttribute(variant, 'price') }}</div>
+      <div class="card-text">
+        <span>Brand:</span> {{ productDetailService.getAttribute(variant, 'brand') }}
+      </div>
+      <div class="card-text">
+        <span>Color:</span> {{ productDetailService.getAttribute(variant, 'color') }}
+      </div>
+      <div class="card-text">
+        <span>Price:</span> {{ productDetailService.getAttribute(variant, 'price') }}
+      </div>
       <div class="card-text">
         <span class="discounted">Discounted price:</span>
-        {{ getDiscountedPrice(variant) }}
+        {{ productDetailService.getDiscountedPrice(variant) }}
       </div>
     </mat-card-content>
     <mat-card-actions>
