@@ -50,6 +50,20 @@
         </mat-select>
       </div>
     </div>
+    <div class="catalog-panel__options">
+      <div class="search-box">
+        <input
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          class="search-input"
+          type="text"
+          placeholder="Search..."
+        />
+        <button *ngIf="searchQuery()" class="clear-btn" (click)="clearSearchQuery()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
   </section>
   <section class="cards-grid">
     <app-product-card *ngFor="let product of products()" [product]="product"></app-product-card>
