@@ -10,7 +10,9 @@
       <div class="card-text"><span>Color:</span> {{ getAttribute(variant, 'color') }}</div>
       <div class="card-text"><span>Price:</span> {{ getAttribute(variant, 'price') }}</div>
       <div class="card-text">
-        <span class="discounted">Discounted price:</span>
+        <span class="discounted" *ngIf="variant?.prices?.[0]?.discounted?.value?.centAmount"
+          >Discounted price:</span
+        >
         {{ getDiscountedPrice(variant) }}
       </div>
     </mat-card-content>

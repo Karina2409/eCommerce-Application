@@ -72,6 +72,9 @@ export class ProductCardComponent implements OnInit {
     let result;
     if (priceArray) {
       const centAmount = priceArray[0].discounted?.value.centAmount;
+      if (centAmount === undefined) {
+        return '';
+      }
       const fractionDigits = priceArray[0].discounted?.value?.fractionDigits;
       const currencyCode = priceArray[0].discounted?.value?.currencyCode;
       let amount;
