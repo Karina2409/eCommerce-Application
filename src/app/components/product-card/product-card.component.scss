@@ -32,6 +32,10 @@
   border-radius: 0.5rem;
   width: 20rem;
   height: 20rem;
+  @media (max-width: 400px) {
+    width: 15rem;
+    height: 15rem;
+  }
 }
 
 .card-img {

@@ -14,8 +14,12 @@ main {
 }
 
 .catalog-panel__options {
+  width: 50%;
   display: flex;
   gap: 1rem;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 }
 
 .cards-grid {
@@ -28,10 +32,19 @@ main {
 
 .select-container {
   display: flex;
+  width: 100%;
   font-size: 1.2rem;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   color: var(--secondary-color);
+}
+
+.select-container__label {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
 .select-container__options {
