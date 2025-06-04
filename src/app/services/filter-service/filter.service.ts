@@ -12,7 +12,7 @@ export class FilterService {
   public async getProductsByQuery(
     query?: string,
     categoryId?: string,
-    sort = 'name.en-US asc',
+    sort = 'name-field.en-US asc',
   ): Promise<ProductProjection[] | string> {
     let products: ProductProjection[] = [];
     const queryArgs: ProductQueryArgs = {

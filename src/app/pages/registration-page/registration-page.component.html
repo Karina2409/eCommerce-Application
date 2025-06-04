@@ -62,45 +62,19 @@
         Show Password
       </label>
 
-      <div class="form-group">
-        <label class="login-form__label" for="first-name">First Name:</label>
-        <input
-          formControlName="firstName"
-          class="login-form__input"
-          id="first-name"
-          placeholder="Enter first name"
-          [class.invalid]="firstName?.invalid && (firstName?.dirty || !firstName?.untouched)"
-        />
-        @if (firstName && firstName.invalid && (firstName.dirty || !firstName.untouched)) {
-          <div class="alert alert-validation">
-            @if (firstName.hasError('required')) {
-              First name is required
-            } @else if (firstName.hasError('pattern')) {
-              Must contain only latin letters
-            }
-          </div>
-        }
-      </div>
+      <app-name-field
+        label="First Name"
+        [control]="firstName"
+        id="first-name"
+        placeholder="Enter first name"
+      ></app-name-field>
 
-      <div class="form-group">
-        <label class="login-form__label" for="last-name">Last Name:</label>
-        <input
-          formControlName="lastName"
-          class="login-form__input"
-          id="last-name"
-          placeholder="Enter last name"
-          [class.invalid]="lastName?.invalid && (lastName?.dirty || !lastName?.untouched)"
-        />
-        @if (lastName && lastName.invalid && (lastName.dirty || !lastName.untouched)) {
-          <div class="alert alert-validation">
-            @if (lastName.hasError('required')) {
-              Last name is required
-            } @else if (lastName.hasError('pattern')) {
-              Must contain only latin letters
-            }
-          </div>
-        }
-      </div>
+      <app-name-field
+        label="Last Name"
+        [control]="lastName"
+        id="last-name"
+        placeholder="Enter last name"
+      ></app-name-field>
 
       <div class="form-group">
         <label class="login-form__label" for="date">Date of birth: </label>

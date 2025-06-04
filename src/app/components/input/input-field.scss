@@ -1,9 +1,3 @@
-.login-form_shadow {
-  box-shadow:
-    0 8px 16px 0 rgba(0, 0, 0, 0.2),
-    0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -36,40 +30,13 @@
   }
 }
 
-.login-form__checkbox {
-  display: flex;
-  color: var(--secondary-color);
-  align-items: center;
-  justify-content: center;
-  gap: 0.2rem;
-  align-self: flex-start;
-}
-
-.form-validation {
-  font-size: 1.2rem;
-  color: var(--secondary-color);
-  display: grid;
-  grid-template-columns: 1fr;
-  text-align: center;
-  gap: 1rem;
-}
-
-.error-message {
-  color: var(--error-color);
-  margin-top: 10px;
-}
-
-.login-form__link {
-  color: var(--secondary-color);
-}
-
 .alert {
   color: var(--error-color);
 }
 
 .alert-validation {
+  font-size: 0.8rem;
   text-wrap: wrap;
   width: 100%;
   text-align: left;
-  font-size: 0.8rem;
 }

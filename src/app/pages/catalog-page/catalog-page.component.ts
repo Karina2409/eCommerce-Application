@@ -46,7 +46,7 @@ export class CatalogPageComponent implements OnInit {
   public allAttributeValues = new Set();
   public brands: string[] = [];
   public selectedBrand = '';
-  public sortOption = 'name.en-US asc';
+  public sortOption = 'name-field.en-US asc';
 
   constructor(
     private route: ActivatedRoute,

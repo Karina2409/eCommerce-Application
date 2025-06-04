@@ -10,10 +10,11 @@ import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import { AddressComponent } from '@components/address-form';
+import { NameFieldComponent } from '@components/input';
 
 @Component({
   selector: 'app-registration-page',
-  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, AddressComponent],
+  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, AddressComponent, NameFieldComponent],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
@@ -63,16 +64,16 @@ export class RegistrationPageComponent implements OnInit {
     return this.form.get('email');
   }
 
-  public get password() {
-    return this.form.get('password');
+  public get password(): FormControl {
+    return this.form.get('password') as FormControl;
   }
 
-  public get firstName() {
-    return this.form.get('firstName');
+  public get firstName(): FormControl {
+    return this.form.get('firstName') as FormControl;
   }
 
-  public get lastName() {
-    return this.form.get('lastName');
+  public get lastName(): FormControl {
+    return this.form.get('lastName') as FormControl;
   }
 
   public get dateOfBirth() {

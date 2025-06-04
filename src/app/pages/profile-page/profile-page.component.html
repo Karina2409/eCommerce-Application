@@ -1,17 +1,34 @@
 <section class="user-information profile__section">
   <h2 class="heading">Information</h2>
+
+  <button class="edit" (click)="toggleEdition()">
+    <img src="/assets/images/edit.svg" alt="Edit" />
+  </button>
+
   <ul class="user-info">
     <li class="user-info__row">
       <div class="user-info__title">Name</div>
-      <div class="user-info__info">{{ user?.firstName ?? 'Unknown' }}</div>
+      @if (!isInfoEditing()) {
+        <div class="user-info__info">{{ user?.firstName ?? 'Unknown' }}</div>
+      } @else {
+        <input type="text" [value]="user?.firstName ?? ''" />
+      }
     </li>
     <li class="user-info__row">
       <div class="user-info__title">Surname</div>
-      <div class="user-info__info">{{ user?.lastName ?? 'Unknown' }}</div>
+      @if (!isInfoEditing()) {
+        <div class="user-info__info">{{ user?.lastName ?? 'Unknown' }}</div>
+      } @else {
+        <input type="text" [value]="user?.lastName ?? ''" />
+      }
     </li>
     <li class="user-info__row">
       <div class="user-info__title">Date of birth</div>
-      <div class="user-info__info">{{ user?.dateOfBirth ?? 'Unknown' }}</div>
+      @if (!isInfoEditing()) {
+        <div class="user-info__info">{{ user?.dateOfBirth ?? 'Unknown' }}</div>
+      } @else {
+        <input type="text" [value]="user?.dateOfBirth ?? ''" />
+      }
     </li>
   </ul>
 </section>
