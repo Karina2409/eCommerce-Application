@@ -21,9 +21,6 @@ export const routes: Routes = [
   { path: 'profile', component: ProfilePageComponent },
   { path: 'catalog/:categoryName', component: CategoryPageComponent },
   { path: 'catalog/:categoryName/:subcategoryName', component: CatalogPageComponent },
-  {
-    path: 'catalog/:categoryName/:subcategoryName/:name-field/:id',
-    component: ProductDetailComponent,
-  },
+  { path: 'catalog/:categoryName/:subcategoryName/:name/:id', component: ProductDetailComponent },
   { path: '**', component: NotFoundPageComponent },
 ];
