@@ -69,7 +69,7 @@
       <div class="search-box">
         <input
           [ngModel]="searchQuery()"
-          (ngModelChange)="searchQuery.set($event)"
+          (ngModelChange)="onValueFilterChange($event, 'brand')"
           class="search-input"
           type="text"
           placeholder="Search..."

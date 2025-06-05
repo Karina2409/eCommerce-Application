@@ -20,6 +20,7 @@ export class FilterService {
     const queryArgs: ProductQueryArgs = {
       limit: 50,
       staged: true,
+      markMatchingVariants: true,
     };
     const queryChanged = String(query).charAt(0).toUpperCase() + String(query).slice(1);
     if (categoryId && query) {

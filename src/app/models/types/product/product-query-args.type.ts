@@ -5,4 +5,5 @@ export type ProductQueryArgs = {
   filter?: string[];
   where?: string;
   sort?: string;
+  markMatchingVariants?: true;
 };
