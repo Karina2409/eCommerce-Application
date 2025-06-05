@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
-import { ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
+import { ProductVariant } from '@commercetools/platform-sdk';
 import { ProductDetailComponent } from '@components/product-detail';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -13,6 +13,7 @@ import {
 } from '@angular/material/card';
 import { ProductService } from '@services/product-service';
 import { ProductDetailService } from '@services/product-detail-service';
+import { ProductProjectionExtend } from '@models/index';
 
 @Component({
   selector: 'app-product-card',
@@ -31,7 +32,7 @@ import { ProductDetailService } from '@services/product-detail-service';
   styleUrl: './product-card.component.scss',
 })
 export class ProductCardComponent implements OnInit {
-  @Input({ required: true }) public product!: ProductProjection;
+  @Input({ required: true }) public product!: ProductProjectionExtend;
   public category: string | null = '';
   public subcategory: string | null = '';
   public productService: ProductService = inject(ProductService);
@@ -43,7 +44,14 @@ export class ProductCardComponent implements OnInit {
   ) {}
 
   public get allVariants(): ProductVariant[] {
-    return [this.product.masterVariant, ...this.product.variants];
+    let variants;
+    if (this.product.variantsRender) {
+      variants = [...this.product.variantsRender];
+      return variants;
+    } else {
+      variants = [this.product.masterVariant, ...this.product.variants];
+      return variants;
+    }
   }
 
   public slugify(text: string): string {
