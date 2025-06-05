@@ -7,10 +7,18 @@ import { AuthService } from '@services/auth-service';
 import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { LoginFormControlType } from '@models/types';
+import { EmailFieldComponent, PasswordFieldComponent } from '@components/input';
 
 @Component({
   selector: 'app-login-page',
-  imports: [MatButtonModule, RouterLink, ReactiveFormsModule, NgIf],
+  imports: [
+    MatButtonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    NgIf,
+    EmailFieldComponent,
+    PasswordFieldComponent,
+  ],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss',
 })
@@ -30,12 +38,20 @@ export class LoginPageComponent {
     }),
   });
 
-  public get email() {
-    return this.form.get('email');
+  public get email(): FormControl {
+    return this.form.get('email') as FormControl;
   }
 
-  public get password() {
-    return this.form.get('password');
+  public get password(): FormControl {
+    return this.form.get('password') as FormControl;
+  }
+
+  public onEmailInit(control: FormControl): void {
+    this.form.setControl('email', control);
+  }
+
+  public onPasswordInit(control: FormControl): void {
+    this.form.setControl('password', control);
   }
 
   public onSubmitAction(): void {

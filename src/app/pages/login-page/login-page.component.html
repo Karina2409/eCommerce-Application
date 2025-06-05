@@ -1,61 +1,13 @@
 <form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
   <h1>Log In</h1>
 
-  <div class="form-group">
-    <label class="login-form__label" for="email">Email</label>
-    <input
-      class="login-form__input"
-      id="email"
-      type="email"
-      placeholder="Enter email"
-      formControlName="email"
-      [class.invalid]="email?.invalid && (email?.dirty || !email?.untouched)"
-      required
-    />
-    @if (email && email.invalid && (email.dirty || !email.untouched)) {
-      <div class="alert alert-validation">
-        @if (email.hasError('required')) {
-          <div>Email is required</div>
-        } @else if (email.hasError('invalidEmailPattern')) {
-          <div>Invalid email format</div>
-        } @else if (email.hasError('containsWhitespace')) {
-          <div>Email shouldn't contain whitespaces</div>
-        }
-      </div>
-    }
-  </div>
+  <app-email-field (emailChange)="onEmailInit($event)" [control]="email"></app-email-field>
 
-  <div class="form-group">
-    <label class="login-form__label" for="password">Password</label>
-    <input
-      class="login-form__input"
-      id="password"
-      [type]="isPasswordShown() ? 'text' : 'password'"
-      placeholder="Enter password"
-      formControlName="password"
-      [class.invalid]="password?.invalid && (password?.dirty || !password?.untouched)"
-      required
-    />
-    @if (password && password.invalid && (password.dirty || !password.untouched)) {
-      <div class="alert alert-validation">
-        @if (password.hasError('required')) {
-          Password is required
-        } @else if (password.hasError('noBigLetter')) {
-          Password must include uppercase latin letter
-        } @else if (password.hasError('noLowerLetter')) {
-          Password must include lowercase latin letter
-        } @else if (password.hasError('noDigit')) {
-          Password must include number
-        } @else if (password.hasError('noSpecialSymbol')) {
-          Password must include special symbol
-        } @else if (password.hasError('minlength')) {
-          Password must include minimum 8 characters
-        } @else if (password.hasError('invalidPasswordPattern')) {
-          Password is not valid
-        }
-      </div>
-    }
-  </div>
+  <app-password-field
+    (passwordChange)="onPasswordInit($event)"
+    [control]="password"
+    [isPasswordShown]="isPasswordShown"
+  ></app-password-field>
 
   <label class="login-form__checkbox">
     <input type="checkbox" (change)="togglePassword()" />

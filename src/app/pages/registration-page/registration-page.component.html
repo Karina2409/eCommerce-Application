@@ -3,104 +3,32 @@
 
   <div class="login-form__container">
     <div class="login-form__info">
-      <div class="form-group">
-        <label class="login-form__label" for="email">Email:</label>
-        <input
-          class="login-form__input"
-          type="email"
-          id="email"
-          placeholder="Enter email"
-          formControlName="email"
-          [class.invalid]="email?.invalid && (email?.dirty || !email?.untouched)"
-        />
-        @if (email && email.invalid && (email.dirty || !email.untouched)) {
-          <div class="alert alert-validation">
-            @if (email.hasError('required')) {
-              <div>Email is required</div>
-            } @else if (email.hasError('invalidEmailPattern')) {
-              <div>Invalid email format</div>
-            } @else if (email.hasError('containsWhitespace')) {
-              <div>Email shouldn't contain whitespaces</div>
-            }
-          </div>
-        }
-      </div>
+      <app-email-field [control]="email"></app-email-field>
 
-      <div class="form-group">
-        <label class="login-form__label" for="password">Password:</label>
-        <input
-          class="login-form__input"
-          [type]="isPasswordShown() ? 'text' : 'password'"
-          id="password"
-          placeholder="Enter password"
-          formControlName="password"
-          [class.invalid]="password?.invalid && (password?.dirty || !password?.untouched)"
-        />
-        @if (password && password.invalid && (password.dirty || !password.untouched)) {
-          <div class="alert alert-validation">
-            @if (password.hasError('required')) {
-              Password is required
-            } @else if (password.hasError('noBigLetter')) {
-              Password must include uppercase latin letter
-            } @else if (password.hasError('noLowerLetter')) {
-              Password must include lowercase latin letter
-            } @else if (password.hasError('noDigit')) {
-              Password must include number
-            } @else if (password.hasError('noSpecialSymbol')) {
-              Password must include special symbol
-            } @else if (password.hasError('minlength')) {
-              Password must include minimum 8 characters
-            } @else if (password.hasError('invalidPasswordPattern')) {
-              Password is not valid
-            }
-          </div>
-        }
-      </div>
+      <app-password-field
+        (passwordChange)="onPasswordInit($event)"
+        [control]="password"
+        [isPasswordShown]="isPasswordShown"
+      ></app-password-field>
 
       <label class="login-form__checkbox">
         <input type="checkbox" (change)="togglePassword()" />
         Show Password
       </label>
 
-      <div class="form-group">
-        <label class="login-form__label" for="first-name">First Name:</label>
-        <input
-          formControlName="firstName"
-          class="login-form__input"
-          id="first-name"
-          placeholder="Enter first name"
-          [class.invalid]="firstName?.invalid && (firstName?.dirty || !firstName?.untouched)"
-        />
-        @if (firstName && firstName.invalid && (firstName.dirty || !firstName.untouched)) {
-          <div class="alert alert-validation">
-            @if (firstName.hasError('required')) {
-              First name is required
-            } @else if (firstName.hasError('pattern')) {
-              Must contain only latin letters
-            }
-          </div>
-        }
-      </div>
+      <app-name-field
+        label="First Name"
+        [control]="firstName"
+        id="first-name"
+        placeholder="Enter first name"
+      ></app-name-field>
 
-      <div class="form-group">
-        <label class="login-form__label" for="last-name">Last Name:</label>
-        <input
-          formControlName="lastName"
-          class="login-form__input"
-          id="last-name"
-          placeholder="Enter last name"
-          [class.invalid]="lastName?.invalid && (lastName?.dirty || !lastName?.untouched)"
-        />
-        @if (lastName && lastName.invalid && (lastName.dirty || !lastName.untouched)) {
-          <div class="alert alert-validation">
-            @if (lastName.hasError('required')) {
-              Last name is required
-            } @else if (lastName.hasError('pattern')) {
-              Must contain only latin letters
-            }
-          </div>
-        }
-      </div>
+      <app-name-field
+        label="Last Name"
+        [control]="lastName"
+        id="last-name"
+        placeholder="Enter last name"
+      ></app-name-field>
 
       <div class="form-group">
         <label class="login-form__label" for="date">Date of birth: </label>

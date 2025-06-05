@@ -10,10 +10,20 @@ import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import { AddressComponent } from '@components/address-form';
+import { EmailFieldComponent, NameFieldComponent, PasswordFieldComponent } from '@components/input';
 
 @Component({
   selector: 'app-registration-page',
-  imports: [MatButton, NgIf, ReactiveFormsModule, RouterLink, AddressComponent],
+  imports: [
+    MatButton,
+    NgIf,
+    ReactiveFormsModule,
+    RouterLink,
+    AddressComponent,
+    NameFieldComponent,
+    EmailFieldComponent,
+    PasswordFieldComponent,
+  ],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
@@ -59,20 +69,20 @@ export class RegistrationPageComponent implements OnInit {
 
   private authService: AuthService = inject(AuthService);
 
-  public get email() {
-    return this.form.get('email');
+  public get email(): FormControl {
+    return this.form.get('email') as FormControl;
   }
 
-  public get password() {
-    return this.form.get('password');
+  public get password(): FormControl {
+    return this.form.get('password') as FormControl;
   }
 
-  public get firstName() {
-    return this.form.get('firstName');
+  public get firstName(): FormControl {
+    return this.form.get('firstName') as FormControl;
   }
 
-  public get lastName() {
-    return this.form.get('lastName');
+  public get lastName(): FormControl {
+    return this.form.get('lastName') as FormControl;
   }
 
   public get dateOfBirth() {
@@ -84,6 +94,14 @@ export class RegistrationPageComponent implements OnInit {
     const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
 
     this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
+  }
+
+  public onEmailInit(control: FormControl): void {
+    this.form.setControl('email', control);
+  }
+
+  public onPasswordInit(control: FormControl): void {
+    this.form.setControl('password', control);
   }
 
   public onShippingAddressInit(addressForm: FormGroup) {

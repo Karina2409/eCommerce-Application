@@ -1,0 +1,19 @@
+<div class="form-group">
+  <label class="login-form__label" [for]="id">{{ label }}:</label>
+  <input
+    [formControl]="control"
+    class="login-form__input"
+    [id]="id"
+    [placeholder]="placeholder"
+    [class.invalid]="control?.invalid && (control?.dirty || !control?.untouched)"
+  />
+  @if (control && control.invalid && (control.dirty || !control.untouched)) {
+    <div class="alert alert-validation">
+      @if (control.hasError('required')) {
+        {{ label }} is required
+      } @else if (control.hasError('pattern')) {
+        Must contain only latin letters
+      }
+    </div>
+  }
+</div>

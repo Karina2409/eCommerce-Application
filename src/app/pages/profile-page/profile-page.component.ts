@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AddressCardComponent } from '@components/address-card';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
@@ -15,6 +15,7 @@ export class ProfilePageComponent implements OnInit {
   public user!: Customer;
   public addresses!: AddressResponse[];
   public profileService = inject(ProfileService);
+  public isInfoEditing = signal(false);
 
   public async ngOnInit() {
     await this.profileService.getCustomerInfo().then((info) => {
@@ -41,6 +42,10 @@ export class ProfilePageComponent implements OnInit {
       defaultBillingAddressId,
       defaultShippingAddressId,
     }));
+  }
+
+  public toggleEdition(): void {
+    this.isInfoEditing.update((value) => !value);
   }
 
   public async addAddress(
