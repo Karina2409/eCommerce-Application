@@ -1,13 +1,26 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AddressCardComponent } from '@components/address-card';
+import { MatButtonModule } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
 import { AddressResponse } from '@models/types';
 import { Customer } from '@commercetools/platform-sdk';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { passwordValidator } from '@validators/password';
+import { minAgeValidator } from '@validators/age';
+import { NameFieldComponent } from '@components/input';
+import { DateFieldComponent } from '@components/input/date-field/date-field.component';
 
 @Component({
   selector: 'app-profile-page',
-  imports: [AddressCardComponent, NgForOf],
+  imports: [
+    AddressCardComponent,
+    NgForOf,
+    NameFieldComponent,
+    DateFieldComponent,
+    ReactiveFormsModule,
+    MatButtonModule,
+  ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
@@ -16,6 +29,43 @@ export class ProfilePageComponent implements OnInit {
   public addresses!: AddressResponse[];
   public profileService = inject(ProfileService);
   public isInfoEditing = signal(false);
+
+  public form: FormGroup = new FormGroup({
+    userInfo: new FormGroup({
+      firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
+      lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
+      dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
+    }),
+
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+      passwordValidator,
+    ]),
+
+    shippingAddress: new FormGroup({}),
+    billingAddress: new FormGroup({}),
+  });
+
+  public get userInfoGroup(): FormGroup {
+    return this.form.get('userInfo') as FormGroup;
+  }
+
+  public get password(): FormControl {
+    return this.form.get('password') as FormControl;
+  }
+
+  public get firstName(): FormControl {
+    return this.userInfoGroup.get('firstName') as FormControl;
+  }
+
+  public get lastName(): FormControl {
+    return this.userInfoGroup.get('lastName') as FormControl;
+  }
+
+  public get dateOfBirth(): FormControl {
+    return this.userInfoGroup.get('dateOfBirth') as FormControl;
+  }
 
   public async ngOnInit() {
     await this.profileService.getCustomerInfo().then((info) => {
@@ -46,6 +96,15 @@ export class ProfilePageComponent implements OnInit {
 
   public toggleEdition(): void {
     this.isInfoEditing.update((value) => !value);
+  }
+
+  public onSubmitAction(): void {
+    if (this.userInfoGroup.valid) {
+      this.changeLastName(this.lastName.value);
+      this.changeFirstName(this.firstName.value);
+      this.setDateOfBirth(this.dateOfBirth.value);
+    }
+    this.isInfoEditing.set(false);
   }
 
   public async addAddress(

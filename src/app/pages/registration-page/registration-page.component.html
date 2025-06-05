@@ -30,26 +30,7 @@
         placeholder="Enter last name"
       ></app-name-field>
 
-      <div class="form-group">
-        <label class="login-form__label" for="date">Date of birth: </label>
-        <input
-          type="date"
-          formControlName="dateOfBirth"
-          class="login-form__input"
-          id="date"
-          [attr.max]="maxDate"
-          [class.invalid]="dateOfBirth?.invalid && (dateOfBirth?.dirty || !dateOfBirth?.untouched)"
-        />
-        @if (dateOfBirth && dateOfBirth.invalid && (dateOfBirth.dirty || !dateOfBirth.untouched)) {
-          <div class="alert alert-validation">
-            @if (dateOfBirth.hasError('required')) {
-              Date of birth is required
-            } @else if (dateOfBirth.hasError('tooYoung')) {
-              You must be at least {{ dateOfBirth.getError('tooYoung')?.age }} years old.
-            }
-          </div>
-        }
-      </div>
+      <app-date-field [control]="dateOfBirth"></app-date-field>
     </div>
     @if (!isBillingShippingAddressDefault()) {
       <app-address-form
