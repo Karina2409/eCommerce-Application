@@ -12,8 +12,4 @@ export class NameFieldComponent {
   @Input({ required: true }) public control!: FormControl;
   @Input({ required: true }) public id!: string;
   @Input() public placeholder = '';
-
-  public get showValidationError(): boolean {
-    return this.control?.invalid && (this.control?.dirty || this.control?.touched);
-  }
 }

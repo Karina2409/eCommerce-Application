@@ -1,1 +1,22 @@
-<p>email-field works!</p>
+<div class="form-group">
+  <label class="login-form__label" for="email">Email:</label>
+  <input
+    [formControl]="control"
+    class="login-form__input"
+    type="email"
+    id="email"
+    placeholder="Enter email"
+    [class.invalid]="control?.invalid && (control?.dirty || !control?.untouched)"
+  />
+  @if (control && control.invalid && (control.dirty || !control.untouched)) {
+    <div class="alert alert-validation">
+      @if (control.hasError('required')) {
+        <div>Email is required</div>
+      } @else if (control.hasError('invalidEmailPattern')) {
+        <div>Invalid email format</div>
+      } @else if (control.hasError('containsWhitespace')) {
+        <div>Email shouldn't contain whitespaces</div>
+      }
+    </div>
+  }
+</div>

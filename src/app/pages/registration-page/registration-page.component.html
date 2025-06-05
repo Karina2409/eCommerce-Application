@@ -3,28 +3,7 @@
 
   <div class="login-form__container">
     <div class="login-form__info">
-      <div class="form-group">
-        <label class="login-form__label" for="email">Email:</label>
-        <input
-          class="login-form__input"
-          type="email"
-          id="email"
-          placeholder="Enter email"
-          formControlName="email"
-          [class.invalid]="email?.invalid && (email?.dirty || !email?.untouched)"
-        />
-        @if (email && email.invalid && (email.dirty || !email.untouched)) {
-          <div class="alert alert-validation">
-            @if (email.hasError('required')) {
-              <div>Email is required</div>
-            } @else if (email.hasError('invalidEmailPattern')) {
-              <div>Invalid email format</div>
-            } @else if (email.hasError('containsWhitespace')) {
-              <div>Email shouldn't contain whitespaces</div>
-            }
-          </div>
-        }
-      </div>
+      <app-email-field [control]="email"></app-email-field>
 
       <div class="form-group">
         <label class="login-form__label" for="password">Password:</label>
