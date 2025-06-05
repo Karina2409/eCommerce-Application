@@ -25,9 +25,9 @@
       <div class="select-container">
         <mat-label class="select-container__label">Brand</mat-label>
         <mat-select
-          [(ngModel)]="selectedBrand"
+          [(ngModel)]="selectedValue"
           class="select-container__options"
-          (ngModelChange)="onValueFilterChange($event)"
+          (ngModelChange)="onValueFilterChange($event, 'brand')"
         >
           <mat-option value="">All brands</mat-option>
           <mat-option *ngFor="let brand of brands" [value]="brand">
@@ -35,6 +35,21 @@
           </mat-option>
         </mat-select>
       </div>
+
+      <div class="select-container">
+        <mat-label class="select-container__label">Color</mat-label>
+        <mat-select
+          [(ngModel)]="selectedValue"
+          class="select-container__options"
+          (ngModelChange)="onValueFilterChange($event, 'color')"
+        >
+          <mat-option value="">All colors</mat-option>
+          <mat-option *ngFor="let color of colors" [value]="color">
+            {{ color }}
+          </mat-option>
+        </mat-select>
+      </div>
+
       <div class="select-container">
         <mat-label class="select-container__label">Sort by</mat-label>
         <mat-select
@@ -54,7 +69,7 @@
       <div class="search-box">
         <input
           [ngModel]="searchQuery()"
-          (ngModelChange)="searchQuery.set($event)"
+          (ngModelChange)="onValueFilterChange($event, 'brand')"
           class="search-input"
           type="text"
           placeholder="Search..."
