@@ -14,8 +14,15 @@ main {
 }
 
 .catalog-panel__options {
+  width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 1rem;
+  @media (max-width: 1000px) {
+    width: 70%;
+    flex-direction: column;
+  }
 }
 
 .cards-grid {
@@ -28,14 +35,23 @@ main {
 
 .select-container {
   display: flex;
+  width: 100%;
   font-size: 1.2rem;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   color: var(--secondary-color);
 }
 
+.select-container__label {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
 .select-container__options {
-  width: 8rem;
+  width: 20rem;
   height: 1.8rem;
   border: 1px solid var(--secondary-color);
   padding: 0.2rem;
@@ -44,4 +60,41 @@ main {
 .subcategory {
   color: var(--subcategory-color);
   font-weight: 700;
+}
+
+.sub-label {
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 0.2rem;
+    div {
+      text-align: center;
+    }
+  }
+}
+
+.search-box {
+  width: 50%;
+  position: relative;
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.5rem;
+}
+
+.clear-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
 }

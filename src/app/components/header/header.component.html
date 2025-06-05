@@ -1,15 +1,57 @@
 <div class="wrapper">
-  <button mat-flat-button routerLink="/main">Home</button>
-  <button mat-flat-button routerLink="/catalog">Catalog</button>
-  <button mat-flat-button routerLink="/cart">Cart</button>
+  <div class="navigation-buttons" *ngIf="!isMobileDevice()">
+    <button mat-flat-button routerLink="/main">Home</button>
+    <button mat-flat-button routerLink="/catalog">Catalog</button>
+    <button mat-flat-button routerLink="/cart">Cart</button>
 
-  @if (isAuthorized()) {
-    <button class="profile-button" routerLink="/profile">
-      <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
-    </button>
-    <button mat-flat-button (click)="logout()">Log Out</button>
-  } @else {
-    <button mat-flat-button routerLink="/login">Log In</button>
-    <button mat-flat-button routerLink="/registration">Sign Up</button>
-  }
+    @if (isAuthorized()) {
+      <button class="profile-button" routerLink="/profile">
+        <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
+      </button>
+      <button mat-flat-button (click)="logout()">Log Out</button>
+    } @else {
+      <button mat-flat-button routerLink="/login">Log In</button>
+      <button mat-flat-button routerLink="/registration">Sign Up</button>
+    }
+  </div>
+
+  <div
+    class="burger"
+    *ngIf="isMobileDevice()"
+    (click)="toggleMenu()"
+    tabindex="0"
+    (keydown.enter)="toggleMenu()"
+  >
+    ☰
+  </div>
+</div>
+
+<div
+  class="modal-backdrop"
+  *ngIf="isMobileDevice() && isMenuOpen()"
+  (click)="closeMenu()"
+  tabindex="0"
+  (keydown.enter)="toggleMenu()"
+>
+  <div
+    class="modal-content"
+    (click)="$event.stopPropagation()"
+    tabindex="0"
+    (keydown.enter)="toggleMenu()"
+  >
+    <button mat-flat-button routerLink="/main" (click)="closeMenu()">Home</button>
+    <button mat-flat-button routerLink="/catalog" (click)="closeMenu()">Catalog</button>
+    <button mat-flat-button routerLink="/cart" (click)="closeMenu()">Cart</button>
+
+    @if (isAuthorized()) {
+      <button class="profile-button" routerLink="/profile" (click)="closeMenu()">
+        <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
+      </button>
+      <button mat-flat-button (click)="logout(); closeMenu()">Log Out</button>
+    } @else {
+      <button mat-flat-button routerLink="/login" (click)="closeMenu()">Log In</button>
+      <button mat-flat-button routerLink="/registration" (click)="closeMenu()">Sign Up</button>
+    }
+    <button mat-flat-button (click)="closeMenu()">Close</button>
+  </div>
 </div>

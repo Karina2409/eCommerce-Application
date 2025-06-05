@@ -15,8 +15,9 @@
         </mat-select>
       </div>
       <div class="select-container">
-        <div class="select-container__label">
-          Subcategory: <span class="subcategory">{{ subcategory }}</span>
+        <div class="select-container__label sub-label">
+          <div>Subcategory:</div>
+          <div class="subcategory">{{ subcategory }}</div>
         </div>
       </div>
     </div>
@@ -47,6 +48,20 @@
           <mat-option value="variants.attributes.price.centAmount asc">Price⬆️</mat-option>
           <mat-option value="variants.attributes.price.centAmount desc">Price⬇️</mat-option>
         </mat-select>
+      </div>
+    </div>
+    <div class="catalog-panel__options">
+      <div class="search-box">
+        <input
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          class="search-input"
+          type="text"
+          placeholder="Search..."
+        />
+        <button *ngIf="searchQuery()" class="clear-btn" (click)="clearSearchQuery()">
+          <mat-icon>close</mat-icon>
+        </button>
       </div>
     </div>
   </section>

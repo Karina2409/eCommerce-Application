@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  Category,
   CategoryPagedQueryResponse,
   ClientResponse,
   ProductProjection,
@@ -94,5 +95,42 @@ export class ProductService {
         },
       })
       .execute();
+  }
+
+  public getCategoryBySlug(
+    slug: string,
+    locale = 'en-US',
+  ): Promise<{
+    categoryName: string;
+    subcategoryName: string;
+  }> {
+    return this.authService.apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          where: `slug(${locale}="${slug}")`,
+          expand: ['categories[*]'],
+          limit: 1,
+        },
+      })
+      .execute()
+      .then((response) => {
+        const product = response.body.results[0];
+
+        const categories = product.categories
+          .map((reference) => reference.obj)
+          .filter((category): category is Category => !!category);
+
+        const category = categories.find((category) => !category.parent);
+        const subcategory = categories.find((category) => !!category.parent);
+
+        const categoryName = category?.name?.[locale] ?? '';
+        const subcategoryName = subcategory?.name?.[locale] ?? '';
+
+        return {
+          categoryName,
+          subcategoryName,
+        };
+      });
   }
 }
