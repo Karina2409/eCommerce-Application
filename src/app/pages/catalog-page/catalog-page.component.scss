@@ -11,6 +11,7 @@ main {
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .catalog-panel__options {
@@ -19,6 +20,7 @@ main {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
   @media (max-width: 1000px) {
     width: 70%;
     flex-direction: column;
