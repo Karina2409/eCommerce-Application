@@ -6,10 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { ProductCardComponent } from '@components/product-card';
 import { ProductService } from '@services/product-service';
-import { ProductProjection } from '@commercetools/platform-sdk';
 import { FilterService } from '@services/filter-service';
 import { SortService } from '@services/sort-service';
 import { MatIcon } from '@angular/material/icon';
+import { ProductProjectionExtend } from '@models/index';
 
 @Component({
   selector: 'app-catalog-page',
@@ -44,10 +44,11 @@ export class CatalogPageComponent implements OnInit {
   > = {};
   public parentId = '';
   public targetId = '';
-  public products = signal<ProductProjection[]>([]);
+  public products = signal<ProductProjectionExtend[]>([]);
   public allAttributeValues = new Set();
   public brands: string[] = [];
-  public selectedBrand = '';
+  public colors: string[] = [];
+  public selectedValue = '';
   public sortOption = 'name.en-US asc';
   public searchQuery = signal('');
 
@@ -60,19 +61,20 @@ export class CatalogPageComponent implements OnInit {
     this.searchQuery.set('');
   }
 
-  public onValueFilterChange(filterValue: string) {
-    this.getFilterProducts(filterValue);
+  public onValueFilterChange(filterValue: string, attribute: string) {
+    this.getFilterProducts(filterValue, attribute);
   }
 
   public onValueSortChange(sortValue: string) {
     this.getSortProducts(sortValue);
   }
 
-  public async getFilterProducts(selectedValue: string) {
+  public async getFilterProducts(selectedValue: string, attribute: string) {
     const products = await this.filterService.getProductsByQuery(
       selectedValue,
       this.targetId,
       this.sortOption,
+      attribute,
     );
 
     if (Array.isArray(products)) {
@@ -84,7 +86,7 @@ export class CatalogPageComponent implements OnInit {
     const products = await this.sortService.getProductsByQuery(
       this.targetId,
       selectedValue,
-      this.selectedBrand,
+      this.selectedValue,
     );
     if (Array.isArray(products)) {
       this.products.set(products);
@@ -149,7 +151,7 @@ export class CatalogPageComponent implements OnInit {
             if (product.masterVariant && product.masterVariant.attributes) {
               const attributeValue = product.masterVariant.attributes.find(
                 (attr) => attr.name === 'brand',
-              )?.value;
+              )?.value[0].key;
               if (attributeValue !== undefined) {
                 this.allAttributeValues.add(attributeValue);
               }
@@ -157,8 +159,31 @@ export class CatalogPageComponent implements OnInit {
           });
 
           for (const value of this.allAttributeValues) {
-            if (Array.isArray(value)) {
-              this.brands.push(value[0].key);
+            if (typeof value === 'string') {
+              this.brands.push(value);
+            }
+          }
+
+          this.allAttributeValues.clear();
+
+          this.products().forEach((product) => {
+            if (product.variants && product.masterVariant.attributes) {
+              const attributeValue = product.masterVariant.attributes.find(
+                (attr) => attr.name === 'color',
+              )?.value[0].key;
+              if (attributeValue !== undefined) {
+                this.allAttributeValues.add(attributeValue);
+              }
+            }
+            product.variants.map((variant) => {
+              const color = variant.attributes?.find((attr) => attr.name === 'color')?.value[0].key;
+              if (color) this.allAttributeValues.add(color);
+            });
+          });
+
+          for (const value of this.allAttributeValues) {
+            if (typeof value === 'string') {
+              this.colors.push(value);
             }
           }
         });
