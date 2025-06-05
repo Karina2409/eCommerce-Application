@@ -5,32 +5,57 @@
     <img src="/assets/images/edit.svg" alt="Edit" />
   </button>
 
-  <ul class="user-info">
-    <li class="user-info__row">
-      <div class="user-info__title">Name</div>
-      @if (!isInfoEditing()) {
+  @if (!isInfoEditing()) {
+    <ul class="user-info">
+      <li class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Name</div>
         <div class="user-info__info">{{ user?.firstName ?? 'Unknown' }}</div>
-      } @else {
-        <input type="text" [value]="user?.firstName ?? ''" />
-      }
-    </li>
-    <li class="user-info__row">
-      <div class="user-info__title">Surname</div>
-      @if (!isInfoEditing()) {
+      </li>
+      <li class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Surname</div>
         <div class="user-info__info">{{ user?.lastName ?? 'Unknown' }}</div>
-      } @else {
-        <input type="text" [value]="user?.lastName ?? ''" />
-      }
-    </li>
-    <li class="user-info__row">
-      <div class="user-info__title">Date of birth</div>
-      @if (!isInfoEditing()) {
+      </li>
+      <li class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Date of birth</div>
         <div class="user-info__info">{{ user?.dateOfBirth ?? 'Unknown' }}</div>
-      } @else {
-        <input type="text" [value]="user?.dateOfBirth ?? ''" />
-      }
-    </li>
-  </ul>
+      </li>
+    </ul>
+  } @else {
+    <form class="user-info" [formGroup]="userInfoGroup" (ngSubmit)="onSubmitAction()">
+      <div class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Name</div>
+        <app-name-field
+          label="First Name"
+          [control]="firstName"
+          id="first-name"
+          placeholder="Enter first name"
+          [value]="user?.firstName"
+        ></app-name-field>
+      </div>
+      <div class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Surname</div>
+        <app-name-field
+          label="Last Name"
+          [control]="lastName"
+          id="last-name"
+          placeholder="Enter last name"
+          [value]="user?.lastName"
+        ></app-name-field>
+      </div>
+      <div class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Date of birth</div>
+        <app-date-field [control]="dateOfBirth" [value]="user?.dateOfBirth"></app-date-field>
+      </div>
+      <button
+        class="login-form__button"
+        mat-flat-button
+        type="submit"
+        [disabled]="!userInfoGroup.valid"
+      >
+        Save
+      </button>
+    </form>
+  }
 </section>
 
 <section class="user-addresses profile__section">

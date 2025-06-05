@@ -37,6 +37,10 @@
     justify-content: space-between;
   }
 
+  &__row.editing {
+    justify-content: flex-start;
+  }
+
   &__title {
     width: 40%;
   }

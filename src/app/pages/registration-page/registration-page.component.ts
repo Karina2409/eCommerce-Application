@@ -3,7 +3,7 @@ import { MatButton } from '@angular/material/button';
 import { NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { signal, OnInit } from '@angular/core';
+import { signal } from '@angular/core';
 import { AuthService } from '@services/auth-service';
 import { CustomerDraft } from '@models/types';
 import { emailValidator } from '@validators/email';
@@ -11,6 +11,7 @@ import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import { AddressComponent } from '@components/address-form';
 import { EmailFieldComponent, NameFieldComponent, PasswordFieldComponent } from '@components/input';
+import { DateFieldComponent } from '@components/input/date-field/date-field.component';
 
 @Component({
   selector: 'app-registration-page',
@@ -23,15 +24,14 @@ import { EmailFieldComponent, NameFieldComponent, PasswordFieldComponent } from 
     NameFieldComponent,
     EmailFieldComponent,
     PasswordFieldComponent,
+    DateFieldComponent,
   ],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
 })
-export class RegistrationPageComponent implements OnInit {
+export class RegistrationPageComponent {
   public shippingAddressFormGroup!: FormGroup;
   public billingAddressFormGroup!: FormGroup;
-
-  public maxDate = '';
 
   public router = inject(Router);
   public readonly errorMessage = signal('');
@@ -85,15 +85,8 @@ export class RegistrationPageComponent implements OnInit {
     return this.form.get('lastName') as FormControl;
   }
 
-  public get dateOfBirth() {
-    return this.form.get('dateOfBirth');
-  }
-
-  public ngOnInit(): void {
-    const today = new Date();
-    const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
-
-    this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
+  public get dateOfBirth(): FormControl {
+    return this.form.get('dateOfBirth') as FormControl;
   }
 
   public onEmailInit(control: FormControl): void {
