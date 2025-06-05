@@ -1,12 +1,13 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-email-field',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './email-field.component.html',
   styleUrl: '../input-field.scss',
 })
 export class EmailFieldComponent {
+  @Output() public emailChange = new EventEmitter<FormControl>();
   @Input({ required: true }) public control!: FormControl;
 }

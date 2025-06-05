@@ -10,7 +10,7 @@ import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import { AddressComponent } from '@components/address-form';
-import { EmailFieldComponent, NameFieldComponent } from '@components/input';
+import { EmailFieldComponent, NameFieldComponent, PasswordFieldComponent } from '@components/input';
 
 @Component({
   selector: 'app-registration-page',
@@ -22,6 +22,7 @@ import { EmailFieldComponent, NameFieldComponent } from '@components/input';
     AddressComponent,
     NameFieldComponent,
     EmailFieldComponent,
+    PasswordFieldComponent,
   ],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',
@@ -93,6 +94,14 @@ export class RegistrationPageComponent implements OnInit {
     const thirteenYearsAgo = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
 
     this.maxDate = thirteenYearsAgo.toISOString().split('T')[0];
+  }
+
+  public onEmailInit(control: FormControl): void {
+    this.form.setControl('email', control);
+  }
+
+  public onPasswordInit(control: FormControl): void {
+    this.form.setControl('password', control);
   }
 
   public onShippingAddressInit(addressForm: FormGroup) {
