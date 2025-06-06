@@ -8,7 +8,7 @@
       <button class="profile-button" routerLink="/profile">
         <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
       </button>
-      <button mat-flat-button (click)="logout()">Log Out</button>
+      <button mat-flat-button (click)="logout()" routerLink="/login">Log Out</button>
     } @else {
       <button mat-flat-button routerLink="/login">Log In</button>
       <button mat-flat-button routerLink="/registration">Sign Up</button>
