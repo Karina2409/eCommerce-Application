@@ -71,6 +71,14 @@ export class ProfilePageComponent implements OnInit {
       if (info.customer) {
         this.user = info.customer;
         this.addresses = this.setAddresses(info.customer);
+
+        if (this.userInfoGroup) {
+          this.userInfoGroup.patchValue({
+            firstName: this.user.firstName ?? '',
+            lastName: this.user.lastName ?? '',
+            dateOfBirth: this.user.dateOfBirth ?? '',
+          });
+        }
       }
     });
   }
