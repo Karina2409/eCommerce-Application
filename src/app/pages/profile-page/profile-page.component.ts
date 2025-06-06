@@ -8,8 +8,7 @@ import { Customer } from '@commercetools/platform-sdk';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
-import { NameFieldComponent } from '@components/input';
-import { DateFieldComponent } from '@components/input/date-field/date-field.component';
+import { DateFieldComponent, NameFieldComponent } from '@components/input';
 
 @Component({
   selector: 'app-profile-page',
