@@ -19,6 +19,10 @@
         <div class="user-info__title">Date of birth</div>
         <div class="user-info__info">{{ dateOfBirth.value ?? 'Unknown' }}</div>
       </li>
+      <li class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Email</div>
+        <div class="user-info__info">{{ email.value ?? 'Unknown' }}</div>
+      </li>
     </ul>
   } @else {
     <form class="user-info" [formGroup]="userInfoGroup" (ngSubmit)="onSubmitAction()">
@@ -43,6 +47,10 @@
       <div class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Date of birth</div>
         <app-date-field [control]="dateOfBirth"></app-date-field>
+      </div>
+      <div class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Email</div>
+        <app-email-field [control]="email"></app-email-field>
       </div>
       <button
         class="login-form__button"

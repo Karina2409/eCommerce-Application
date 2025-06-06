@@ -8,7 +8,8 @@ import { Customer } from '@commercetools/platform-sdk';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
-import { DateFieldComponent, NameFieldComponent } from '@components/input';
+import { DateFieldComponent, EmailFieldComponent, NameFieldComponent } from '@components/input';
+import { emailValidator } from '@validators/email';
 
 @Component({
   selector: 'app-profile-page',
@@ -19,6 +20,7 @@ import { DateFieldComponent, NameFieldComponent } from '@components/input';
     DateFieldComponent,
     ReactiveFormsModule,
     MatButtonModule,
+    EmailFieldComponent,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
@@ -34,6 +36,7 @@ export class ProfilePageComponent implements OnInit {
       firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
       lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
       dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
+      email: new FormControl('', [Validators.required, emailValidator]),
     }),
 
     password: new FormControl('', [
@@ -66,6 +69,10 @@ export class ProfilePageComponent implements OnInit {
     return this.userInfoGroup.get('dateOfBirth') as FormControl;
   }
 
+  public get email(): FormControl {
+    return this.userInfoGroup.get('email') as FormControl;
+  }
+
   public async ngOnInit() {
     await this.profileService.getCustomerInfo().then((info) => {
       if (info.customer) {
@@ -77,6 +84,7 @@ export class ProfilePageComponent implements OnInit {
             firstName: this.user.firstName ?? '',
             lastName: this.user.lastName ?? '',
             dateOfBirth: this.user.dateOfBirth ?? '',
+            email: this.user.email ?? '',
           });
         }
       }
@@ -110,6 +118,7 @@ export class ProfilePageComponent implements OnInit {
       this.changeLastName(this.lastName.value);
       this.changeFirstName(this.firstName.value);
       this.setDateOfBirth(this.dateOfBirth.value);
+      this.changeEmail(this.email.value);
     }
     this.isInfoEditing.set(false);
   }
