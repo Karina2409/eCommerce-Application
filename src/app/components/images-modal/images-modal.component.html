@@ -1,8 +1,8 @@
 <button mat-button (click)="prevImg()" [disabled]="currentImgIndex === 0">◀</button>
 <div class="image-container">
   <img
-    [src]="images[currentImgIndex]?.url"
-    [alt]="images[currentImgIndex]?.label || 'Product image'"
+    [src]="images[currentImgIndex].url"
+    [alt]="images[currentImgIndex].label || 'Product image'"
     class="card-img"
   />
 </div>

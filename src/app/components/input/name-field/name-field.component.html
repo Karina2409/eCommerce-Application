@@ -6,7 +6,7 @@
     [id]="id"
     [value]="value"
     [placeholder]="placeholder"
-    [class.invalid]="control?.invalid && (control?.dirty || !control?.untouched)"
+    [class.invalid]="control.invalid && (control.dirty || !control.untouched)"
   />
   @if (control && control.invalid && (control.dirty || !control.untouched)) {
     <div class="alert alert-validation">

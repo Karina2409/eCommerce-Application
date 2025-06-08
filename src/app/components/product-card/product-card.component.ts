@@ -2,32 +2,15 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { NgForOf, NgIf } from '@angular/common';
 import { ProductVariant } from '@commercetools/platform-sdk';
-import { ProductDetailComponent } from '@components/product-detail';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  MatCard,
-  MatCardActions,
-  MatCardContent,
-  MatCardImage,
-  MatCardTitle,
-} from '@angular/material/card';
+import { MatCard, MatCardActions, MatCardContent, MatCardImage } from '@angular/material/card';
 import { ProductService } from '@services/product-service';
 import { ProductDetailService } from '@services/product-detail-service';
 import { ProductProjectionExtend } from '@models/index';
 
 @Component({
   selector: 'app-product-card',
-  imports: [
-    MatButton,
-    NgForOf,
-    NgIf,
-    MatCard,
-    MatCardTitle,
-    MatCardContent,
-    MatCardImage,
-    MatCardActions,
-    ProductDetailComponent,
-  ],
+  imports: [MatButton, NgForOf, NgIf, MatCard, MatCardContent, MatCardImage, MatCardActions],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
 })
