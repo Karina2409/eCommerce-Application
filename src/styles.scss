@@ -11,6 +11,11 @@
   --address-type-color: #d6d6d6;
   --address-type-text-color: #7c7c7c;
   --subcategory-color: rgb(219, 185, 14);
+  @include mat.tooltip-overrides(
+    (
+      container-color: var(--secondary-color),
+    )
+  );
 }
 
 html,
@@ -20,7 +25,6 @@ body {
 }
 
 .wrapper {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 0 10px;
 }

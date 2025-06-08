@@ -1,8 +1,14 @@
 <section class="user-information profile__section">
   <h2 class="heading">Information</h2>
 
-  <button class="edit" (click)="toggleEdition()">
-    <img src="/assets/images/edit.svg" alt="Edit" />
+  <button
+    mat-mini-fab
+    class="edit"
+    routerLink="/profile"
+    matTooltip="Edit info"
+    (click)="toggleEdition()"
+  >
+    <mat-icon fontIcon="edit"></mat-icon>
   </button>
 
   @if (!isInfoEditing()) {

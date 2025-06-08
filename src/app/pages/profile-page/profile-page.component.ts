@@ -10,6 +10,9 @@ import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import { NameFieldComponent } from '@components/input';
 import { DateFieldComponent } from '@components/input/date-field/date-field.component';
+import { RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-profile-page',
@@ -20,6 +23,9 @@ import { DateFieldComponent } from '@components/input/date-field/date-field.comp
     DateFieldComponent,
     ReactiveFormsModule,
     MatButtonModule,
+    MatIcon,
+    MatTooltip,
+    RouterLink,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',

@@ -15,15 +15,11 @@ main {
 }
 
 .catalog-panel__options {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  flex-wrap: wrap;
   @media (max-width: 1000px) {
-    width: 70%;
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -54,9 +50,8 @@ main {
 
 .select-container__options {
   width: 20rem;
-  height: 1.8rem;
   border: 1px solid var(--secondary-color);
-  padding: 0.2rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
 }
 .subcategory {
@@ -75,16 +70,15 @@ main {
 }
 
 .search-box {
-  width: 50%;
+  width: 100%;
   position: relative;
   @media (max-width: 1000px) {
-    width: 100%;
   }
 }
 
 .search-input {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.7rem;
   font-size: 1rem;
   border: 1px solid var(--secondary-color);
   border-radius: 0.5rem;
