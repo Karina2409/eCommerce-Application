@@ -5,8 +5,8 @@
       <div class="image-container">
         <img
           tabindex="0"
-          [src]="images[currentImgIndex]?.url"
-          [alt]="images[currentImgIndex]?.label || 'Product image'"
+          [src]="images[currentImgIndex].url"
+          [alt]="images[currentImgIndex].label || 'Product image'"
           class="card-img"
           (click)="openModal(images)"
           (keydown.enter)="openModal(images)"
@@ -24,7 +24,7 @@
           tabindex="0"
           [class.selected]="i === currentImgIndex"
           (click)="selectImg(i)"
-          [alt]="images[currentImgIndex]?.label || 'Product image'"
+          [alt]="images[currentImgIndex].label || 'Product image'"
           (keydown.enter)="selectImg(i)"
         />
       </div>
