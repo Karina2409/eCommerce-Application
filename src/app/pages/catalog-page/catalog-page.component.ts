@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,7 +7,6 @@ import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { ProductCardComponent } from '@components/product-card';
 import { ProductService } from '@services/product-service';
 import { FilterService } from '@services/filter-service';
-import { SortService } from '@services/sort-service';
 import { MatIcon } from '@angular/material/icon';
 import { ProductProjectionExtend } from '@models/index';
 
@@ -29,9 +28,14 @@ import { ProductProjectionExtend } from '@models/index';
   styleUrl: './catalog-page.component.scss',
 })
 export class CatalogPageComponent implements OnInit {
+  @Input() public minPrice = 0;
+  @Input() public maxPrice = 1000000;
+  @Output() public priceRangeChange = new EventEmitter<{
+    from: number | null;
+    to: number | null;
+  }>();
   public productService: ProductService = inject(ProductService);
   public filterService: FilterService = inject(FilterService);
-  public sortService: SortService = inject(SortService);
   public category: string | null = '';
   public subcategory: string | null = '';
   public categories: Record<string, string> = {};
@@ -48,33 +52,99 @@ export class CatalogPageComponent implements OnInit {
   public allAttributeValues = new Set();
   public brands: string[] = [];
   public colors: string[] = [];
-  public selectedValue = '';
+  public selectedBrandValue = '';
+  public selectedColorValue = '';
   public sortOption = 'name.en-US asc';
   public searchQuery = signal('');
+  public priceFrom: number | null = 0;
+  public priceTo: number | null = 10000;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
   ) {}
 
+  public onPriceFromChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+      this.priceFrom = parsedValue;
+      this.emitPriceRange();
+    } else {
+      this.priceFrom = null;
+      this.emitPriceRange();
+    }
+  }
+
+  public onPriceToChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+      this.priceTo = parsedValue;
+      this.emitPriceRange();
+    } else {
+      this.priceTo = null;
+      this.emitPriceRange();
+    }
+  }
+
+  public emitPriceRange() {
+    this.priceRangeChange.emit({ from: this.priceFrom, to: this.priceTo });
+  }
+
+  //Валидация: Проверка, что "Цена От" не больше "Цены До"
+  public isFromGreaterThanTo(): boolean {
+    if (this.priceFrom !== null && this.priceTo !== null) {
+      return this.priceFrom > this.priceTo;
+    }
+    return false;
+  }
+
+  //Валидация: Проверка, что цена находится в заданном диапазоне (minPrice - maxPrice)
+  public isPriceOutOfRange(price: number | null): boolean {
+    if (price === null) {
+      return false;
+    }
+    return price < this.minPrice || price > this.maxPrice;
+  }
+
+  public onApply() {
+    this.getProducts();
+  }
+
+  public onFiltersReset() {
+    this.targetId = '';
+    this.selectedBrandValue = '';
+    this.selectedColorValue = '';
+    this.sortOption = 'name.en-US asc';
+    this.searchQuery = signal('');
+    this.priceFrom = 0;
+    this.priceTo = 10000;
+    this.getProducts();
+  }
+
   public clearSearchQuery() {
     this.searchQuery.set('');
   }
 
-  public onValueFilterChange(filterValue: string, attribute: string) {
-    this.getFilterProducts(filterValue, attribute);
+  public onValueFilterChange() {
+    this.getProducts();
   }
 
-  public onValueSortChange(sortValue: string) {
-    this.getSortProducts(sortValue);
+  public onValueSortChange() {
+    this.getProducts();
   }
 
-  public async getFilterProducts(selectedValue: string, attribute: string) {
+  public async getProducts() {
     const products = await this.filterService.getProductsByQuery(
-      selectedValue,
+      this.selectedBrandValue,
+      this.selectedColorValue,
       this.targetId,
+      this.priceFrom,
+      this.priceTo,
       this.sortOption,
-      attribute,
     );
 
     if (Array.isArray(products)) {
@@ -82,16 +152,6 @@ export class CatalogPageComponent implements OnInit {
     }
   }
 
-  public async getSortProducts(selectedValue: string) {
-    const products = await this.sortService.getProductsByQuery(
-      this.targetId,
-      selectedValue,
-      this.selectedValue,
-    );
-    if (Array.isArray(products)) {
-      this.products.set(products);
-    }
-  }
   public onCategoryChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const category = selectElement.innerText;
@@ -104,14 +164,6 @@ export class CatalogPageComponent implements OnInit {
 
   public onSubcategoryChange(subcategory: string) {
     this.router.navigate([`/catalog/${this.category}`, `${subcategory}`]);
-  }
-
-  public async getProducts(selectedValue: string) {
-    const products = await this.filterService.getProductsByQuery(selectedValue, this.targetId);
-
-    if (Array.isArray(products)) {
-      this.products.set(products);
-    }
   }
 
   public ngOnInit() {
