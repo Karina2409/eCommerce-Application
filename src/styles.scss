@@ -23,6 +23,11 @@
       container-text-size: 1.2rem,
     )
   );
+  @include mat.button-overrides(
+    (
+      filled-container-shape: rectangle,
+    )
+  );
 }
 
 html,
