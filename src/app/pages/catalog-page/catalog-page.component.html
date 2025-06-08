@@ -23,9 +23,9 @@
       <div class="select-container">
         <mat-label class="select-container__label">Brand</mat-label>
         <mat-select
-          [(ngModel)]="selectedValue"
+          [(ngModel)]="selectedBrandValue"
           class="select-container__options"
-          (ngModelChange)="onValueFilterChange($event, 'brand')"
+          (ngModelChange)="onValueFilterChange()"
         >
           <mat-option value="">All brands</mat-option>
           <mat-option *ngFor="let brand of brands" [value]="brand">
@@ -36,9 +36,9 @@
       <div class="select-container">
         <mat-label class="select-container__label">Color</mat-label>
         <mat-select
-          [(ngModel)]="selectedValue"
+          [(ngModel)]="selectedColorValue"
           class="select-container__options"
-          (ngModelChange)="onValueFilterChange($event, 'color')"
+          (ngModelChange)="onValueFilterChange()"
         >
           <mat-option value="">All colors</mat-option>
           <mat-option *ngFor="let color of colors" [value]="color">
@@ -46,13 +46,50 @@
           </mat-option>
         </mat-select>
       </div>
+      <div class="price-range-container">
+        <label for="priceFrom">Price from:</label>
+        <input
+          type="number"
+          id="priceFrom"
+          [(ngModel)]="priceFrom"
+          (change)="onPriceFromChange($event)"
+          [min]="minPrice"
+          [max]="maxPrice"
+        />
+        <div *ngIf="isPriceOutOfRange(priceFrom)" class="error-message">
+          The price should be in the range from {{ minPrice }} to {{ maxPrice }}.
+        </div>
+
+        <label for="priceTo">Price to:</label>
+        <input
+          type="number"
+          id="priceTo"
+          [(ngModel)]="priceTo"
+          (change)="onPriceToChange($event)"
+          [min]="minPrice"
+          [max]="maxPrice"
+        />
+        <div *ngIf="isPriceOutOfRange(priceTo)" class="error-message">
+          The price should be in the range from {{ minPrice }} to {{ maxPrice }}.
+        </div>
+
+        <div *ngIf="isFromGreaterThanTo()" class="error-message">
+          The price "From" cannot be greater than the price "To".
+        </div>
+        <button class="price-range-container__button" (click)="onApply()">
+          Apply a price range
+        </button>
+        <button class="catalog-panel__button-filters-reset" (click)="onFiltersReset()">
+          Reset all filters
+        </button>
+      </div>
       <div class="select-container">
         <mat-label class="select-container__label">Sort by</mat-label>
         <mat-select
           id="sort"
           [(ngModel)]="sortOption"
           class="select-container__options"
-          (ngModelChange)="onValueSortChange($event)"
+          (ngModelChange)="onValueSortChange()"
         >
           <mat-option value="name.en-US asc">Name A-Z</mat-option>
           <mat-option value="name.en-US desc">Name Z-A</mat-option>
@@ -63,7 +100,7 @@
       <div class="search-box">
         <input
           [ngModel]="searchQuery()"
-          (ngModelChange)="onValueFilterChange($event, 'brand')"
+          (ngModelChange)="onValueFilterChange()"
           class="search-input"
           type="text"
           placeholder="Search..."
