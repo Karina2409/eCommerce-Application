@@ -1,23 +1,29 @@
 <section class="user-information profile__section">
   <h2 class="heading">Information</h2>
 
-  <button class="edit" (click)="toggleEdition()">
-    <img src="/assets/images/edit.svg" alt="Edit" />
+  <button
+    mat-mini-fab
+    class="edit"
+    routerLink="/profile"
+    matTooltip="Edit info"
+    (click)="toggleEdition()"
+  >
+    <mat-icon fontIcon="edit"></mat-icon>
   </button>
 
   @if (!isInfoEditing()) {
     <ul class="user-info">
       <li class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Name</div>
-        <div class="user-info__info">{{ user?.firstName ?? 'Unknown' }}</div>
+        <div class="user-info__info">{{ user.firstName ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Surname</div>
-        <div class="user-info__info">{{ user?.lastName ?? 'Unknown' }}</div>
+        <div class="user-info__info">{{ user.lastName ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Date of birth</div>
-        <div class="user-info__info">{{ user?.dateOfBirth ?? 'Unknown' }}</div>
+        <div class="user-info__info">{{ user.dateOfBirth ?? 'Unknown' }}</div>
       </li>
     </ul>
   } @else {
@@ -29,7 +35,7 @@
           [control]="firstName"
           id="first-name"
           placeholder="Enter first name"
-          [value]="user?.firstName"
+          [value]="user.firstName"
         ></app-name-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
@@ -39,12 +45,12 @@
           [control]="lastName"
           id="last-name"
           placeholder="Enter last name"
-          [value]="user?.lastName"
+          [value]="user.lastName"
         ></app-name-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Date of birth</div>
-        <app-date-field [control]="dateOfBirth" [value]="user?.dateOfBirth"></app-date-field>
+        <app-date-field [control]="dateOfBirth" [value]="user.dateOfBirth"></app-date-field>
       </div>
       <button
         class="login-form__button"

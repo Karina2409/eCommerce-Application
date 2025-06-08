@@ -1,12 +1,15 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@services/auth-service';
 import { NgIf } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatListItem, MatNavList } from '@angular/material/list';
 
 @Component({
   selector: 'app-header',
-  imports: [MatButtonModule, RouterLink, NgIf],
+  imports: [MatButtonModule, RouterLink, NgIf, MatIconModule, MatTooltip, MatNavList, MatListItem],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

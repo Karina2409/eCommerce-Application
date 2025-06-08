@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgForOf, NgIf, Location } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { Image, ProductProjection, ProductVariant } from '@commercetools/platform-sdk';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '@services/product-service';
 import { ImagesModalComponent } from '@components/images-modal';
 import { ProductDetailService } from '@services/product-detail-service';
@@ -11,7 +11,7 @@ import { ProductDetailService } from '@services/product-detail-service';
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [MatButton, NgForOf, NgIf, RouterLink],
+  imports: [MatButton, NgForOf, NgIf],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss',
 })
@@ -69,6 +69,7 @@ export class ProductDetailComponent implements OnInit {
   public openModal(images: Image[]) {
     this.dialog.open(ImagesModalComponent, {
       maxWidth: '100vw',
+      maxHeight: '100vh',
       panelClass: 'fullscreen-dialog',
       data: { images },
     });
