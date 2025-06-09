@@ -8,7 +8,7 @@
           <mat-option
             *ngFor="let category of categories | keyvalue"
             [value]="category.key"
-            (click)="onCategoryChange($event)"
+            (click)="onCategoryChange(category.key)"
           >
             {{ category.key }}
           </mat-option>
@@ -52,7 +52,7 @@
           type="number"
           id="priceFrom"
           [(ngModel)]="priceFrom"
-          (change)="onPriceFromChange($event)"
+          (change)="onPriceChange('priceFrom', priceFrom)"
           [min]="minPrice"
           [max]="maxPrice"
         />
@@ -65,7 +65,7 @@
           type="number"
           id="priceTo"
           [(ngModel)]="priceTo"
-          (change)="onPriceToChange($event)"
+          (change)="onPriceChange('priceTo', priceTo)"
           [min]="minPrice"
           [max]="maxPrice"
         />
@@ -76,7 +76,7 @@
         <div *ngIf="isFromGreaterThanTo()" class="error-message">
           The price "From" cannot be greater than the price "To".
         </div>
-        <button class="price-range-container__button" (click)="onApply()">
+        <button class="price-range-container__button" (click)="applyPriceRange()">
           Apply a price range
         </button>
         <button class="catalog-panel__button-filters-reset" (click)="onFiltersReset()">
@@ -99,13 +99,13 @@
       </div>
       <div class="search-box">
         <input
-          [ngModel]="searchQuery()"
-          (ngModelChange)="onValueFilterChange()"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchQuery(searchQuery)"
           class="search-input"
           type="text"
           placeholder="Search..."
         />
-        <button *ngIf="searchQuery()" class="clear-btn" (click)="clearSearchQuery()">
+        <button *ngIf="searchQuery" class="clear-btn" (click)="clearSearchQuery()">
           <mat-icon>close</mat-icon>
         </button>
       </div>
