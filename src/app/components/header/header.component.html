@@ -1,29 +1,42 @@
 <div class="wrapper">
   <div class="navigation-buttons" *ngIf="!isMobileDevice()">
-    <button mat-flat-button routerLink="/main">Home</button>
-    <button mat-flat-button routerLink="/catalog">Catalog</button>
-    <button mat-flat-button routerLink="/cart">Cart</button>
+    <button mat-mini-fab routerLink="/main" matTooltip="Home">
+      <mat-icon fontIcon="home"></mat-icon>
+    </button>
+    <button mat-mini-fab routerLink="/catalog" matTooltip="Catalog">
+      <mat-icon fontIcon="category_search"></mat-icon>
+    </button>
+    <button mat-mini-fab routerLink="/cart" matTooltip="Cart">
+      <mat-icon fontIcon="shopping_cart"></mat-icon>
+    </button>
 
     @if (isAuthorized()) {
-      <button class="profile-button" routerLink="/profile">
-        <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
+      <button mat-mini-fab routerLink="/profile" matTooltip="Account">
+        <mat-icon fontIcon="account_circle"></mat-icon>
       </button>
-      <button mat-flat-button (click)="logout()">Log Out</button>
+      <button mat-mini-fab (click)="logout()" routerLink="/login" matTooltip="Log Out">
+        <mat-icon fontIcon="logout"></mat-icon>
+      </button>
     } @else {
-      <button mat-flat-button routerLink="/login">Log In</button>
-      <button mat-flat-button routerLink="/registration">Sign Up</button>
+      <button mat-mini-fab routerLink="/login" matTooltip="Log In">
+        <mat-icon fontIcon="login"></mat-icon>
+      </button>
+      <button mat-mini-fab routerLink="/registration" matTooltip="Sign Up">
+        <mat-icon fontIcon="person_add"></mat-icon>
+      </button>
     }
   </div>
 
-  <div
+  <button
+    mat-mini-fab
     class="burger"
     *ngIf="isMobileDevice()"
     (click)="toggleMenu()"
     tabindex="0"
     (keydown.enter)="toggleMenu()"
   >
-    ☰
-  </div>
+    <mat-icon>{{ isMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+  </button>
 </div>
 
 <div
@@ -39,19 +52,45 @@
     tabindex="0"
     (keydown.enter)="toggleMenu()"
   >
-    <button mat-flat-button routerLink="/main" (click)="closeMenu()">Home</button>
-    <button mat-flat-button routerLink="/catalog" (click)="closeMenu()">Catalog</button>
-    <button mat-flat-button routerLink="/cart" (click)="closeMenu()">Cart</button>
-
-    @if (isAuthorized()) {
-      <button class="profile-button" routerLink="/profile" (click)="closeMenu()">
-        <img class="profile-button__image" src="/assets/images/profile.svg" alt="Profile" />
-      </button>
-      <button mat-flat-button (click)="logout(); closeMenu()">Log Out</button>
-    } @else {
-      <button mat-flat-button routerLink="/login" (click)="closeMenu()">Log In</button>
-      <button mat-flat-button routerLink="/registration" (click)="closeMenu()">Sign Up</button>
-    }
-    <button mat-flat-button (click)="closeMenu()">Close</button>
+    <mat-nav-list>
+      <li>
+        <a mat-list-item routerLink="/main" (click)="closeMenu()" matTooltip="Home"> Home </a>
+      </li>
+      <li>
+        <a mat-list-item routerLink="/catalog" (click)="closeMenu()" matTooltip="Catalog">
+          Catalog
+        </a>
+      </li>
+      <li>
+        <a mat-list-item routerLink="/cart" (click)="closeMenu()" matTooltip="Cart"> Cart </a>
+      </li>
+      @if (isAuthorized()) {
+        <li>
+          <a mat-list-item routerLink="/profile" matTooltip="Account"> Account </a>
+        </li>
+        <li>
+          <a
+            mat-list-item
+            (click)="logout(); closeMenu()"
+            matTooltip="Log Out"
+            tabindex="0"
+            (keydown.enter)="toggleMenu()"
+          >
+            Log Out
+          </a>
+        </li>
+      } @else {
+        <li>
+          <a mat-list-item routerLink="/login" (click)="closeMenu()" matTooltip="Log In">
+            Log In
+          </a>
+        </li>
+        <li>
+          <a mat-list-item routerLink="/registration" (click)="closeMenu()" matTooltip="Sign Up">
+            Sign Up
+          </a>
+        </li>
+      }
+    </mat-nav-list>
   </div>
 </div>

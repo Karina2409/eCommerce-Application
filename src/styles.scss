@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
-@import './reset.scss';
-@import './fonts.scss';
+@use './reset.scss' as reset;
+@use './fonts.scss' as fonts;
 
 :root {
   --primary-color: #d6e2fd;
@@ -11,6 +11,18 @@
   --address-type-color: #d6d6d6;
   --address-type-text-color: #7c7c7c;
   --subcategory-color: rgb(219, 185, 14);
+  @include mat.tooltip-overrides(
+    (
+      container-color: var(--secondary-color),
+    )
+  );
+  @include mat.expansion-overrides(
+    (
+      header-text-color: var(--secondary-color),
+      container-text-color: var(--secondary-color),
+      container-text-size: 1.2rem,
+    )
+  );
 }
 
 html,
@@ -20,7 +32,6 @@ body {
 }
 
 .wrapper {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 0 10px;
 }

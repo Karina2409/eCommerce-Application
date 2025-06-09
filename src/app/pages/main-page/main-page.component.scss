@@ -47,6 +47,10 @@
     border-top-right-radius: 1rem;
   }
   @media (max-width: 1000px) {
+    width: 50vw;
+    height: 50vw;
+  }
+  @media (max-width: 600px) {
     width: 80vw;
     height: 80vw;
   }
