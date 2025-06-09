@@ -16,6 +16,7 @@ import { ProductService } from '@services/product-service';
 import { ProductDetailService } from '@services/product-detail-service';
 import { ProductProjectionExtend } from '@models/index';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormattingToolsService } from '@services/formatting-tools';
 
 @Component({
   selector: 'app-product-card',
@@ -32,6 +33,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
   public subcategory: string | null = '';
   public productService: ProductService = inject(ProductService);
   public productDetailService: ProductDetailService = inject(ProductDetailService);
+  public formattingToolsService: FormattingToolsService = inject(FormattingToolsService);
 
   constructor(
     private router: Router,
@@ -39,17 +41,8 @@ export class ProductCardComponent implements OnInit, OnChanges {
     private destroyRef: DestroyRef,
   ) {}
 
-  public slugify(text: string): string {
-    void this;
-    if (!text) return '';
-    return text
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^\w-]+/g, '');
-  }
-
   public async openProductPage(variant: ProductVariant): Promise<void> {
-    const slugifiedName = this.slugify(this.name);
+    const slugifiedName = this.formattingToolsService.slugify(this.name);
 
     try {
       const response = await this.productService.getCategoryBySlug(slugifiedName);
