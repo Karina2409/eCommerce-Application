@@ -6,4 +6,8 @@ export type ProductQueryArgs = {
   where?: string;
   sort?: string;
   markMatchingVariants?: true;
+  type?: string;
+  fuzzy?: boolean;
+  fuzzyLevel?: number;
+  'text.en-US'?: string;
 };
