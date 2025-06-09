@@ -15,15 +15,19 @@
     <ul class="user-info">
       <li class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Name</div>
-        <div class="user-info__info">{{ user.firstName ?? 'Unknown' }}</div>
+        <div class="user-info__info">{{ firstName.value ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Surname</div>
-        <div class="user-info__info">{{ user.lastName ?? 'Unknown' }}</div>
+        <div class="user-info__info">{{ lastName.value ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Date of birth</div>
-        <div class="user-info__info">{{ user.dateOfBirth ?? 'Unknown' }}</div>
+        <div class="user-info__info">{{ dateOfBirth.value ?? 'Unknown' }}</div>
+      </li>
+      <li class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Email</div>
+        <div class="user-info__info">{{ email.value ?? 'Unknown' }}</div>
       </li>
     </ul>
   } @else {
@@ -35,7 +39,6 @@
           [control]="firstName"
           id="first-name"
           placeholder="Enter first name"
-          [value]="user.firstName"
         ></app-name-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
@@ -45,12 +48,15 @@
           [control]="lastName"
           id="last-name"
           placeholder="Enter last name"
-          [value]="user.lastName"
         ></app-name-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Date of birth</div>
-        <app-date-field [control]="dateOfBirth" [value]="user.dateOfBirth"></app-date-field>
+        <app-date-field [control]="dateOfBirth"></app-date-field>
+      </div>
+      <div class="user-info__row" [class.editing]="isInfoEditing()">
+        <div class="user-info__title">Email</div>
+        <app-email-field [control]="email"></app-email-field>
       </div>
       <button
         class="login-form__button"
