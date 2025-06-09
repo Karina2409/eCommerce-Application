@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,11 +40,7 @@ import {
 })
 export class CatalogPageComponent implements OnInit {
   @Input() public minPrice = 0;
-  @Input() public maxPrice = 1000000;
-  @Output() public priceRangeChange = new EventEmitter<{
-    from: number | null;
-    to: number | null;
-  }>();
+  @Input() public maxPrice = 10000;
   public productService: ProductService = inject(ProductService);
   public filterService: FilterService = inject(FilterService);
   public category: string | null = '';
@@ -66,7 +62,7 @@ export class CatalogPageComponent implements OnInit {
   public selectedBrandValue = '';
   public selectedColorValue = '';
   public sortOption = 'name.en-US asc';
-  public searchQuery = signal('');
+  public searchQuery = '';
   public priceFrom: number | null = 0;
   public priceTo: number | null = 10000;
 
@@ -75,34 +71,14 @@ export class CatalogPageComponent implements OnInit {
     private router: Router,
   ) {}
 
-  public onPriceFromChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const value = selectElement.value;
-    const parsedValue = parseFloat(value);
-    if (!isNaN(parsedValue)) {
-      this.priceFrom = parsedValue;
-      this.emitPriceRange();
+  public onPriceChange(text: string, price: number | null) {
+    if (text === 'priceFrom') {
+      this.priceFrom = price;
+    } else if (text === 'priceTo') {
+      this.priceTo = price;
     } else {
       this.priceFrom = null;
-      this.emitPriceRange();
     }
-  }
-
-  public onPriceToChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const value = selectElement.value;
-    const parsedValue = parseFloat(value);
-    if (!isNaN(parsedValue)) {
-      this.priceTo = parsedValue;
-      this.emitPriceRange();
-    } else {
-      this.priceTo = null;
-      this.emitPriceRange();
-    }
-  }
-
-  public emitPriceRange() {
-    this.priceRangeChange.emit({ from: this.priceFrom, to: this.priceTo });
   }
 
   //Валидация: Проверка, что "Цена От" не больше "Цены До"
@@ -116,39 +92,43 @@ export class CatalogPageComponent implements OnInit {
   //Валидация: Проверка, что цена находится в заданном диапазоне (minPrice - maxPrice)
   public isPriceOutOfRange(price: number | null): boolean {
     if (price === null) {
-      return false;
+      return true;
     }
     return price < this.minPrice || price > this.maxPrice;
   }
 
-  public onApply() {
+  public applyPriceRange() {
     this.getProducts();
   }
 
   public onFiltersReset() {
-    this.targetId = '';
     this.selectedBrandValue = '';
     this.selectedColorValue = '';
     this.sortOption = 'name.en-US asc';
-    this.searchQuery = signal('');
+    this.searchQuery = '';
     this.priceFrom = 0;
     this.priceTo = 10000;
     this.getProducts();
   }
 
   public clearSearchQuery() {
-    this.searchQuery.set('');
+    this.searchQuery = '';
+    this.getProducts();
   }
 
   public onValueFilterChange() {
     this.getProducts();
   }
 
+  public onSearchQuery(searchQuery: string) {
+    this.getProducts(searchQuery);
+  }
+
   public onValueSortChange() {
     this.getProducts();
   }
 
-  public async getProducts() {
+  public async getProducts(search?: string) {
     const products = await this.filterService.getProductsByQuery(
       this.selectedBrandValue,
       this.selectedColorValue,
@@ -156,6 +136,7 @@ export class CatalogPageComponent implements OnInit {
       this.priceFrom,
       this.priceTo,
       this.sortOption,
+      search,
     );
 
     if (Array.isArray(products)) {
@@ -163,9 +144,7 @@ export class CatalogPageComponent implements OnInit {
     }
   }
 
-  public onCategoryChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const category = selectElement.innerText;
+  public onCategoryChange(category: string) {
     if (category === '') {
       this.router.navigate(['/catalog']);
     } else {
@@ -192,15 +171,18 @@ export class CatalogPageComponent implements OnInit {
       .getCategoriesData()
       .then(() => {
         this.categories = this.productService.categories;
-        for (const key in this.categories) {
+
+        for (const category of Object.entries(this.categories)) {
+          const [key, value] = category;
           if (key === this.category) {
-            this.parentId = this.categories[key];
+            this.parentId = value;
           }
         }
         this.subcategories = this.productService.subcategories;
-        for (const key in this.subcategories) {
+        for (const subcategory of Object.entries(this.subcategories)) {
+          const [key, value] = subcategory;
           if (key === this.subcategory) {
-            this.targetId = this.subcategories[key].id;
+            this.targetId = value.id;
           }
         }
       })

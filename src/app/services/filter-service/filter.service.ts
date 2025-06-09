@@ -16,6 +16,7 @@ export class FilterService {
     priceFrom: number | null,
     priceTo: number | null,
     sort = 'name.en-US asc',
+    querySearch?: string,
   ): Promise<ProductProjectionExtend[] | string> {
     let products: ProductProjection[] = [];
     let productsRender: ProductProjectionExtend[] = [];
@@ -23,6 +24,7 @@ export class FilterService {
       limit: 50,
       staged: true,
       markMatchingVariants: true,
+      fuzzy: true,
     };
     if (priceFrom) {
       priceFrom *= 100;
@@ -82,6 +84,9 @@ export class FilterService {
     } else {
       queryArgs.filter = [`variants.price.centAmount:range (${priceFrom} to ${priceTo})`];
       queryArgs.sort = `${sort}`;
+    }
+    if (querySearch) {
+      queryArgs['text.en-US'] = querySearch;
     }
 
     try {

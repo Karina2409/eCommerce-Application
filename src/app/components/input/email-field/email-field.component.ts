@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,5 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: '../input-field.scss',
 })
 export class EmailFieldComponent {
-  @Output() public emailChange = new EventEmitter<FormControl>();
   @Input({ required: true }) public control!: FormControl;
 }
