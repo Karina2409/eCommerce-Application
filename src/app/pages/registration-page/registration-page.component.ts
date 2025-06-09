@@ -12,6 +12,7 @@ import { minAgeValidator } from '@validators/age';
 import { AddressComponent } from '@components/address-form';
 import { EmailFieldComponent, NameFieldComponent, PasswordFieldComponent } from '@components/input';
 import { DateFieldComponent } from '@components/input/date-field/date-field.component';
+import { latinValidator } from '@validators/latin';
 
 @Component({
   selector: 'app-registration-page',
@@ -59,8 +60,8 @@ export class RegistrationPageComponent {
       Validators.minLength(8),
       passwordValidator,
     ]),
-    firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
-    lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
+    firstName: new FormControl('', [Validators.required, latinValidator]),
+    lastName: new FormControl('', [Validators.required, latinValidator]),
     dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
 
     shippingAddress: new FormGroup({}),

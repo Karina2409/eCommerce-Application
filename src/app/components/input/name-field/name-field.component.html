@@ -11,7 +11,7 @@
     <div class="alert alert-validation">
       @if (control.hasError('required')) {
         {{ label }} is required
-      } @else if (control.hasError('pattern')) {
+      } @else if (control.hasError('notOnlyLatin')) {
         Must contain only latin letters
       }
     </div>
