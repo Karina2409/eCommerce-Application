@@ -8,8 +8,8 @@ import { Customer } from '@commercetools/platform-sdk';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
-import { NameFieldComponent } from '@components/input';
-import { DateFieldComponent } from '@components/input/date-field/date-field.component';
+import { DateFieldComponent, EmailFieldComponent, NameFieldComponent } from '@components/input';
+import { emailValidator } from '@validators/email';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -23,6 +23,7 @@ import { MatTooltip } from '@angular/material/tooltip';
     DateFieldComponent,
     ReactiveFormsModule,
     MatButtonModule,
+    EmailFieldComponent,
     MatIcon,
     MatTooltip,
     RouterLink,
@@ -41,6 +42,7 @@ export class ProfilePageComponent implements OnInit {
       firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
       lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
       dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
+      email: new FormControl('', [Validators.required, emailValidator]),
     }),
 
     password: new FormControl('', [
@@ -73,11 +75,24 @@ export class ProfilePageComponent implements OnInit {
     return this.userInfoGroup.get('dateOfBirth') as FormControl;
   }
 
+  public get email(): FormControl {
+    return this.userInfoGroup.get('email') as FormControl;
+  }
+
   public async ngOnInit() {
     await this.profileService.getCustomerInfo().then((info) => {
       if (info.customer) {
         this.user = info.customer;
         this.addresses = this.setAddresses(info.customer);
+
+        if (this.userInfoGroup) {
+          this.userInfoGroup.patchValue({
+            firstName: this.user.firstName ?? '',
+            lastName: this.user.lastName ?? '',
+            dateOfBirth: this.user.dateOfBirth ?? '',
+            email: this.user.email ?? '',
+          });
+        }
       }
     });
   }
@@ -109,6 +124,7 @@ export class ProfilePageComponent implements OnInit {
       this.changeLastName(this.lastName.value);
       this.changeFirstName(this.firstName.value);
       this.setDateOfBirth(this.dateOfBirth.value);
+      this.changeEmail(this.email.value);
     }
     this.isInfoEditing.set(false);
   }

@@ -16,6 +16,13 @@
       container-color: var(--secondary-color),
     )
   );
+  @include mat.expansion-overrides(
+    (
+      header-text-color: var(--secondary-color),
+      container-text-color: var(--secondary-color),
+      container-text-size: 1.2rem,
+    )
+  );
 }
 
 html,

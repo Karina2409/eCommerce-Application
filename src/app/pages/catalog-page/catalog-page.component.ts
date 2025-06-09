@@ -2,6 +2,7 @@ import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule } from '@angular/forms';
 import { MatLabel, MatOption, MatSelect } from '@angular/material/select';
 import { ProductCardComponent } from '@components/product-card';
@@ -9,12 +10,19 @@ import { ProductService } from '@services/product-service';
 import { FilterService } from '@services/filter-service';
 import { MatIcon } from '@angular/material/icon';
 import { ProductProjectionExtend } from '@models/index';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-catalog-page',
+  standalone: true,
   imports: [
     NgForOf,
     MatButtonModule,
+    MatExpansionModule,
     FormsModule,
     MatSelect,
     MatOption,
@@ -23,6 +31,9 @@ import { ProductProjectionExtend } from '@models/index';
     KeyValuePipe,
     NgIf,
     MatIcon,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelTitle,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',

@@ -1,7 +1,7 @@
 <form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
   <h1>Log In</h1>
 
-  <app-email-field (emailChange)="onEmailInit($event)" [control]="email"></app-email-field>
+  <app-email-field [control]="email"></app-email-field>
 
   <app-password-field
     (passwordChange)="onPasswordInit($event)"
