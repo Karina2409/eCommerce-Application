@@ -11,6 +11,9 @@
   }
 
   &__detail {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     white-space: wrap;
     border-radius: 0.5rem;
     padding: 0.5rem;

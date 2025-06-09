@@ -14,19 +14,19 @@
   @if (!isInfoEditing()) {
     <ul class="user-info">
       <li class="user-info__row" [class.editing]="isInfoEditing()">
-        <div class="user-info__title">Name</div>
+        <div class="user-info__title">Name:</div>
         <div class="user-info__info">{{ firstName.value ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
-        <div class="user-info__title">Surname</div>
+        <div class="user-info__title">Surname:</div>
         <div class="user-info__info">{{ lastName.value ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
-        <div class="user-info__title">Date of birth</div>
+        <div class="user-info__title">Date of birth:</div>
         <div class="user-info__info">{{ dateOfBirth.value ?? 'Unknown' }}</div>
       </li>
       <li class="user-info__row" [class.editing]="isInfoEditing()">
-        <div class="user-info__title">Email</div>
+        <div class="user-info__title">Email:</div>
         <div class="user-info__info">{{ email.value ?? 'Unknown' }}</div>
       </li>
     </ul>

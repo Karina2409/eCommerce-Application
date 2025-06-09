@@ -4,8 +4,8 @@
       <img mat-card-image [src]="variant.images?.[0]?.url" alt="product image" class="card-img" />
     </div>
     <mat-card-content class="card__info">
-      <h3>{{ getName() }}</h3>
-      <p>{{ getDescription() }}</p>
+      <h3>{{ this.name }}</h3>
+      <p>{{ this.description }}</p>
       <div class="card-text">
         <span>Brand:</span> {{ productDetailService.getAttribute(variant, 'brand') }}
       </div>
@@ -16,9 +16,7 @@
         <span>Price:</span> {{ productDetailService.getAttribute(variant, 'price') }}
       </div>
       <div class="card-text">
-        <span class="discounted" *ngIf="variant?.prices?.[0]?.discounted?.value?.centAmount"
-          >Discounted price:</span
-        >
+        <span class="discounted" *ngIf="isHasDiscount(variant)">Sale price:</span>
         {{ productDetailService.getDiscountedPrice(variant) }}
       </div>
     </mat-card-content>
