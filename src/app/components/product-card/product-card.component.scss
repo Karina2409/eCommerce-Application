@@ -32,6 +32,7 @@
   border-radius: 0.5rem;
   width: 20rem;
   height: 20rem;
+  overflow: hidden;
   @media (max-width: 400px) {
     width: 15rem;
     height: 15rem;
@@ -51,6 +52,10 @@
   align-items: center;
   justify-content: center;
   width: 80%;
+  h3 {
+    text-align: center;
+    max-width: 15rem;
+  }
 }
 
 .card-button {
@@ -58,7 +63,7 @@
 }
 
 .card-text {
-  width: 115%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   span {

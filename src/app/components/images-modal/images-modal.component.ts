@@ -10,7 +10,7 @@ import { Image } from '@commercetools/platform-sdk';
   styleUrl: './images-modal.component.scss',
 })
 export class ImagesModalComponent {
-  public images: Image[];
+  public readonly images: Image[];
   public currentImgIndex = 0;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { images: Image[] }) {
