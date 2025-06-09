@@ -9,7 +9,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 })
 export class NameFieldComponent {
   @Input({ required: true }) public label!: string;
-  @Input({ required: true }) public control!: FormControl;
+  @Input({ required: true }) public control!: FormControl<string | null>;
   @Input({ required: true }) public id!: string;
   @Input() public placeholder = '';
 }

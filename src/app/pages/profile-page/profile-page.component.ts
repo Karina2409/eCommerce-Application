@@ -13,6 +13,7 @@ import { emailValidator } from '@validators/email';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { latinValidator } from '@validators/latin';
 
 @Component({
   selector: 'app-profile-page',
@@ -39,8 +40,8 @@ export class ProfilePageComponent implements OnInit {
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
-      firstName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
-      lastName: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
+      firstName: new FormControl('', [Validators.required, latinValidator]),
+      lastName: new FormControl('', [Validators.required, latinValidator]),
       dateOfBirth: new FormControl('', [Validators.required, minAgeValidator(13)]),
       email: new FormControl('', [Validators.required, emailValidator]),
     }),
