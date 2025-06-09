@@ -16,9 +16,7 @@
         <span>Price:</span> {{ productDetailService.getAttribute(variant, 'price') }}
       </div>
       <div class="card-text">
-        <span class="discounted" *ngIf="variant?.prices?.[0]?.discounted?.value?.centAmount"
-          >Discounted price:</span
-        >
+        <span class="discounted" *ngIf="isHasDiscount(variant)">Sale price:</span>
         {{ productDetailService.getDiscountedPrice(variant) }}
       </div>
     </mat-card-content>

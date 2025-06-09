@@ -77,6 +77,11 @@ export class ProductCardComponent implements OnInit, OnChanges {
     this.description = this.product.description?.[locale] || '';
   }
 
+  public isHasDiscount(variant: ProductVariant): boolean {
+    void this;
+    return !!variant?.prices?.[0]?.discounted?.value?.centAmount;
+  }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['product']) {
       if (this.product.variantsRender) {
