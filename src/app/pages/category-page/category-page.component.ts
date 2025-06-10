@@ -1,8 +1,8 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { KeyValuePipe, LowerCasePipe, NgStyle, TitleCasePipe } from '@angular/common';
 import { ProductService } from '@services/product-service';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-category-page',
@@ -10,7 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './category-page.component.html',
   styleUrl: './category-page.component.scss',
 })
-export class CategoryPageComponent implements OnInit, OnDestroy {
+export class CategoryPageComponent implements OnInit {
   public productService: ProductService = inject(ProductService);
   public category: string | null = '';
   public subcategory: string | null = '';
@@ -23,11 +23,13 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     }
   > = {};
   public parentId = '';
-  private readonly destroy = new Subject<void>();
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private destroyRef: DestroyRef,
+  ) {}
   public ngOnInit(): void | Promise<string> {
-    this.route.paramMap.pipe(takeUntil(this.destroy)).subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.category = params.get('categoryName');
     });
     this.productService
@@ -49,9 +51,5 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
         }
         return String(error);
       });
-  }
-  public ngOnDestroy() {
-    this.destroy.next();
-    this.destroy.complete();
   }
 }
