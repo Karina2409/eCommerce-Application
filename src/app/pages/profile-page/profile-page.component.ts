@@ -122,10 +122,18 @@ export class ProfilePageComponent implements OnInit {
 
   public onSubmitAction(): void {
     if (this.userInfoGroup.valid) {
-      this.changeLastName(this.lastName.value);
-      this.changeFirstName(this.firstName.value);
-      this.setDateOfBirth(this.dateOfBirth.value);
-      this.changeEmail(this.email.value);
+      if (this.user.lastName === this.lastName.value) {
+        this.changeLastName(this.lastName.value);
+      }
+      if (this.user.firstName === this.firstName.value) {
+        this.changeFirstName(this.firstName.value);
+      }
+      if (this.user.email === this.email.value) {
+        this.changeEmail(this.email.value);
+      }
+      if (this.user.dateOfBirth === this.dateOfBirth.value) {
+        this.setDateOfBirth(this.dateOfBirth.value);
+      }
     }
     this.isInfoEditing.set(false);
   }
