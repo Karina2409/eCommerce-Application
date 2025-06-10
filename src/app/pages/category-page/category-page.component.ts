@@ -23,11 +23,11 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     }
   > = {};
   public parentId = '';
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroy = new Subject<void>();
 
   constructor(private route: ActivatedRoute) {}
   public ngOnInit(): void | Promise<string> {
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy)).subscribe((params) => {
       this.category = params.get('categoryName');
     });
     this.productService
@@ -51,7 +51,7 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
       });
   }
   public ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy.next();
+    this.destroy.complete();
   }
 }
