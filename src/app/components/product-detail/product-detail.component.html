@@ -1,7 +1,16 @@
-<ng-container *ngIf="product() as product" class="product-container">
+<ng-container
+  *ngIf="product() as product"
+  class="product-container"
+>
   <div class="image-gallery">
     <div class="main-image">
-      <button mat-button (click)="prevImg()" [disabled]="currentImgIndex === 0">◀</button>
+      <button
+        mat-button
+        (click)="prevImg()"
+        [disabled]="currentImgIndex === 0"
+      >
+        ◀
+      </button>
       <div class="image-container">
         <img
           tabindex="0"
@@ -12,12 +21,19 @@
           (keydown.enter)="openModal(images)"
         />
       </div>
-      <button mat-button (click)="nextImg()" [disabled]="currentImgIndex === images.length - 1">
+      <button
+        mat-button
+        (click)="nextImg()"
+        [disabled]="currentImgIndex === images.length - 1"
+      >
         ▶
       </button>
     </div>
     <div class="thumbnail-row">
-      <div *ngFor="let img of images; let i = index" class="thumb-container">
+      <div
+        *ngFor="let img of images; let i = index"
+        class="thumb-container"
+      >
         <img
           [src]="img.url"
           class="thumb"
@@ -31,7 +47,10 @@
     </div>
   </div>
   <div class="card-info">
-    <div class="card-info__details" *ngIf="variantId">
+    <div
+      class="card-info__details"
+      *ngIf="variantId"
+    >
       <h2>{{ product.name[locale] }}</h2>
       <div class="card-text">
         <span>Price:</span
@@ -45,7 +64,10 @@
         </span>
         {{ productDetailService.getDiscountedPrice(allVariants[variantId - 1]) }}
       </div>
-      <div class="card-text" *ngIf="variantId">
+      <div
+        class="card-text"
+        *ngIf="variantId"
+      >
         <span>Brand:</span
         >{{ productDetailService.getAttribute(allVariants[variantId - 1], 'brand') }}
       </div>
@@ -56,8 +78,19 @@
       <div class="card-text"><span>Description:</span>{{ product.description?.[locale] }}</div>
     </div>
     <div class="buttons-container">
-      <button mat-flat-button class="product-detail__button">Add to cart</button>
-      <button mat-flat-button class="product-detail__button" (click)="goBack()">Back</button>
+      <button
+        mat-flat-button
+        class="product-detail__button"
+      >
+        Add to cart
+      </button>
+      <button
+        mat-flat-button
+        class="product-detail__button"
+        (click)="goBack()"
+      >
+        Back
+      </button>
     </div>
   </div>
 </ng-container>

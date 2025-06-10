@@ -1,7 +1,16 @@
 <div class="card-list-container">
-  <mat-card class="card" *ngFor="let variant of allVariants" (click)="openProductPage(variant)">
+  <mat-card
+    class="card"
+    *ngFor="let variant of allVariants"
+    (click)="openProductPage(variant)"
+  >
     <div class="image-container">
-      <img mat-card-image [src]="variant.images?.[0]?.url" alt="product image" class="card-img" />
+      <img
+        mat-card-image
+        [src]="variant.images?.[0]?.url"
+        alt="product image"
+        class="card-img"
+      />
     </div>
     <mat-card-content class="card__info">
       <h3>{{ this.name }}</h3>
@@ -16,12 +25,21 @@
         <span>Price:</span> {{ productDetailService.getAttribute(variant, 'price') }}
       </div>
       <div class="card-text">
-        <span class="discounted" *ngIf="isHasDiscount(variant)">Sale price:</span>
+        <span
+          class="discounted"
+          *ngIf="isHasDiscount(variant)"
+          >Sale price:</span
+        >
         {{ productDetailService.getDiscountedPrice(variant) }}
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-flat-button class="card-button">Add to cart</button>
+      <button
+        mat-flat-button
+        class="card-button"
+      >
+        Add to cart
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

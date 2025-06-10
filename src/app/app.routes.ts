@@ -9,6 +9,7 @@ import { canActivateAuth, canNoActivateAuth } from '@services/auth-service';
 import { CategoryPageComponent } from '@pages/category-page';
 import { ProductDetailComponent } from '@components/product-detail';
 import { ProfilePageComponent } from '@pages/profile-page';
+import { AboutPageComponent } from '@pages/about-page/about-page.component';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'catalog', component: CatalogPageComponent },
   { path: 'category', component: CategoryPageComponent },
   { path: 'cart', component: CartPageComponent },
+  { path: 'about', component: AboutPageComponent },
   { path: 'profile', component: ProfilePageComponent, canActivate: [canNoActivateAuth] },
   { path: 'catalog/:categoryName', component: CategoryPageComponent },
   { path: 'catalog/:categoryName/:subcategoryName', component: CatalogPageComponent },

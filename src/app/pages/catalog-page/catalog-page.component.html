@@ -3,7 +3,10 @@
     <div class="catalog-panel__options">
       <div class="select-container">
         <mat-label class="select-container__label">Category</mat-label>
-        <mat-select [(ngModel)]="category" class="select-container__options">
+        <mat-select
+          [(ngModel)]="category"
+          class="select-container__options"
+        >
           <mat-option value="">All</mat-option>
           <mat-option
             *ngFor="let category of categories | keyvalue"
@@ -42,7 +45,11 @@
           type="text"
           placeholder="Search..."
         />
-        <button *ngIf="searchQuery" class="clear-btn" (click)="clearSearchQuery()">
+        <button
+          *ngIf="searchQuery"
+          class="clear-btn"
+          (click)="clearSearchQuery()"
+        >
           <mat-icon>close</mat-icon>
         </button>
       </div>
@@ -60,7 +67,10 @@
                 (ngModelChange)="onValueFilterChange()"
               >
                 <mat-option value="">All brands</mat-option>
-                <mat-option *ngFor="let brand of brands" [value]="brand">
+                <mat-option
+                  *ngFor="let brand of brands"
+                  [value]="brand"
+                >
                   {{ brand }}
                 </mat-option>
               </mat-select>
@@ -73,7 +83,10 @@
                 (ngModelChange)="onValueFilterChange()"
               >
                 <mat-option value="">All colors</mat-option>
-                <mat-option *ngFor="let color of colors" [value]="color">
+                <mat-option
+                  *ngFor="let color of colors"
+                  [value]="color"
+                >
                   {{ color }}
                 </mat-option>
               </mat-select>
@@ -89,7 +102,10 @@
                 [min]="minPrice"
                 [max]="maxPrice"
               />
-              <div *ngIf="isPriceOutOfRange(priceFrom)" class="error-message">
+              <div
+                *ngIf="isPriceOutOfRange(priceFrom)"
+                class="error-message"
+              >
                 The price should be in the range from {{ minPrice }} to {{ maxPrice }}.
               </div>
 
@@ -103,16 +119,32 @@
                 [min]="minPrice"
                 [max]="maxPrice"
               />
-              <div *ngIf="isPriceOutOfRange(priceTo)" class="error-message">
+              <div
+                *ngIf="isPriceOutOfRange(priceTo)"
+                class="error-message"
+              >
                 The price should be in the range from {{ minPrice }} to {{ maxPrice }}.
               </div>
-              <div *ngIf="isFromGreaterThanTo()" class="error-message">
+              <div
+                *ngIf="isFromGreaterThanTo()"
+                class="error-message"
+              >
                 The price "From" cannot be greater than the price "To".
               </div>
             </div>
             <div class="filters-buttons">
-              <button mat-flat-button (click)="applyPriceRange()">Apply a price range</button>
-              <button mat-flat-button (click)="onFiltersReset()">Reset all filters</button>
+              <button
+                mat-flat-button
+                (click)="applyPriceRange()"
+              >
+                Apply a price range
+              </button>
+              <button
+                mat-flat-button
+                (click)="onFiltersReset()"
+              >
+                Reset all filters
+              </button>
             </div>
           </div>
         </mat-expansion-panel>
@@ -120,6 +152,9 @@
     </div>
   </section>
   <section class="cards-grid">
-    <app-product-card *ngFor="let product of products()" [product]="product"></app-product-card>
+    <app-product-card
+      *ngFor="let product of products()"
+      [product]="product"
+    ></app-product-card>
   </section>
 </main>

@@ -1,34 +1,73 @@
 <div class="wrapper">
-  <div class="navigation-buttons" *ngIf="!isMobileDevice()">
-    <button mat-mini-fab routerLink="/main" matTooltip="Home">
+  <div
+    class="navigation-buttons"
+    *ngIf="!isMobileDevice()"
+  >
+    <button
+      mat-mini-fab
+      routerLink="/main"
+      matTooltip="Home"
+    >
       <mat-icon fontIcon="home"></mat-icon>
     </button>
-    <button mat-mini-fab routerLink="/catalog" matTooltip="Catalog">
+    <button
+      mat-mini-fab
+      routerLink="/catalog"
+      matTooltip="Catalog"
+    >
       <mat-icon fontIcon="category_search"></mat-icon>
     </button>
-    <button mat-mini-fab routerLink="/cart" matTooltip="Cart">
+    <button
+      mat-mini-fab
+      routerLink="/cart"
+      matTooltip="Cart"
+    >
       <mat-icon fontIcon="shopping_cart"></mat-icon>
+    </button>
+    <button
+      mat-mini-fab
+      routerLink="/about"
+      matTooltip="About Us"
+    >
+      <mat-icon fontIcon="info"></mat-icon>
     </button>
 
     @if (isAuthorized()) {
-      <button mat-mini-fab routerLink="/profile" matTooltip="Account">
+      <button
+        mat-mini-fab
+        routerLink="/profile"
+        matTooltip="Account"
+      >
         <mat-icon fontIcon="account_circle"></mat-icon>
       </button>
-      <button mat-mini-fab (click)="logout()" routerLink="/login" matTooltip="Log Out">
+      <button
+        mat-mini-fab
+        (click)="logout()"
+        routerLink="/login"
+        matTooltip="Log Out"
+      >
         <mat-icon fontIcon="logout"></mat-icon>
       </button>
     } @else {
-      <button mat-mini-fab routerLink="/login" matTooltip="Log In">
+      <button
+        mat-mini-fab
+        routerLink="/login"
+        matTooltip="Log In"
+      >
         <mat-icon fontIcon="login"></mat-icon>
       </button>
-      <button mat-mini-fab routerLink="/registration" matTooltip="Sign Up">
+      <button
+        mat-mini-fab
+        routerLink="/registration"
+        matTooltip="Sign Up"
+      >
         <mat-icon fontIcon="person_add"></mat-icon>
       </button>
     }
   </div>
 
   <button
-    mat-mini-fab
+    mat-icon-button
     class="burger"
     *ngIf="isMobileDevice()"
     (click)="toggleMenu()"
@@ -54,19 +93,55 @@
   >
     <mat-nav-list>
       <li>
-        <a mat-list-item routerLink="/main" (click)="closeMenu()" matTooltip="Home"> Home </a>
+        <a
+          mat-list-item
+          routerLink="/main"
+          (click)="closeMenu()"
+          matTooltip="Home"
+        >
+          Home
+        </a>
       </li>
       <li>
-        <a mat-list-item routerLink="/catalog" (click)="closeMenu()" matTooltip="Catalog">
+        <a
+          mat-list-item
+          routerLink="/catalog"
+          (click)="closeMenu()"
+          matTooltip="Catalog"
+        >
           Catalog
         </a>
       </li>
       <li>
-        <a mat-list-item routerLink="/cart" (click)="closeMenu()" matTooltip="Cart"> Cart </a>
+        <a
+          mat-list-item
+          routerLink="/cart"
+          (click)="closeMenu()"
+          matTooltip="Cart"
+        >
+          Cart
+        </a>
+      </li>
+      <li>
+        <a
+          mat-list-item
+          routerLink="/about"
+          (click)="closeMenu()"
+          matTooltip="About Us"
+        >
+          About
+        </a>
       </li>
       @if (isAuthorized()) {
         <li>
-          <a mat-list-item routerLink="/profile" matTooltip="Account"> Account </a>
+          <a
+            mat-list-item
+            routerLink="/profile"
+            (click)="closeMenu()"
+            matTooltip="Account"
+          >
+            Account
+          </a>
         </li>
         <li>
           <a
@@ -81,12 +156,22 @@
         </li>
       } @else {
         <li>
-          <a mat-list-item routerLink="/login" (click)="closeMenu()" matTooltip="Log In">
+          <a
+            mat-list-item
+            routerLink="/login"
+            (click)="closeMenu()"
+            matTooltip="Log In"
+          >
             Log In
           </a>
         </li>
         <li>
-          <a mat-list-item routerLink="/registration" (click)="closeMenu()" matTooltip="Sign Up">
+          <a
+            mat-list-item
+            routerLink="/registration"
+            (click)="closeMenu()"
+            matTooltip="Sign Up"
+          >
             Sign Up
           </a>
         </li>

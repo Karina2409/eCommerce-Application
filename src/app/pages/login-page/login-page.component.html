@@ -1,4 +1,8 @@
-<form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
+<form
+  class="login-form login-form_shadow"
+  [formGroup]="form"
+  (ngSubmit)="onSubmitAction()"
+>
   <h1>Log In</h1>
 
   <app-email-field [control]="email"></app-email-field>
@@ -10,21 +14,37 @@
   ></app-password-field>
 
   <label class="login-form__checkbox">
-    <input type="checkbox" (change)="togglePassword()" />
+    <input
+      type="checkbox"
+      (change)="togglePassword()"
+    />
     Show Password
   </label>
 
-  <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
+  <button
+    class="login-form__button"
+    mat-flat-button
+    type="submit"
+    [disabled]="!form.valid"
+  >
     Log In
   </button>
 
-  <button class="login-form__button" mat-flat-button type="button" routerLink="/main">
+  <button
+    class="login-form__button"
+    mat-flat-button
+    type="button"
+    routerLink="/main"
+  >
     Cancel
   </button>
 
   <span class="login-form__link"> Don't have an account? <a href="/registration">Register</a></span>
 </form>
 
-<div *ngIf="errorMessage" class="error-message">
+<div
+  *ngIf="errorMessage"
+  class="error-message"
+>
   {{ errorMessage() }}
 </div>
