@@ -25,6 +25,7 @@ export class FilterService {
       staged: true,
       markMatchingVariants: true,
       fuzzy: true,
+      sort: `${sort}`,
     };
     if (priceFrom) {
       priceFrom *= 100;
@@ -34,56 +35,26 @@ export class FilterService {
     }
     const brand = String(queryBrand).charAt(0).toUpperCase() + String(queryBrand).slice(1);
     const color = String(queryColor).charAt(0).toUpperCase() + String(queryColor).slice(1);
+    const brandFilter = `variants.attributes.brand.label.en-US:"${brand}"`;
+    const colorFilter = `variants.attributes.color.label.en-US:"${color}"`;
+    const rangePriceFilter = `variants.price.centAmount:range (${priceFrom} to ${priceTo})`;
+    const categoryIdFilter = `categories.id:"${categoryId}"`;
     if (categoryId && queryBrand && queryColor) {
-      queryArgs.filter = [
-        `categories.id:"${categoryId}"`,
-        `variants.attributes.brand.label.en-US:"${brand}"`,
-        `variants.attributes.color.label.en-US:"${color}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [categoryIdFilter, brandFilter, colorFilter, rangePriceFilter];
     } else if (categoryId && queryBrand && queryColor === '') {
-      queryArgs.filter = [
-        `categories.id:"${categoryId}"`,
-        `variants.attributes.brand.label.en-US:"${brand}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [categoryIdFilter, brandFilter, rangePriceFilter];
     } else if (categoryId && queryBrand === '' && queryColor) {
-      queryArgs.filter = [
-        `categories.id:"${categoryId}"`,
-        `variants.attributes.color.label.en-US:"${color}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [categoryIdFilter, colorFilter, rangePriceFilter];
     } else if (categoryId && queryBrand === '' && queryColor === '') {
-      queryArgs.filter = [
-        `categories.id:"${categoryId}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [categoryIdFilter, rangePriceFilter];
     } else if (queryBrand && queryColor) {
-      queryArgs.filter = [
-        `variants.attributes.brand.label.en-US:"${brand}"`,
-        `variants.attributes.color.label.en-US:"${color}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [brandFilter, colorFilter, rangePriceFilter];
     } else if (queryBrand && queryColor === '') {
-      queryArgs.filter = [
-        `variants.attributes.brand.label.en-US:"${brand}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [brandFilter, rangePriceFilter];
     } else if (queryBrand === '' && queryColor) {
-      queryArgs.filter = [
-        `variants.attributes.color.label.en-US:"${color}"`,
-        `variants.price.centAmount:range (${priceFrom} to ${priceTo})`,
-      ];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [colorFilter, rangePriceFilter];
     } else {
-      queryArgs.filter = [`variants.price.centAmount:range (${priceFrom} to ${priceTo})`];
-      queryArgs.sort = `${sort}`;
+      queryArgs.filter = [rangePriceFilter];
     }
     if (querySearch) {
       queryArgs['text.en-US'] = querySearch;
