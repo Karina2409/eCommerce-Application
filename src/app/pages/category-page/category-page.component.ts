@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { KeyValuePipe, LowerCasePipe, NgStyle, TitleCasePipe } from '@angular/common';
 import { ProductService } from '@services/product-service';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-category-page',
@@ -23,11 +23,11 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     }
   > = {};
   public parentId = '';
-  private paramMapSubscription: Subscription | undefined;
+  private readonly destroy$ = new Subject<void>();
 
   constructor(private route: ActivatedRoute) {}
   public ngOnInit(): void | Promise<string> {
-    this.paramMapSubscription = this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.category = params.get('categoryName');
     });
     this.productService
@@ -51,9 +51,7 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
       });
   }
   public ngOnDestroy() {
-    if (this.paramMapSubscription) {
-      this.paramMapSubscription.unsubscribe();
-      this.paramMapSubscription = undefined;
-    }
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
