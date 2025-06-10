@@ -10,4 +10,5 @@ export type ProductProjectionQueryArgs = {
   priceCountry?: string;
   priceCustomerGroup?: string;
   priceCustomerGroupAssignments?: string | string[];
+  filter?: string[];
 };

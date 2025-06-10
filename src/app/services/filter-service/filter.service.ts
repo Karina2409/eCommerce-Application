@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ProductProjection } from '@commercetools/platform-sdk';
-import { ProductProjectionExtend, ProductQueryArgs } from '@models/index';
+import { ProductProjectionExtend, ProductProjectionQueryArgs } from '@models/index';
 import { AuthService } from '@services/auth-service';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class FilterService {
   ): Promise<ProductProjectionExtend[] | string> {
     let products: ProductProjection[] = [];
     let productsRender: ProductProjectionExtend[] = [];
-    const queryArgs: ProductQueryArgs = {
+    const queryArgs: ProductProjectionQueryArgs = {
       limit: 50,
       staged: true,
       markMatchingVariants: true,
