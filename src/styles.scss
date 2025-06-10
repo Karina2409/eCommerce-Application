@@ -5,11 +5,13 @@
 :root {
   --primary-color: #d6e2fd;
   --secondary-color: #0c62bf;
-  --light-color: #fffdf6;
+  --light-color: #f6fcff;
   --error-color: #d80000;
-  --dark-color: black;
+  --dark-color: #001025;
   --address-type-color: #d6d6d6;
   --address-type-text-color: #7c7c7c;
+  --address-card-color: #f2f2fd;
+  --address-card-color-hover: #efefff;
   --subcategory-color: rgb(219, 185, 14);
   @include mat.tooltip-overrides(
     (

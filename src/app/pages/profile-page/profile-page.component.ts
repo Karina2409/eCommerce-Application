@@ -3,12 +3,17 @@ import { AddressCardComponent } from '@components/address-card';
 import { MatButtonModule } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
-import { AddressResponse } from '@models/types';
+import { Address, AddressResponse } from '@models/types';
 import { Customer } from '@commercetools/platform-sdk';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
-import { DateFieldComponent, EmailFieldComponent, NameFieldComponent } from '@components/input';
+import {
+  DateFieldComponent,
+  EmailFieldComponent,
+  NameFieldComponent,
+  PasswordFieldComponent,
+} from '@components/input';
 import { emailValidator } from '@validators/email';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
@@ -28,6 +33,7 @@ import { latinValidator } from '@validators/latin';
     MatIcon,
     MatTooltip,
     RouterLink,
+    PasswordFieldComponent,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
@@ -37,6 +43,7 @@ export class ProfilePageComponent implements OnInit {
   public addresses!: AddressResponse[];
   public profileService = inject(ProfileService);
   public isInfoEditing = signal(false);
+  public isPasswordChanging = signal(false);
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
@@ -46,11 +53,19 @@ export class ProfilePageComponent implements OnInit {
       email: new FormControl('', [Validators.required, emailValidator]),
     }),
 
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      passwordValidator,
-    ]),
+    password: new FormGroup({
+      oldPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        passwordValidator,
+      ]),
+
+      newPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        passwordValidator,
+      ]),
+    }),
 
     shippingAddress: new FormGroup({}),
     billingAddress: new FormGroup({}),
@@ -60,8 +75,16 @@ export class ProfilePageComponent implements OnInit {
     return this.form.get('userInfo') as FormGroup;
   }
 
-  public get password(): FormControl {
-    return this.form.get('password') as FormControl;
+  public get passwordGroup(): FormGroup {
+    return this.form.get('password') as FormGroup;
+  }
+
+  public get oldPassword(): FormControl {
+    return this.passwordGroup.get('oldPassword') as FormControl;
+  }
+
+  public get newPassword(): FormControl {
+    return this.passwordGroup.get('newPassword') as FormControl;
   }
 
   public get firstName(): FormControl {
@@ -116,27 +139,39 @@ export class ProfilePageComponent implements OnInit {
     }));
   }
 
-  public toggleEdition(): void {
+  public toggleInfoEdition(): void {
     this.isInfoEditing.update((value) => !value);
   }
 
   public onSubmitAction(): void {
     if (this.userInfoGroup.valid) {
-      this.changeLastName(this.lastName.value);
-      this.changeFirstName(this.firstName.value);
-      this.setDateOfBirth(this.dateOfBirth.value);
-      this.changeEmail(this.email.value);
+      if (this.user.lastName === this.lastName.value) {
+        this.changeLastName(this.lastName.value);
+      }
+      if (this.user.firstName === this.firstName.value) {
+        this.changeFirstName(this.firstName.value);
+      }
+      if (this.user.email === this.email.value) {
+        this.changeEmail(this.email.value);
+      }
+      if (this.user.dateOfBirth === this.dateOfBirth.value) {
+        this.setDateOfBirth(this.dateOfBirth.value);
+      }
     }
     this.isInfoEditing.set(false);
   }
 
-  public async addAddress(
-    streetName: string,
-    streetNumber: string,
-    postalCode: string,
-    city: string,
-    country: string,
-  ) {
+  public onEditPasswordSubmit(): void {
+    if (!this.passwordGroup.valid) return;
+    this.togglePasswordEditing();
+  }
+
+  public togglePasswordEditing(): void {
+    this.isPasswordChanging.update((value) => !value);
+    this.passwordGroup.reset();
+  }
+
+  public async addAddress({ city, country, postalCode, streetName, streetNumber }: Address) {
     void this;
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -155,14 +190,14 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  public async changeAddress(
-    addressId: string,
-    streetName: string,
-    streetNumber: string,
-    postalCode: string,
-    city: string,
-    country: string,
-  ) {
+  public async changeAddress({
+    addressId,
+    streetName,
+    streetNumber,
+    postalCode,
+    city,
+    country,
+  }: Address) {
     void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {

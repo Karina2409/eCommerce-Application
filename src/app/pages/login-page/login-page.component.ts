@@ -67,8 +67,4 @@ export class LoginPageComponent {
         });
     }
   }
-
-  public togglePassword(): void {
-    this.isPasswordShown.update((value) => !value);
-  }
 }

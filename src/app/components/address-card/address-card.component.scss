@@ -3,6 +3,12 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr) 1.8fr;
   gap: 0.5rem;
+  background-color: var(--address-card-color);
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: var(--address-card-color-hover);
+  }
 
   &__label {
     font-weight: bold;
@@ -13,11 +19,10 @@
   &__detail {
     display: flex;
     flex-direction: row;
-    align-items: center;
     white-space: wrap;
     border-radius: 0.5rem;
     padding: 0.5rem;
-    display: flex;
+    align-items: center;
   }
 
   &__type-container {

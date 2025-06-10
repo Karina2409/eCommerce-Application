@@ -33,9 +33,11 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  width: 50%;
+  width: 100%;
+  max-width: 600px;
+  min-width: 0;
   gap: 1rem;
-  @media (max-width: 350px) {
+  @media (max-width: 400px) {
     width: 100%;
   }
 
@@ -43,13 +45,15 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    @media (max-width: 350px) {
+    row-gap: 2px;
+
+    @media (max-width: 400px) {
       flex-direction: column;
     }
-  }
 
-  &__row.editing {
-    width: 100%;
+    &.editing {
+      justify-content: flex-start;
+    }
   }
 
   &__title {
@@ -74,6 +78,9 @@
   }
 
   &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   &__head {
@@ -92,7 +99,25 @@
   }
 }
 
-.edit {
+.change-password {
+  &__form {
+    width: 100%;
+    max-width: 400px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: 1rem;
+
+    &__button {
+      margin: 0 auto;
+      width: fit-content;
+      border-radius: 1rem;
+    }
+  }
+}
+
+.corn-icon {
   background-color: inherit;
   width: 40px;
   position: absolute;
@@ -104,4 +129,5 @@
 .login-form__button {
   width: 20%;
   justify-self: center;
+  border-radius: 1rem;
 }
