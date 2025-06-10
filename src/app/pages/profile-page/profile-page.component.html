@@ -6,7 +6,7 @@
     class="corn-icon"
     routerLink="/profile"
     matTooltip="Edit info"
-    (click)="toggleEdition()"
+    (click)="toggleInfoEdition()"
   >
     <mat-icon fontIcon="edit"></mat-icon>
   </button>
@@ -80,15 +80,25 @@
       <mat-icon>close</mat-icon>
     </button>
 
-    <form class="change-password__form" [formGroup]="passwordGroup">
+    <form
+      class="change-password__form"
+      [formGroup]="passwordGroup"
+      (ngSubmit)="onEditPasswordSubmit()"
+    >
       <app-password-field label="Old Password" [control]="oldPassword"></app-password-field>
       <app-password-field label="New Password" [control]="newPassword"></app-password-field>
+
+      <button
+        class="change-password__form__button"
+        type="submit"
+        mat-flat-button
+        [disabled]="!passwordGroup.valid"
+      >
+        Save
+      </button>
     </form>
-    <button class="change-password__button" mat-flat-button (click)="togglePasswordEditing()">
-      Save
-    </button>
   } @else {
-    <button class="change-password__button" mat-flat-button (click)="togglePasswordEditing()">
+    <button class="change-password__form__button" mat-flat-button (click)="togglePasswordEditing()">
       Change Password
     </button>
   }

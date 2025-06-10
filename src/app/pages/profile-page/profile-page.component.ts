@@ -139,7 +139,7 @@ export class ProfilePageComponent implements OnInit {
     }));
   }
 
-  public toggleEdition(): void {
+  public toggleInfoEdition(): void {
     this.isInfoEditing.update((value) => !value);
   }
 
@@ -161,12 +161,14 @@ export class ProfilePageComponent implements OnInit {
     this.isInfoEditing.set(false);
   }
 
-  // public onEditPassword(): void {
-  //
-  // }
+  public onEditPasswordSubmit(): void {
+    if (!this.passwordGroup.valid) return;
+    this.togglePasswordEditing();
+  }
 
   public togglePasswordEditing(): void {
     this.isPasswordChanging.update((value) => !value);
+    this.passwordGroup.reset();
   }
 
   public async addAddress(
