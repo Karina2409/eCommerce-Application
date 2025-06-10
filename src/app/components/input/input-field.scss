@@ -40,3 +40,17 @@
   width: 100%;
   text-align: left;
 }
+
+.password-field__container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.icon {
+  overflow: unset;
+}
+
+.is-password-change {
+  align-items: stretch;
+}
