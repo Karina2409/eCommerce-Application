@@ -3,7 +3,7 @@ import { AddressCardComponent } from '@components/address-card';
 import { MatButtonModule } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
-import { AddressResponse } from '@models/types';
+import { Address, AddressResponse } from '@models/types';
 import { Customer } from '@commercetools/platform-sdk';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordValidator } from '@validators/password';
@@ -130,13 +130,7 @@ export class ProfilePageComponent implements OnInit {
     this.isInfoEditing.set(false);
   }
 
-  public async addAddress(
-    streetName: string,
-    streetNumber: string,
-    postalCode: string,
-    city: string,
-    country: string,
-  ) {
+  public async addAddress({ city, country, postalCode, streetName, streetNumber }: Address) {
     void this;
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -155,14 +149,14 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  public async changeAddress(
-    addressId: string,
-    streetName: string,
-    streetNumber: string,
-    postalCode: string,
-    city: string,
-    country: string,
-  ) {
+  public async changeAddress({
+    addressId,
+    streetName,
+    streetNumber,
+    postalCode,
+    city,
+    country,
+  }: Address) {
     void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
