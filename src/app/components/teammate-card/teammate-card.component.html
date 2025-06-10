@@ -1,0 +1,34 @@
+<div class="teammate-container">
+  <div class="teammate-img-container">
+    <img
+      class="teammate-img"
+      [src]="teammate.img"
+      alt="Teammate Image"
+    />
+  </div>
+
+  <div class="teammate-info">
+    <div class="teammate-info__name">
+      <h2>{{ teammate.name }}</h2>
+      <a
+        href="{{ teammate.git }}"
+        target="_blank"
+      >
+        <button
+          mat-icon-button
+          matTooltip="Github repo"
+        >
+          <img
+            class="github-icon"
+            src="assets/icons/github-icon.svg"
+            alt="github icon"
+          />
+        </button>
+      </a>
+    </div>
+    <mat-divider></mat-divider>
+    <h3>{{ teammate.role }}</h3>
+    <p><span>Biography:</span> {{ teammate.bio }}</p>
+    <p><span>Contribution:</span>{{ teammate.contributions }}</p>
+  </div>
+</div>
