@@ -8,7 +8,12 @@ import { Customer } from '@commercetools/platform-sdk';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
-import { DateFieldComponent, EmailFieldComponent, NameFieldComponent } from '@components/input';
+import {
+  DateFieldComponent,
+  EmailFieldComponent,
+  NameFieldComponent,
+  PasswordFieldComponent,
+} from '@components/input';
 import { emailValidator } from '@validators/email';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
@@ -28,6 +33,7 @@ import { latinValidator } from '@validators/latin';
     MatIcon,
     MatTooltip,
     RouterLink,
+    PasswordFieldComponent,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
@@ -37,6 +43,7 @@ export class ProfilePageComponent implements OnInit {
   public addresses!: AddressResponse[];
   public profileService = inject(ProfileService);
   public isInfoEditing = signal(false);
+  public isPasswordChanging = signal(false);
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
@@ -46,11 +53,19 @@ export class ProfilePageComponent implements OnInit {
       email: new FormControl('', [Validators.required, emailValidator]),
     }),
 
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-      passwordValidator,
-    ]),
+    password: new FormGroup({
+      oldPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        passwordValidator,
+      ]),
+
+      newPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        passwordValidator,
+      ]),
+    }),
 
     shippingAddress: new FormGroup({}),
     billingAddress: new FormGroup({}),
@@ -60,8 +75,16 @@ export class ProfilePageComponent implements OnInit {
     return this.form.get('userInfo') as FormGroup;
   }
 
-  public get password(): FormControl {
-    return this.form.get('password') as FormControl;
+  public get passwordGroup(): FormGroup {
+    return this.form.get('password') as FormGroup;
+  }
+
+  public get oldPassword(): FormControl {
+    return this.passwordGroup.get('oldPassword') as FormControl;
+  }
+
+  public get newPassword(): FormControl {
+    return this.passwordGroup.get('newPassword') as FormControl;
   }
 
   public get firstName(): FormControl {
@@ -136,6 +159,14 @@ export class ProfilePageComponent implements OnInit {
       }
     }
     this.isInfoEditing.set(false);
+  }
+
+  // public onEditPassword(): void {
+  //
+  // }
+
+  public togglePasswordEditing(): void {
+    this.isPasswordChanging.update((value) => !value);
   }
 
   public async addAddress(

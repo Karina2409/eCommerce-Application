@@ -149,10 +149,6 @@ export class RegistrationPageComponent {
     }
   }
 
-  public togglePassword(): void {
-    this.isPasswordShown.update((value) => !value);
-  }
-
   public toggleAddress(flag: WritableSignal<boolean>, controlPathToToggle?: string): void {
     flag.update((value) => !value);
 

@@ -6,13 +6,7 @@
   <app-password-field
     (passwordChange)="onPasswordInit($event)"
     [control]="password"
-    [isPasswordShown]="isPasswordShown"
   ></app-password-field>
-
-  <label class="login-form__checkbox">
-    <input type="checkbox" (change)="togglePassword()" />
-    Show Password
-  </label>
 
   <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
     Log In
