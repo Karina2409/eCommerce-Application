@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { MatListItem, MatNavList } from '@angular/material/list';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
   public authService: AuthService = inject(AuthService);
   public isAuthorized = computed(() => this.authService.isAuthorized());
 
@@ -31,6 +31,10 @@ export class HeaderComponent {
         this.isMenuOpen.set(false);
       }
     });
+  }
+
+  public ngOnDestroy() {
+    window.removeEventListener('resize', this.screenWidth);
   }
 
   public toggleMenu() {
