@@ -1,0 +1,31 @@
+<div class="about-page-wrapper">
+  <div class="team-info">
+    <h3 class="about-page__title">About us</h3>
+    <p class="about-page__text">
+      Hello! You are on the website of our e-commerce application. We are Deadline Witnesses. This
+      is our final project for RS School and our first team collaboration during the course. It gave
+      us valuable insight into the development process and allowed us to build a working product
+      together.
+    </p>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="people-container">
+    <app-teammate-card
+      *ngFor="let teammate of team"
+      [teammate]="teammate"
+    ></app-teammate-card>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="rs-logo-container">
+    <a
+      href="https://rs.school/courses/javascript"
+      target="_blank"
+    >
+      <img
+        class="rs-icon"
+        src="assets/icons/rs_school.svg"
+        alt="github icon"
+      />
+    </a>
+  </div>
+</div>

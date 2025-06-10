@@ -5,3 +5,4 @@ export * from './forms';
 export * from './product';
 export * from './address-response';
 export * from './productExtend';
+export * from './team';

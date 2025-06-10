@@ -1,9 +1,16 @@
-<form [formGroup]="addressForm" [ngClass]="['address-form', addressDefaultInput]">
+<form
+  [formGroup]="addressForm"
+  [ngClass]="['address-form', addressDefaultInput]"
+>
   <fieldset class="address-form__address">
     <legend class="address-legend">{{ addressDefaultInput | titlecase }} address</legend>
 
     <div class="form-group">
-      <label class="login-form__label" [for]="addressDefaultInput + '-country'">Country:</label>
+      <label
+        class="login-form__label"
+        [for]="addressDefaultInput + '-country'"
+        >Country:</label
+      >
       <select
         formControlName="country"
         class="login-form__input"
@@ -11,7 +18,10 @@
         [class.invalid]="country?.invalid && (country?.dirty || !country?.untouched)"
       >
         <option value="">Select</option>
-        <option *ngFor="let country of countries | keyvalue" [value]="country.value">
+        <option
+          *ngFor="let country of countries | keyvalue"
+          [value]="country.value"
+        >
           {{ country.value }}
         </option>
       </select>
@@ -25,7 +35,11 @@
     </div>
 
     <div class="form-group">
-      <label class="login-form__label" [for]="addressDefaultInput + '-city'">City: </label>
+      <label
+        class="login-form__label"
+        [for]="addressDefaultInput + '-city'"
+        >City:
+      </label>
       <input
         formControlName="city"
         class="login-form__input"
@@ -45,7 +59,11 @@
     </div>
 
     <div class="form-group">
-      <label class="login-form__label" [for]="addressDefaultInput + '-street'">Street: </label>
+      <label
+        class="login-form__label"
+        [for]="addressDefaultInput + '-street'"
+        >Street:
+      </label>
       <input
         formControlName="streetName"
         class="login-form__input"
@@ -65,7 +83,11 @@
     </div>
 
     <div class="form-group">
-      <label class="login-form__label" [for]="addressDefaultInput + '-code'">Postal Code: </label>
+      <label
+        class="login-form__label"
+        [for]="addressDefaultInput + '-code'"
+        >Postal Code:
+      </label>
       <input
         formControlName="postalCode"
         class="login-form__input"
