@@ -34,7 +34,7 @@
   justify-content: center;
   text-decoration: none;
   width: 100%;
-  max-width: 700px;
+  max-width: 600px;
   min-width: 0;
   gap: 1rem;
   @media (max-width: 400px) {
@@ -46,13 +46,14 @@
     display: flex;
     justify-content: space-between;
     row-gap: 2px;
+
     @media (max-width: 400px) {
       flex-direction: column;
     }
-  }
 
-  &__row.editing {
-    justify-content: flex-start;
+    &.editing {
+      justify-content: flex-start;
+    }
   }
 
   &__title {

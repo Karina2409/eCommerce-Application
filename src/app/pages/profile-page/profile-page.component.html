@@ -39,6 +39,7 @@
           [control]="firstName"
           id="first-name"
           placeholder="Enter first name"
+          class="user-info__info"
         ></app-name-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
@@ -48,15 +49,16 @@
           [control]="lastName"
           id="last-name"
           placeholder="Enter last name"
+          class="user-info__info"
         ></app-name-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Date of birth</div>
-        <app-date-field [control]="dateOfBirth"></app-date-field>
+        <app-date-field [control]="dateOfBirth" class="user-info__info"></app-date-field>
       </div>
       <div class="user-info__row" [class.editing]="isInfoEditing()">
         <div class="user-info__title">Email</div>
-        <app-email-field [control]="email"></app-email-field>
+        <app-email-field [control]="email" class="user-info__info"></app-email-field>
       </div>
       <button
         class="login-form__button"
