@@ -57,7 +57,7 @@ export class ProfilePageComponent implements OnInit {
   public billingAddressFormGroup!: FormGroup;
 
   public user!: Customer;
-  public addresses!: AddressResponse[];
+  public addresses = signal<AddressResponse[]>([]);
   public profileService = inject(ProfileService);
   public authService: AuthService = inject(AuthService);
   public isInfoEditing = signal(false);
@@ -143,20 +143,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async ngOnInit() {
-    await this.profileService.getCustomerInfo().then((info) => {
-      if (info.customer) {
-        this.user = info.customer;
-        this.addresses = this.setAddresses(info.customer);
-        if (this.userInfoGroup) {
-          this.userInfoGroup.patchValue({
-            firstName: this.user.firstName ?? '',
-            lastName: this.user.lastName ?? '',
-            dateOfBirth: this.user.dateOfBirth ?? '',
-            email: this.user.email ?? '',
-          });
-        }
-      }
-    });
+    await this.getCustomerInfo();
   }
 
   public onAddressChange(type: string, event: FormGroup) {
@@ -247,18 +234,35 @@ export class ProfilePageComponent implements OnInit {
     this.isModalShown.update((value) => !value);
   }
 
-  public onModalConfirm(event: Event): void {
+  public async getCustomerInfo() {
+    await this.profileService.getCustomerInfo().then((info) => {
+      if (info.customer) {
+        this.user = info.customer;
+        this.addresses.set(this.setAddresses(info.customer));
+        if (this.userInfoGroup) {
+          this.userInfoGroup.patchValue({
+            firstName: this.user.firstName ?? '',
+            lastName: this.user.lastName ?? '',
+            dateOfBirth: this.user.dateOfBirth ?? '',
+            email: this.user.email ?? '',
+          });
+        }
+      }
+    });
+  }
+
+  public async onModalConfirm(event: Event): Promise<void> {
     event.preventDefault();
 
     if (this.selectedAddressType === 'billing') {
-      this.addAddress({
+      await this.addAddress({
         city: this.billingAddressGroup.get('city')?.value ?? '',
         country: this.billingAddressGroup.get('country')?.value ?? '',
         postalCode: this.billingAddressGroup.get('postalCode')?.value ?? '',
         streetName: this.billingAddressGroup.get('streetName')?.value ?? '',
       } as Address);
     } else if (this.selectedAddressType === 'shipping') {
-      this.addAddress({
+      await this.addAddress({
         city: this.shippingAddressGroup.get('city')?.value ?? '',
         country: this.shippingAddressGroup.get('country')?.value ?? '',
         postalCode: this.shippingAddressGroup.get('postalCode')?.value ?? '',
@@ -266,7 +270,8 @@ export class ProfilePageComponent implements OnInit {
       } as Address);
     }
 
-    this.addresses = this.setAddresses(this.user);
+    await this.getCustomerInfo();
+
     this.onModalClose();
   }
 

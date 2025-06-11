@@ -167,7 +167,7 @@
     </ul>
     <div class="user-addresses__list">
       <app-address-card
-        *ngFor="let address of addresses"
+        *ngFor="let address of addresses()"
         [address]="address"
       ></app-address-card>
     </div>
