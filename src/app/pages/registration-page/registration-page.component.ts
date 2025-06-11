@@ -90,14 +90,6 @@ export class RegistrationPageComponent {
     return this.form.get('dateOfBirth') as FormControl;
   }
 
-  public onEmailInit(control: FormControl): void {
-    this.form.setControl('email', control);
-  }
-
-  public onPasswordInit(control: FormControl): void {
-    this.form.setControl('password', control);
-  }
-
   public onShippingAddressInit(addressForm: FormGroup) {
     this.shippingAddressFormGroup = addressForm;
     this.form.setControl('shippingAddress', this.shippingAddressFormGroup);

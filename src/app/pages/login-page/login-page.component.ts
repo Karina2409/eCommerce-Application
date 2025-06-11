@@ -46,14 +46,6 @@ export class LoginPageComponent {
     return this.form.get('password') as FormControl;
   }
 
-  public onEmailInit(control: FormControl): void {
-    this.form.setControl('email', control);
-  }
-
-  public onPasswordInit(control: FormControl): void {
-    this.form.setControl('password', control);
-  }
-
   public onSubmitAction(): void {
     if (this.form.valid) {
       this.authService
