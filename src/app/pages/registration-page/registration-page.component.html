@@ -1,4 +1,8 @@
-<form class="login-form login-form_shadow" [formGroup]="form" (ngSubmit)="onSubmitAction()">
+<form
+  class="login-form login-form_shadow"
+  [formGroup]="form"
+  (ngSubmit)="onSubmitAction()"
+>
   <h1>Sign Up</h1>
 
   <div class="login-form__container">
@@ -44,15 +48,28 @@
     }
   </div>
   <div class="login-form__button-container">
-    <button class="login-form__button" mat-flat-button type="submit" [disabled]="!form.valid">
+    <button
+      class="login-form__button"
+      mat-flat-button
+      type="submit"
+      [disabled]="!form.valid"
+    >
       Sign Up
     </button>
-    <button class="login-form__button" mat-flat-button type="button" routerLink="/main">
+    <button
+      class="login-form__button"
+      mat-flat-button
+      type="button"
+      routerLink="/main"
+    >
       Cancel
     </button>
   </div>
   <span class="login-form__link"> Already have an account? <a href="/login">Log in</a></span>
-  <div *ngIf="errorMessage" class="error-message">
+  <div
+    *ngIf="errorMessage"
+    class="error-message"
+  >
     {{ errorMessage() }}
   </div>
 </form>
