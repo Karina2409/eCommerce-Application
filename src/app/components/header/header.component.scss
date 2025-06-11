@@ -1,9 +1,54 @@
 :host {
   background-color: var(--primary-color);
   display: flex;
-  flex-direction: row;
+  padding: 1rem;
+}
+
+.wrapper {
+  display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
-  padding: 1rem;
+  width: 100%;
+}
+
+.navigation-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10%;
+  z-index: 900;
+}
+
+.modal-content {
+  position: fixed;
+  background: #fff;
+  border-radius: 0.5rem;
+  top: 0;
+  right: 0;
+  padding: 20vw 5vw;
+  box-shadow: 0 4px 12px var(--secondary-color);
+  min-width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.burger {
+  z-index: 999;
 }

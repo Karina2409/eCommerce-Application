@@ -1,0 +1,57 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  width: 100%;
+}
+
+.login-form__label {
+  width: 100%;
+  text-align: left;
+  color: var(--secondary-color);
+}
+
+.login-form__input {
+  color: var(--secondary-color);
+  padding: 0.5rem;
+  background-color: var(--primary-color);
+  border-radius: 0.8rem;
+  border: 0.01rem solid var(--secondary-color);
+  width: 100%;
+  &.invalid {
+    border-color: var(--error-color);
+  }
+  &::placeholder {
+    color: var(--secondary-text);
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.alert {
+  color: var(--error-color);
+}
+
+.alert-validation {
+  font-size: 0.8rem;
+  text-wrap: wrap;
+  width: 100%;
+  text-align: left;
+}
+
+.password-field__container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.icon {
+  overflow: unset;
+}
+
+.is-password-change {
+  align-items: stretch;
+}

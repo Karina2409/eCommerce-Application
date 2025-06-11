@@ -1,4 +1,4 @@
-@import '../../pages/login-registration';
+@use '../../pages/login-registration' as login-registration;
 
 .address-form {
   display: flex;

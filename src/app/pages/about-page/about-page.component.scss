@@ -1,0 +1,37 @@
+%flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+%flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.about-page-wrapper {
+  padding: 5vh 5vw;
+  @extend %flex-column;
+  gap: 1rem;
+}
+
+.team-info {
+  @extend %flex-column;
+  gap: 0.5rem;
+}
+
+.about-page__title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  color: var(--secondary-color);
+}
+
+.people-container {
+  @extend %flex-column;
+  gap: 1rem;
+}
+
+.rs-logo-container {
+  width: 7rem;
+  align-self: center;
+}

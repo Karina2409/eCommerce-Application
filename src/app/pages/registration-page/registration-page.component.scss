@@ -1,4 +1,4 @@
-@import '../login-registration';
+@use '../login-registration' as login-registration;
 
 :host {
   display: flex;

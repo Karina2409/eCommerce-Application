@@ -5,7 +5,11 @@ import { LoginPageComponent } from '@pages/login-page';
 import { MainPageComponent } from '@pages/main-page';
 import { NotFoundPageComponent } from '@pages/not-found-page';
 import { RegistrationPageComponent } from '@pages/registration-page';
-import { canActivateAuth } from '@services/auth-service';
+import { canActivateAuth, canNoActivateAuth } from '@services/auth-service';
+import { CategoryPageComponent } from '@pages/category-page';
+import { ProductDetailComponent } from '@components/product-detail';
+import { ProfilePageComponent } from '@pages/profile-page';
+import { AboutPageComponent } from '@pages/about-page/about-page.component';
 
 export const routes: Routes = [
   { path: '', component: MainPageComponent },
@@ -13,7 +17,12 @@ export const routes: Routes = [
   { path: 'registration', component: RegistrationPageComponent, canActivate: [canActivateAuth] },
   { path: 'main', component: MainPageComponent },
   { path: 'catalog', component: CatalogPageComponent },
+  { path: 'category', component: CategoryPageComponent },
   { path: 'cart', component: CartPageComponent },
-  { path: 'catalog/:categoryName', component: CatalogPageComponent },
+  { path: 'about', component: AboutPageComponent },
+  { path: 'profile', component: ProfilePageComponent, canActivate: [canNoActivateAuth] },
+  { path: 'catalog/:categoryName', component: CategoryPageComponent },
+  { path: 'catalog/:categoryName/:subcategoryName', component: CatalogPageComponent },
+  { path: 'catalog/:categoryName/:subcategoryName/:name/:id', component: ProductDetailComponent },
   { path: '**', component: NotFoundPageComponent },
 ];

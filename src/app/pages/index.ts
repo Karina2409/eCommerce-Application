@@ -4,3 +4,5 @@ export * from './not-found-page';
 export * from './registration-page';
 export * from './cart-page';
 export * from './catalog-page';
+export * from './category-page';
+export * from './profile-page';
