@@ -35,7 +35,7 @@
         (addressChange)="onShippingAddressInit($event)"
         [isAddressDefault]="isShippingAddressDefault"
         [isBothAddressDefault]="isShippingBillingAddressDefault"
-        [addressDefaultInput]="'billing'"
+        [addressDefaultInput]="'shipping'"
       ></app-address-form>
     }
     @if (!isShippingBillingAddressDefault()) {
@@ -43,7 +43,7 @@
         (addressChange)="onBillingAddressInit($event)"
         [isAddressDefault]="isBillingAddressDefault"
         [isBothAddressDefault]="isBillingShippingAddressDefault"
-        [addressDefaultInput]="'shipping'"
+        [addressDefaultInput]="'billing'"
       ></app-address-form>
     }
   </div>
