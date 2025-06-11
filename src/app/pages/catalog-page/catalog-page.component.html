@@ -157,4 +157,12 @@
       [product]="product"
     ></app-product-card>
   </section>
+  <section class="pagination">
+    <mat-paginator
+      [length]="totalCount"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="onPageChange($event)"
+    ></mat-paginator>
+  </section>
 </main>

@@ -80,7 +80,7 @@ export class ProductCardComponent implements OnInit, OnChanges {
       if (this.product.variantsRender) {
         this.allVariants = [...this.product.variantsRender];
       } else {
-        this.allVariants = [this.product.masterVariant, ...this.product.variants];
+        this.allVariants = [this.product.masterVariant];
       }
     }
   }

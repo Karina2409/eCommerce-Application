@@ -79,7 +79,7 @@ export class ProductDetailComponent implements OnInit {
     try {
       const response = await this.productService.getProductBySlug(slug);
       this.product.set(response.body.results[0] ?? null);
-      this.allVariants = [this.product()!.masterVariant, ...this.product()!.variants];
+      this.allVariants = [this.product()!.masterVariant];
       this.images = this.allVariants[this.variantId - 1].images ?? [];
     } catch (err) {
       if (err instanceof Error) {
