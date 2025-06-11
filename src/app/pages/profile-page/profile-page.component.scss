@@ -164,3 +164,7 @@
   flex-direction: column;
   gap: 20px;
 }
+
+.message_error {
+  color: var(--error-color);
+}

@@ -4,9 +4,10 @@ import {
   CategoryPagedQueryResponse,
   ClientResponse,
   ProductProjection,
+  ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { AuthService } from '@services/auth-service';
-import { ProductQueryArgs } from '@models/types';
+import { ProductProjectionQueryArgs } from '@models/types';
 
 @Injectable({
   providedIn: 'root',
@@ -60,8 +61,8 @@ export class ProductService {
     categoryId?: string,
   ): Promise<ProductProjection[] | string> {
     let products: ProductProjection[] = [];
-    const queryArgs: ProductQueryArgs = {
-      limit: 50,
+    const queryArgs: ProductProjectionQueryArgs = {
+      limit: 8,
       staged: true,
       priceCurrency: 'USD',
     };
@@ -70,7 +71,8 @@ export class ProductService {
     }
 
     try {
-      const data = await this.authService.apiRoot.productProjections().get({ queryArgs }).execute();
+      const data: ClientResponse<ProductProjectionPagedQueryResponse> =
+        await this.authService.apiRoot.productProjections().get({ queryArgs }).execute();
       products = data.body.results;
       return products;
     } catch (error) {

@@ -76,6 +76,7 @@ export class ProfileService {
         .password()
         .post({ body: data })
         .execute();
+
       return {
         success: true,
         customer: customerUpdateResult.body,
@@ -83,7 +84,7 @@ export class ProfileService {
       };
     } catch (error) {
       if (error instanceof Error) {
-        return error.message;
+        return { success: false, customer: {}, message: error.message };
       }
       return String(error);
     }

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, Input, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValuePipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import {
   MatExpansionPanel,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-catalog-page',
@@ -69,6 +70,7 @@ export class CatalogPageComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private destroyRef: DestroyRef,
   ) {}
 
   public onPriceChange(text: string, price: number | null) {
@@ -157,7 +159,7 @@ export class CatalogPageComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.category = params.get('categoryName');
       if (this.category === null) {
         this.category = '';
