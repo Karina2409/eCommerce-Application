@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { AddressCardComponent } from '@components/address-card';
 import { MatButtonModule } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
@@ -19,6 +18,10 @@ import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { latinValidator } from '@validators/latin';
+import { ModalComponent } from '@components/modal';
+import { MatSelectModule } from '@angular/material/select';
+import { AddressComponent } from '@components/address-form';
+import { AddressCardComponent } from '@components/address-card';
 
 @Component({
   selector: 'app-profile-page',
@@ -34,6 +37,9 @@ import { latinValidator } from '@validators/latin';
     MatTooltip,
     RouterLink,
     PasswordFieldComponent,
+    ModalComponent,
+    MatSelectModule,
+    AddressComponent,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
@@ -44,6 +50,8 @@ export class ProfilePageComponent implements OnInit {
   public profileService = inject(ProfileService);
   public isInfoEditing = signal(false);
   public isPasswordChanging = signal(false);
+  public isModalShown = signal(false);
+  public selectedAddressType: 'billing' | 'shipping' = 'billing';
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
@@ -169,6 +177,18 @@ export class ProfilePageComponent implements OnInit {
   public togglePasswordEditing(): void {
     this.isPasswordChanging.update((value) => !value);
     this.passwordGroup.reset();
+  }
+
+  public onOpenModal(): void {
+    this.isModalShown.update((value) => !value);
+  }
+
+  public onModalClose(): void {
+    this.isModalShown.update((value) => !value);
+  }
+
+  public onModalConfirm(): void {
+    void this;
   }
 
   public async addAddress({ city, country, postalCode, streetName, streetNumber }: Address) {

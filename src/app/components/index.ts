@@ -6,3 +6,4 @@ export * from './product-detail';
 export * from './address-card';
 export * from './images-modal';
 export * from './input';
+export * from './modal';

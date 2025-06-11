@@ -1,15 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  Output,
-  WritableSignal,
-  OnInit,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, WritableSignal, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Countries } from '@models/enums';
-import { RegistrationPageComponent } from '@pages/registration-page';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -25,7 +16,10 @@ export class AddressComponent implements OnInit {
   @Input() public isBothAddressDefault!: WritableSignal<boolean>;
   @Input() public addressDefaultInput!: string;
 
-  public registrationPage = inject(RegistrationPageComponent);
+  @Output() public toggleAddress = new EventEmitter<{
+    signal: WritableSignal<boolean>;
+    value?: string;
+  }>();
 
   public addressForm: FormGroup = new FormGroup({
     country: new FormControl('', [Validators.required]),
@@ -66,5 +60,9 @@ export class AddressComponent implements OnInit {
 
   public ngOnInit() {
     this.addressChange.emit(this.addressForm);
+  }
+
+  public onToggleAddress(isAddressDefault: WritableSignal<boolean>, addressDefault = '') {
+    this.toggleAddress.emit({ signal: isAddressDefault, value: addressDefault || undefined });
   }
 }
