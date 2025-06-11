@@ -200,6 +200,7 @@ export class ProfilePageComponent implements OnInit {
   public togglePasswordEditing(): void {
     this.isPasswordChanging.update((value) => !value);
     this.passwordGroup.reset();
+    this.message = '';
   }
 
   public onOpenModal(): void {
