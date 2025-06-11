@@ -19,6 +19,7 @@ import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { latinValidator } from '@validators/latin';
+import { AuthService } from '@services/auth-service';
 
 @Component({
   selector: 'app-profile-page',
@@ -42,8 +43,10 @@ export class ProfilePageComponent implements OnInit {
   public user!: Customer;
   public addresses!: AddressResponse[];
   public profileService = inject(ProfileService);
+  public authService: AuthService = inject(AuthService);
   public isInfoEditing = signal(false);
   public isPasswordChanging = signal(false);
+  public message = '';
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
@@ -168,13 +171,22 @@ export class ProfilePageComponent implements OnInit {
     if (data.customer?.id) {
       id = data.customer.id;
     }
-    await this.profileService.updateCustomerPassword({
-      id: id,
-      version: this.profileService.currentVersion,
-      currentPassword: this.oldPassword.value,
-      newPassword: this.newPassword.value,
-    });
-    this.togglePasswordEditing();
+    await this.profileService
+      .updateCustomerPassword({
+        id: id,
+        version: this.profileService.currentVersion,
+        currentPassword: this.oldPassword.value,
+        newPassword: this.newPassword.value,
+      })
+      .then((result) => {
+        if (result instanceof Object && result?.success) {
+          if (data.customer?.email)
+            this.authService.signIn(data.customer?.email, this.newPassword.value);
+          this.togglePasswordEditing();
+        } else if (result instanceof Object && !result?.success) {
+          this.message = result.message;
+        }
+      });
   }
 
   public togglePasswordEditing(): void {
