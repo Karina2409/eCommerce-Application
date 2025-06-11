@@ -1,1 +1,1 @@
-export * from '../responses/product-query-args.type';
+export * from './product-query-args.type';
