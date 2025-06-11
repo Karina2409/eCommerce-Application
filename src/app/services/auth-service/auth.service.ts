@@ -74,23 +74,32 @@ export class AuthService {
         const billingDefaultIndex = addresses.findIndex(
           (addr, i) => addr.addressDefault && i === 1,
         );
-
         if (bothDefaultIndex !== -1) {
           const shippingResponse = await this.setDefaultShippingAddress(
             customerResponse,
             bothDefaultIndex,
           );
           await this.setDefaultBillingAddress(shippingResponse, 0);
-        } else {
-          if (shippingDefaultIndex !== -1) {
-            const shippingResponse = await this.setDefaultShippingAddress(
-              customerResponse,
-              shippingDefaultIndex,
-            );
-            if (customerDraft.addresses[1].addressDefault) {
-              await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
-            }
+        } else if (shippingDefaultIndex !== -1) {
+          const shippingResponse = await this.setDefaultShippingAddress(
+            customerResponse,
+            shippingDefaultIndex,
+          );
+          if (customerDraft.addresses[1].addressDefault) {
+            await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
+          } else {
+            await this.setBillingAddressId(shippingResponse, 1);
           }
+        } else if (billingDefaultIndex !== -1) {
+          const shippingResponse = await this.setShippingAddressId(customerResponse, 0);
+          if (customerDraft.addresses[1].addressDefault) {
+            await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
+          } else {
+            await this.setBillingAddressId(shippingResponse, 1);
+          }
+        } else {
+          const shippingResponse = await this.setShippingAddressId(customerResponse, 0);
+          await this.setBillingAddressId(shippingResponse, 1);
         }
         this.isAuthorized.set(true);
         return {
@@ -264,6 +273,24 @@ export class AuthService {
       .execute();
   }
 
+  private async setBillingAddressId(shippingResponse: ClientResponse<Customer>, index: number) {
+    await this.apiRoot
+      .customers()
+      .withId({ ID: shippingResponse.body!.id })
+      .post({
+        body: {
+          version: shippingResponse.body!.version,
+          actions: [
+            {
+              action: 'addBillingAddressId',
+              addressId: shippingResponse.body!.addresses[index].id,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
   private async setDefaultShippingAddress(
     customerResponse: ClientResponse<CustomerSignInResult>,
     index: number,
@@ -277,6 +304,26 @@ export class AuthService {
           actions: [
             {
               action: 'setDefaultShippingAddress',
+              addressId: customerResponse.body!.customer.addresses[index].id,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+  private async setShippingAddressId(
+    customerResponse: ClientResponse<CustomerSignInResult>,
+    index: number,
+  ): Promise<ClientResponse<Customer>> {
+    return await this.apiRoot
+      .customers()
+      .withId({ ID: customerResponse.body!.customer.id })
+      .post({
+        body: {
+          version: customerResponse.body!.customer.version,
+          actions: [
+            {
+              action: 'addShippingAddressId',
               addressId: customerResponse.body!.customer.addresses[index].id,
             },
           ],
