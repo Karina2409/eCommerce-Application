@@ -183,22 +183,50 @@
 
   <app-modal
     [show]="isModalShown()"
-    (close)="onModalClose()"
-    (confirm)="onModalConfirm()"
+    (closeModal)="onModalClose()"
   >
-    <div class="modal-content">
-      <div class="select-container">
-        <mat-label class="select-container__label">Address Type</mat-label>
-        <mat-select
-          [(value)]="selectedAddressType"
-          class="select-container__options"
-        >
-          <mat-option value="billing">Billing Address</mat-option>
-          <mat-option value="shipping">Shipping Address</mat-option>
-        </mat-select>
-      </div>
+    <form (ngSubmit)="onModalConfirm($event)">
+      <div class="modal-content">
+        <div class="select-container">
+          <mat-label class="select-container__label">Address Type</mat-label>
+          <mat-select
+            [(ngModel)]="selectedAddressType"
+            name="addressType"
+            class="select-container__options"
+          >
+            <mat-option value="billing">Billing Address</mat-option>
+            <mat-option value="shipping">Shipping Address</mat-option>
+          </mat-select>
+        </div>
 
-      <app-address-form [addressDefaultInput]="selectedAddressType"></app-address-form>
-    </div>
+        @if (selectedAddressType === 'billing') {
+          <app-address-form
+            (addressChange)="onAddressChange('billing', $event)"
+            [addressDefaultInput]="selectedAddressType"
+          ></app-address-form>
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="!billingAddressGroup.valid"
+          >
+            OK
+          </button>
+        } @else {
+          <app-address-form
+            (addressChange)="onAddressChange('shipping', $event)"
+            [addressDefaultInput]="selectedAddressType"
+          ></app-address-form>
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="!shippingAddressGroup.valid"
+          >
+            OK
+          </button>
+        }
+      </div>
+    </form>
   </app-modal>
 </section>

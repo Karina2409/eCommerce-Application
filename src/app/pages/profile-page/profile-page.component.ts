@@ -4,7 +4,13 @@ import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
 import { Address, AddressResponse } from '@models/types';
 import { Customer } from '@commercetools/platform-sdk';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import {
@@ -41,11 +47,15 @@ import { AuthService } from '@services/auth-service';
     ModalComponent,
     MatSelectModule,
     AddressComponent,
+    FormsModule,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
 export class ProfilePageComponent implements OnInit {
+  public shippingAddressFormGroup!: FormGroup;
+  public billingAddressFormGroup!: FormGroup;
+
   public user!: Customer;
   public addresses!: AddressResponse[];
   public profileService = inject(ProfileService);
@@ -114,6 +124,24 @@ export class ProfilePageComponent implements OnInit {
     return this.userInfoGroup.get('email') as FormControl;
   }
 
+  public get shippingAddressGroup(): FormGroup {
+    return this.form.get('shippingAddress') as FormGroup;
+  }
+
+  public get billingAddressGroup(): FormGroup {
+    return this.form.get('billingAddress') as FormGroup;
+  }
+
+  public onShippingAddressInit(addressForm: FormGroup) {
+    this.shippingAddressFormGroup = addressForm;
+    this.form.setControl('shippingAddress', this.shippingAddressFormGroup);
+  }
+
+  public onBillingAddressInit(addressForm: FormGroup) {
+    this.billingAddressFormGroup = addressForm;
+    this.form.setControl('billingAddress', this.billingAddressFormGroup);
+  }
+
   public async ngOnInit() {
     await this.profileService.getCustomerInfo().then((info) => {
       if (info.customer) {
@@ -129,6 +157,14 @@ export class ProfilePageComponent implements OnInit {
         }
       }
     });
+  }
+
+  public onAddressChange(type: string, event: FormGroup) {
+    if (type === 'billing') {
+      this.onBillingAddressInit(event);
+    } else {
+      this.onShippingAddressInit(event);
+    }
   }
 
   public setAddresses(customer: Customer): AddressResponse[] {
@@ -211,11 +247,30 @@ export class ProfilePageComponent implements OnInit {
     this.isModalShown.update((value) => !value);
   }
 
-  public onModalConfirm(): void {
-    void this;
+  public onModalConfirm(event: Event): void {
+    event.preventDefault();
+
+    if (this.selectedAddressType === 'billing') {
+      this.addAddress({
+        city: this.billingAddressGroup.get('city')?.value ?? '',
+        country: this.billingAddressGroup.get('country')?.value ?? '',
+        postalCode: this.billingAddressGroup.get('postalCode')?.value ?? '',
+        streetName: this.billingAddressGroup.get('streetName')?.value ?? '',
+      } as Address);
+    } else if (this.selectedAddressType === 'shipping') {
+      this.addAddress({
+        city: this.shippingAddressGroup.get('city')?.value ?? '',
+        country: this.shippingAddressGroup.get('country')?.value ?? '',
+        postalCode: this.shippingAddressGroup.get('postalCode')?.value ?? '',
+        streetName: this.shippingAddressGroup.get('streetName')?.value ?? '',
+      } as Address);
+    }
+
+    this.addresses = this.setAddresses(this.user);
+    this.onModalClose();
   }
 
-  public async addAddress({ city, country, postalCode, streetName, streetNumber }: Address) {
+  public async addAddress({ city, country, postalCode, streetName }: Address) {
     void this;
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -224,7 +279,6 @@ export class ProfilePageComponent implements OnInit {
           action: 'addAddress',
           address: {
             streetName,
-            streetNumber,
             postalCode,
             city,
             country,
