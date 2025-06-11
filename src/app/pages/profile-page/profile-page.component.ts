@@ -108,7 +108,6 @@ export class ProfilePageComponent implements OnInit {
       if (info.customer) {
         this.user = info.customer;
         this.addresses = this.setAddresses(info.customer);
-
         if (this.userInfoGroup) {
           this.userInfoGroup.patchValue({
             firstName: this.user.firstName ?? '',
@@ -161,14 +160,37 @@ export class ProfilePageComponent implements OnInit {
     this.isInfoEditing.set(false);
   }
 
-  public onEditPasswordSubmit(): void {
+  public async onEditPasswordSubmit(
+    oldPassword: FormControl,
+    newPassword: FormControl,
+  ): Promise<void> {
     if (!this.passwordGroup.valid) return;
+
+    let id = '';
+    const data = await this.profileService.getCustomerInfo();
+    if (data.customer?.id) {
+      id = data.customer.id;
+    }
+    await this.profileService.updateCustomerPassword({
+      id: id,
+      version: this.profileService.currentVersion,
+      currentPassword: oldPassword.value,
+      newPassword: newPassword.value,
+    });
     this.togglePasswordEditing();
   }
 
   public togglePasswordEditing(): void {
     this.isPasswordChanging.update((value) => !value);
     this.passwordGroup.reset();
+  }
+
+  public initOldPassword(control: FormControl) {
+    this.oldPassword.setValue(control.value);
+  }
+
+  public initNewPassword(control: FormControl) {
+    this.newPassword.setValue(control.value);
   }
 
   public async addAddress({ city, country, postalCode, streetName, streetNumber }: Address) {
