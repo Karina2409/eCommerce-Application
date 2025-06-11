@@ -20,7 +20,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class PasswordFieldComponent implements OnInit {
   @Output() public passwordChange = new EventEmitter<FormControl>();
   @Input() public label!: string;
-  @Input({ required: true }) public control!: FormControl;
+  @Input({ required: true }) public control!: FormControl<string | null>;
 
   public isPasswordShown: WritableSignal<boolean> = signal(false);
 
