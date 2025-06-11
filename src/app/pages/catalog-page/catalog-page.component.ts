@@ -16,6 +16,9 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ClientResponse } from '@commercetools/ts-client';
+import { ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-catalog-page',
@@ -35,6 +38,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelTitle,
+    MatPaginator,
   ],
   templateUrl: './catalog-page.component.html',
   styleUrl: './catalog-page.component.scss',
@@ -66,6 +70,10 @@ export class CatalogPageComponent implements OnInit {
   public searchQuery = '';
   public priceFrom: number | null = 0;
   public priceTo: number | null = 10000;
+
+  public pageNumber = 1;
+  public pageSize = 10;
+  public totalCount = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -158,6 +166,59 @@ export class CatalogPageComponent implements OnInit {
     this.router.navigate([`/catalog/${this.category}`, `${subcategory}`]);
   }
 
+  public async getAllProducts(pageNumber: number, pageSize: number, targetId: string) {
+    const result = (await this.productService.getAllProductsByCategory(
+      pageNumber,
+      pageSize,
+      targetId,
+    )) as ClientResponse<ProductProjectionPagedQueryResponse>;
+    if (result.body && result.body.total) {
+      this.products.set(result.body.results);
+      this.pageNumber = pageNumber;
+      this.totalCount = result.body.total;
+    }
+
+    this.products().forEach((product) => {
+      if (product.masterVariant && product.masterVariant.attributes) {
+        const attributeValue = product.masterVariant.attributes.find(
+          (attr) => attr.name === 'brand',
+        )?.value[0].key;
+        if (attributeValue !== undefined) {
+          this.allAttributeValues.add(attributeValue);
+        }
+      }
+    });
+
+    for (const value of this.allAttributeValues) {
+      if (typeof value === 'string') {
+        this.brands.push(value);
+      }
+    }
+
+    this.allAttributeValues.clear();
+
+    this.products().forEach((product) => {
+      if (product.variants && product.masterVariant.attributes) {
+        const attributeValue = product.masterVariant.attributes.find(
+          (attr) => attr.name === 'color',
+        )?.value[0].key;
+        if (attributeValue !== undefined) {
+          this.allAttributeValues.add(attributeValue);
+        }
+      }
+      product.variants.map((variant) => {
+        const color = variant.attributes?.find((attr) => attr.name === 'color')?.value[0].key;
+        if (color) this.allAttributeValues.add(color);
+      });
+    });
+
+    for (const value of this.allAttributeValues) {
+      if (typeof value === 'string') {
+        this.colors.push(value);
+      }
+    }
+  }
+
   public ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.category = params.get('categoryName');
@@ -189,51 +250,13 @@ export class CatalogPageComponent implements OnInit {
         }
       })
       .then(() => {
-        this.productService.getAllProductsByCategory(this.targetId).then((products) => {
-          if (Array.isArray(products)) {
-            this.products.set(products);
-          }
-
-          this.products().forEach((product) => {
-            if (product.masterVariant && product.masterVariant.attributes) {
-              const attributeValue = product.masterVariant.attributes.find(
-                (attr) => attr.name === 'brand',
-              )?.value[0].key;
-              if (attributeValue !== undefined) {
-                this.allAttributeValues.add(attributeValue);
-              }
-            }
-          });
-
-          for (const value of this.allAttributeValues) {
-            if (typeof value === 'string') {
-              this.brands.push(value);
-            }
-          }
-
-          this.allAttributeValues.clear();
-
-          this.products().forEach((product) => {
-            if (product.variants && product.masterVariant.attributes) {
-              const attributeValue = product.masterVariant.attributes.find(
-                (attr) => attr.name === 'color',
-              )?.value[0].key;
-              if (attributeValue !== undefined) {
-                this.allAttributeValues.add(attributeValue);
-              }
-            }
-            product.variants.map((variant) => {
-              const color = variant.attributes?.find((attr) => attr.name === 'color')?.value[0].key;
-              if (color) this.allAttributeValues.add(color);
-            });
-          });
-
-          for (const value of this.allAttributeValues) {
-            if (typeof value === 'string') {
-              this.colors.push(value);
-            }
-          }
-        });
+        this.getAllProducts(this.pageNumber, this.pageSize, this.targetId);
       });
+  }
+
+  public onPageChange(event: PageEvent) {
+    this.pageNumber = event.pageIndex + 1;
+    this.pageSize = event.pageSize;
+    this.getAllProducts(this.pageNumber, this.pageSize, this.targetId);
   }
 }

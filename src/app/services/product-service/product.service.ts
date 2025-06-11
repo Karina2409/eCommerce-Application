@@ -3,7 +3,6 @@ import {
   Category,
   CategoryPagedQueryResponse,
   ClientResponse,
-  ProductProjection,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { AuthService } from '@services/auth-service';
@@ -58,12 +57,15 @@ export class ProductService {
   }
 
   public async getAllProductsByCategory(
+    pageNumber = 1,
+    pageSize = 10,
     categoryId?: string,
-  ): Promise<ProductProjection[] | string> {
-    let products: ProductProjection[] = [];
+  ): Promise<ClientResponse<ProductProjectionPagedQueryResponse> | string> {
+    const offset = (pageNumber - 1) * pageSize;
     const queryArgs: ProductProjectionQueryArgs = {
-      limit: 8,
+      limit: pageSize,
       staged: true,
+      offset: offset,
       priceCurrency: 'USD',
     };
     if (categoryId) {
@@ -71,10 +73,7 @@ export class ProductService {
     }
 
     try {
-      const data: ClientResponse<ProductProjectionPagedQueryResponse> =
-        await this.authService.apiRoot.productProjections().get({ queryArgs }).execute();
-      products = data.body.results;
-      return products;
+      return await this.authService.apiRoot.productProjections().get({ queryArgs }).execute();
     } catch (error) {
       if (error instanceof Error) {
         return error.message;
