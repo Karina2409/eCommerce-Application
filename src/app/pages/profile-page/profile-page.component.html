@@ -167,9 +167,66 @@
     </ul>
     <div class="user-addresses__list">
       <app-address-card
-        *ngFor="let address of addresses"
+        *ngFor="let address of addresses()"
         [address]="address"
       ></app-address-card>
     </div>
   </div>
+
+  <button
+    mat-mini-fab
+    matTooltip="Add Address"
+    (click)="onOpenModal()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <app-modal
+    [show]="isModalShown()"
+    (closeModal)="onModalClose()"
+  >
+    <form (ngSubmit)="onModalConfirm($event)">
+      <div class="modal-content">
+        <div class="select-container">
+          <mat-label class="select-container__label">Address Type</mat-label>
+          <mat-select
+            [(ngModel)]="selectedAddressType"
+            name="addressType"
+            class="select-container__options"
+          >
+            <mat-option value="billing">Billing Address</mat-option>
+            <mat-option value="shipping">Shipping Address</mat-option>
+          </mat-select>
+        </div>
+
+        @if (selectedAddressType === 'billing') {
+          <app-address-form
+            (addressChange)="onAddressChange('billing', $event)"
+            [addressDefaultInput]="selectedAddressType"
+          ></app-address-form>
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="!billingAddressGroup.valid"
+          >
+            OK
+          </button>
+        } @else {
+          <app-address-form
+            (addressChange)="onAddressChange('shipping', $event)"
+            [addressDefaultInput]="selectedAddressType"
+          ></app-address-form>
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="!shippingAddressGroup.valid"
+          >
+            OK
+          </button>
+        }
+      </div>
+    </form>
+  </app-modal>
 </section>

@@ -132,6 +132,39 @@
   border-radius: 1rem;
 }
 
+.select-container {
+  display: flex;
+  width: 100%;
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--secondary-color);
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
+
+  &__label {
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+  }
+
+  &__options {
+    width: 80%;
+    border: 1px solid var(--secondary-color);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .message_error {
   color: var(--error-color);
 }

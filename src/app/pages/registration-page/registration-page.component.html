@@ -9,10 +9,7 @@
     <div class="login-form__info">
       <app-email-field [control]="email"></app-email-field>
 
-      <app-password-field
-        (passwordChange)="onPasswordInit($event)"
-        [control]="password"
-      ></app-password-field>
+      <app-password-field [control]="password"></app-password-field>
 
       <app-name-field
         label="First Name"
