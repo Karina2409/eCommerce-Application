@@ -83,18 +83,10 @@
     <form
       class="change-password__form"
       [formGroup]="passwordGroup"
-      (ngSubmit)="onEditPasswordSubmit(oldPassword, newPassword)"
+      (ngSubmit)="onEditPasswordSubmit()"
     >
-      <app-password-field
-        label="Old Password"
-        [control]="oldPassword"
-        (passwordChange)="initOldPassword($event)"
-      ></app-password-field>
-      <app-password-field
-        label="New Password"
-        [control]="newPassword"
-        (passwordChange)="initNewPassword($event)"
-      ></app-password-field>
+      <app-password-field label="Old Password" [control]="oldPassword"></app-password-field>
+      <app-password-field label="New Password" [control]="newPassword"></app-password-field>
 
       <button
         class="change-password__form__button"

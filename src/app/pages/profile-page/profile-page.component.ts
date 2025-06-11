@@ -160,10 +160,7 @@ export class ProfilePageComponent implements OnInit {
     this.isInfoEditing.set(false);
   }
 
-  public async onEditPasswordSubmit(
-    oldPassword: FormControl,
-    newPassword: FormControl,
-  ): Promise<void> {
+  public async onEditPasswordSubmit(): Promise<void> {
     if (!this.passwordGroup.valid) return;
 
     let id = '';
@@ -174,8 +171,8 @@ export class ProfilePageComponent implements OnInit {
     await this.profileService.updateCustomerPassword({
       id: id,
       version: this.profileService.currentVersion,
-      currentPassword: oldPassword.value,
-      newPassword: newPassword.value,
+      currentPassword: this.oldPassword.value,
+      newPassword: this.newPassword.value,
     });
     this.togglePasswordEditing();
   }
@@ -183,14 +180,6 @@ export class ProfilePageComponent implements OnInit {
   public togglePasswordEditing(): void {
     this.isPasswordChanging.update((value) => !value);
     this.passwordGroup.reset();
-  }
-
-  public initOldPassword(control: FormControl) {
-    this.oldPassword.setValue(control.value);
-  }
-
-  public initNewPassword(control: FormControl) {
-    this.newPassword.setValue(control.value);
   }
 
   public async addAddress({ city, country, postalCode, streetName, streetNumber }: Address) {
