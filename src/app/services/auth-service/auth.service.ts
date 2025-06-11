@@ -87,6 +87,15 @@ export class AuthService {
           );
           if (customerDraft.addresses[1].addressDefault) {
             await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
+          } else {
+            await this.setBillingAddressId(shippingResponse, 1);
+          }
+        } else if (billingDefaultIndex !== -1) {
+          const shippingResponse = await this.setShippingAddressId(customerResponse, 0);
+          if (customerDraft.addresses[1].addressDefault) {
+            await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
+          } else {
+            await this.setBillingAddressId(shippingResponse, 1);
           }
         } else {
           const shippingResponse = await this.setShippingAddressId(customerResponse, 0);
