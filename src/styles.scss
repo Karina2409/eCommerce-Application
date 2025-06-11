@@ -30,6 +30,12 @@
       filled-container-shape: rectangle,
     )
   );
+  @include mat.paginator-overrides(
+    (
+      container-text-color: var(--secondary-color),
+      container-background-color: var(--light-color),
+    )
+  );
 }
 
 html,
