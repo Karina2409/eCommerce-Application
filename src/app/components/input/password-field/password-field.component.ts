@@ -12,6 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class PasswordFieldComponent {
   @Input() public label!: string;
   @Input({ required: true }) public control!: FormControl<string | null>;
+  @Input({ required: true }) public id!: string;
 
   public isPasswordShown: WritableSignal<boolean> = signal(false);
 
