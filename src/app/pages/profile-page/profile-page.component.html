@@ -124,13 +124,20 @@
       [formGroup]="passwordGroup"
       (ngSubmit)="onEditPasswordSubmit()"
     >
+      <input
+        type="text"
+        hidden="hidden"
+        autocomplete="username"
+      />
       <app-password-field
         label="Old Password"
         [control]="oldPassword"
+        id="current-password"
       ></app-password-field>
       <app-password-field
         label="New Password"
         [control]="newPassword"
+        id="new-password"
       ></app-password-field>
       <p class="message_error">{{ message }}</p>
       <button
