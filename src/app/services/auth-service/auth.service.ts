@@ -21,13 +21,14 @@ import { environment } from '@environments/environment.development';
 import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
 import { Session } from '@models/enums/session';
 import { CustomerDraft } from '@models/types';
+import { CurrentCart } from '@services/cart-service/currentCart/current-cart';
+import { CustomerInfo } from './customerInfo';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public isAuthorized = signal<boolean>(!!localStorage.getItem('authorized'));
-
   public apiRoot: ByProjectKeyRequestBuilder;
   protected PROJECT_KEY = environment.projectKey;
   protected API_URL = environment.apiUrl;
@@ -35,9 +36,11 @@ export class AuthService {
   protected CLIENT_ID = environment.clientId;
   protected CLIENT_SECRET = environment.clientSecret;
   protected SCOPES = environment.scopes;
+
   constructor() {
     if (!this.isAuthorized()) {
       this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+      this.createAnonymousCart();
     } else {
       this.apiRoot = this.createApiRoot(this.getRefreshClient(Session.AUTH));
     }
@@ -65,7 +68,11 @@ export class AuthService {
           body: customerDraft,
         })
         .execute();
+
       if (customerResponse.statusCode === 201) {
+        CustomerInfo.setCustomer(customerResponse.body.customer);
+        if (CustomerInfo.id) this.createRegisteredCart(CustomerInfo.id);
+
         const addresses = customerDraft.addresses ?? [];
         const bothDefaultIndex = addresses.findIndex((addr) => addr.bothAddressesDefault);
         const shippingDefaultIndex = addresses.findIndex(
@@ -157,6 +164,7 @@ export class AuthService {
   public async logout(): Promise<void> {
     localStorage.clear();
     this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+    this.createAnonymousCart();
     this.isAuthorized.set(false);
     await this.apiRoot.get().execute();
   }
@@ -171,6 +179,96 @@ export class AuthService {
       },
       refreshToken,
     };
+  }
+
+  public async createAnonymousCart() {
+    void this;
+    await this.apiRoot
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute()
+      .then((response) => {
+        CurrentCart.setCart(response.body);
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+        return String(error);
+      });
+  }
+
+  public async createRegisteredCart(ID: Customer['id']) {
+    void this;
+    try {
+      const products = CurrentCart.products;
+      const cartCreateResp = await this.apiRoot
+        .carts()
+        .post({ body: { currency: 'USD', customerId: ID } })
+        .execute();
+      CurrentCart.setCart(cartCreateResp.body);
+      for (const product of products) {
+        const { productId, quantity } = product;
+        const version = CurrentCart.version;
+        if (CurrentCart.id && typeof version === 'number') {
+          const cartId = CurrentCart.id;
+          await this.makePurchases(cartId, version, productId, quantity);
+        }
+      }
+      return {
+        cartID: cartCreateResp.body.id,
+      };
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
+  }
+
+  public async makePurchases(id: string, version: number, currentProductId: string, quantity = 1) {
+    void this;
+
+    await this.apiRoot
+      .carts()
+      .withId({ ID: id })
+      .post({
+        body: {
+          version: version,
+          actions: [
+            {
+              action: 'addLineItem',
+              productId: currentProductId,
+              variantId: 1,
+              quantity,
+            },
+          ],
+        },
+      })
+      .execute()
+      .then((response) => {
+        CurrentCart.setCart(response.body);
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+        return String(error);
+      });
+  }
+
+  public async currentVersionCart(cartId: string) {
+    void this;
+    try {
+      const currentVersionCart = await this.apiRoot.carts().withId({ ID: cartId }).get().execute();
+
+      return currentVersionCart.body.version;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
   }
 
   protected createApiRoot(ctpClient: Client): ByProjectKeyRequestBuilder {

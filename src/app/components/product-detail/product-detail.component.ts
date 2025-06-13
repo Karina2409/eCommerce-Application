@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '@services/product-service';
 import { ImagesModalComponent } from '@components/images-modal';
 import { ProductDetailService } from '@services/product-detail-service';
+import { CartService } from '@services/cart-service';
+import { CurrentCart } from '@services/cart-service/currentCart/current-cart';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,11 +21,13 @@ export class ProductDetailComponent implements OnInit {
   public locale = 'en-US';
   public images: Image[] = [];
   public currentImgIndex = 0;
+  public currentProductId = '';
   public slug = signal<string | null>(null);
   public product = signal<ProductProjection | null>(null);
   public variantId = 1;
   public allVariants: ProductVariant[] = [];
   public productDetailService: ProductDetailService = inject(ProductDetailService);
+  private cartService: CartService = inject(CartService);
 
   constructor(
     private route: ActivatedRoute,
@@ -66,6 +70,15 @@ export class ProductDetailComponent implements OnInit {
     this.location.back();
   }
 
+  public async addProduct(currentProductId: string) {
+    let id;
+    const version = await this.cartService.currentVersionCart(CurrentCart.id!);
+    if (CurrentCart.id && typeof version === 'number') {
+      id = CurrentCart.id;
+      this.cartService.makePurchases(id, version, currentProductId);
+    }
+  }
+
   public openModal(images: Image[]) {
     this.dialog.open(ImagesModalComponent, {
       maxWidth: '100vw',
@@ -78,6 +91,7 @@ export class ProductDetailComponent implements OnInit {
   private async fetchProductBySlug(slug: string) {
     try {
       const response = await this.productService.getProductBySlug(slug);
+      this.currentProductId = response.body.results[0].id;
       this.product.set(response.body.results[0] ?? null);
       this.allVariants = [this.product()!.masterVariant];
       this.images = this.allVariants[this.variantId - 1].images ?? [];
