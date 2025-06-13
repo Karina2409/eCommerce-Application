@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   createApiBuilderFromCtpClient,
   Customer,
@@ -21,8 +21,8 @@ import { environment } from '@environments/environment.development';
 import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
 import { Session } from '@models/enums/session';
 import { CustomerDraft } from '@models/types';
-import { CurrentCart } from '@services/cart-service/currentCart/current-cart';
 import { CustomerInfo } from './customerInfo';
+import { CartService } from '@services/cart-service';
 
 @Injectable({
   providedIn: 'root',
@@ -36,11 +36,12 @@ export class AuthService {
   protected CLIENT_ID = environment.clientId;
   protected CLIENT_SECRET = environment.clientSecret;
   protected SCOPES = environment.scopes;
+  private cartService: CartService = inject(CartService);
 
   constructor() {
     if (!this.isAuthorized()) {
       this.apiRoot = this.createApiRoot(this.getAnonymousClient());
-      this.createAnonymousCart();
+      this.cartService.createAnonymousCart(this.apiRoot);
     } else {
       this.apiRoot = this.createApiRoot(this.getRefreshClient(Session.AUTH));
     }
@@ -71,7 +72,7 @@ export class AuthService {
 
       if (customerResponse.statusCode === 201) {
         CustomerInfo.setCustomer(customerResponse.body.customer);
-        if (CustomerInfo.id) this.createRegisteredCart(CustomerInfo.id);
+        if (CustomerInfo.id) this.cartService.createRegisteredCart(this.apiRoot, CustomerInfo.id);
 
         const addresses = customerDraft.addresses ?? [];
         const bothDefaultIndex = addresses.findIndex((addr) => addr.bothAddressesDefault);
@@ -164,7 +165,7 @@ export class AuthService {
   public async logout(): Promise<void> {
     localStorage.clear();
     this.apiRoot = this.createApiRoot(this.getAnonymousClient());
-    this.createAnonymousCart();
+    await this.cartService.createAnonymousCart(this.apiRoot);
     this.isAuthorized.set(false);
     await this.apiRoot.get().execute();
   }
@@ -179,96 +180,6 @@ export class AuthService {
       },
       refreshToken,
     };
-  }
-
-  public async createAnonymousCart() {
-    void this;
-    await this.apiRoot
-      .carts()
-      .post({ body: { currency: 'USD' } })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
-  }
-
-  public async createRegisteredCart(ID: Customer['id']) {
-    void this;
-    try {
-      const products = CurrentCart.products;
-      const cartCreateResp = await this.apiRoot
-        .carts()
-        .post({ body: { currency: 'USD', customerId: ID } })
-        .execute();
-      CurrentCart.setCart(cartCreateResp.body);
-      for (const product of products) {
-        const { productId, quantity } = product;
-        const version = CurrentCart.version;
-        if (CurrentCart.id && typeof version === 'number') {
-          const cartId = CurrentCart.id;
-          await this.makePurchases(cartId, version, productId, quantity);
-        }
-      }
-      return {
-        cartID: cartCreateResp.body.id,
-      };
-    } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
-      return String(error);
-    }
-  }
-
-  public async makePurchases(id: string, version: number, currentProductId: string, quantity = 1) {
-    void this;
-
-    await this.apiRoot
-      .carts()
-      .withId({ ID: id })
-      .post({
-        body: {
-          version: version,
-          actions: [
-            {
-              action: 'addLineItem',
-              productId: currentProductId,
-              variantId: 1,
-              quantity,
-            },
-          ],
-        },
-      })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
-  }
-
-  public async currentVersionCart(cartId: string) {
-    void this;
-    try {
-      const currentVersionCart = await this.apiRoot.carts().withId({ ID: cartId }).get().execute();
-
-      return currentVersionCart.body.version;
-    } catch (error) {
-      if (error instanceof Error) {
-        return error.message;
-      }
-      return String(error);
-    }
   }
 
   protected createApiRoot(ctpClient: Client): ByProjectKeyRequestBuilder {

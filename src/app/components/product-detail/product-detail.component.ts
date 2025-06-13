@@ -9,6 +9,7 @@ import { ImagesModalComponent } from '@components/images-modal';
 import { ProductDetailService } from '@services/product-detail-service';
 import { CartService } from '@services/cart-service';
 import { CurrentCart } from '@services/cart-service/currentCart/current-cart';
+import { AuthService } from '@services/auth-service';
 
 @Component({
   selector: 'app-product-detail',
@@ -27,6 +28,7 @@ export class ProductDetailComponent implements OnInit {
   public variantId = 1;
   public allVariants: ProductVariant[] = [];
   public productDetailService: ProductDetailService = inject(ProductDetailService);
+  private authService: AuthService = inject(AuthService);
   private cartService: CartService = inject(CartService);
 
   constructor(
@@ -72,10 +74,13 @@ export class ProductDetailComponent implements OnInit {
 
   public async addProduct(currentProductId: string) {
     let id;
-    const version = await this.cartService.currentVersionCart(CurrentCart.id!);
+    const version = await this.cartService.currentVersionCart(
+      this.authService.apiRoot,
+      CurrentCart.id!,
+    );
     if (CurrentCart.id && typeof version === 'number') {
       id = CurrentCart.id;
-      this.cartService.makePurchases(id, version, currentProductId);
+      this.cartService.makePurchases(this.authService.apiRoot, id, version, currentProductId);
     }
   }
 

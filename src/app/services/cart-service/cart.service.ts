@@ -1,20 +1,28 @@
-import { inject, Injectable } from '@angular/core';
-import { Customer } from '@commercetools/platform-sdk';
-import { AuthService } from '@services/auth-service';
+import { Injectable } from '@angular/core';
+import { ByProjectKeyRequestBuilder, Customer } from '@commercetools/platform-sdk';
 import { CurrentCart } from './currentCart/current-cart';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private authService: AuthService = inject(AuthService);
-  public async createNewCustomerCart(ID: Customer['id']) {
+  public async createRegisteredCart(apiRoot: ByProjectKeyRequestBuilder, ID: Customer['id']) {
     void this;
     try {
-      const cartCreateResp = await this.authService.apiRoot
+      const products = CurrentCart.products;
+      const cartCreateResp = await apiRoot
         .carts()
         .post({ body: { currency: 'USD', customerId: ID } })
         .execute();
+      CurrentCart.setCart(cartCreateResp.body);
+      for (const product of products) {
+        const { productId, quantity } = product;
+        const version = CurrentCart.version;
+        if (CurrentCart.id && typeof version === 'number') {
+          const cartId = CurrentCart.id;
+          await this.makePurchases(apiRoot, cartId, version, productId, quantity);
+        }
+      }
       return {
         cartID: cartCreateResp.body.id,
       };
@@ -26,9 +34,9 @@ export class CartService {
     }
   }
 
-  public async createAnonymousCart() {
+  public async createAnonymousCart(apiRoot: ByProjectKeyRequestBuilder) {
     void this;
-    await this.authService.apiRoot
+    await apiRoot
       .carts()
       .post({ body: { currency: 'USD' } })
       .execute()
@@ -43,9 +51,15 @@ export class CartService {
       });
   }
 
-  public async makePurchases(id: string, version: number, currentProductId: string, quantity = 1) {
+  public async makePurchases(
+    apiRoot: ByProjectKeyRequestBuilder,
+    id: string,
+    version: number,
+    currentProductId: string,
+    quantity = 1,
+  ) {
     void this;
-    await this.authService.apiRoot
+    await apiRoot
       .carts()
       .withId({ ID: id })
       .post({
@@ -73,14 +87,10 @@ export class CartService {
       });
   }
 
-  public async currentVersionCart(cartId: string) {
+  public async currentVersionCart(apiRoot: ByProjectKeyRequestBuilder, cartId: string) {
     void this;
     try {
-      const currentVersionCart = await this.authService.apiRoot
-        .carts()
-        .withId({ ID: cartId })
-        .get()
-        .execute();
+      const currentVersionCart = await apiRoot.carts().withId({ ID: cartId }).get().execute();
       return currentVersionCart.body.version;
     } catch (error) {
       if (error instanceof Error) {
