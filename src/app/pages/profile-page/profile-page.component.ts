@@ -275,6 +275,11 @@ export class ProfilePageComponent implements OnInit {
     this.onModalClose();
   }
 
+  public async onRemoveAddress(id: string): Promise<void> {
+    await this.removeAddress(id);
+    await this.getCustomerInfo();
+  }
+
   public async addAddress({ city, country, postalCode, streetName }: Address) {
     void this;
     await this.profileService.updateCustomerInfo(this.user.id, {

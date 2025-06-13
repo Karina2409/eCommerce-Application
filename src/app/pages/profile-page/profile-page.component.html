@@ -176,6 +176,7 @@
       <app-address-card
         *ngFor="let address of addresses()"
         [address]="address"
+        (removeAddress)="onRemoveAddress($event)"
       ></app-address-card>
     </div>
   </div>
