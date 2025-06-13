@@ -1,0 +1,54 @@
+@use '@angular/material' as mat;
+@use 'global-styles/reset' as reset;
+@use 'global-styles/fonts' as fonts;
+
+:root {
+  --primary-color: #d6e2fd;
+  --secondary-color: #0c62bf;
+  --light-color: #f6fcff;
+  --error-color: #d80000;
+  --dark-color: #001025;
+  --address-type-color: #d6d6d6;
+  --address-type-text-color: #7c7c7c;
+  --address-card-color: #f2f2fd;
+  --address-card-color-hover: #efefff;
+  --subcategory-color: rgb(219, 185, 14);
+  @include mat.tooltip-overrides(
+    (
+      container-color: var(--secondary-color),
+    )
+  );
+  @include mat.expansion-overrides(
+    (
+      header-text-color: var(--secondary-color),
+      container-text-color: var(--secondary-color),
+      container-text-size: 1.2rem,
+    )
+  );
+  @include mat.button-overrides(
+    (
+      filled-container-shape: rectangle,
+    )
+  );
+  @include mat.paginator-overrides(
+    (
+      container-text-color: var(--secondary-color),
+      container-background-color: var(--light-color),
+    )
+  );
+}
+
+html,
+body {
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.wrapper {
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.no-scroll {
+  overflow: hidden;
+}

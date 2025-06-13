@@ -1,0 +1,19 @@
+<div class="main-page__container">
+  <section class="categories">
+    <a
+      *ngFor="let category of productService.categories | keyvalue"
+      [routerLink]="['/catalog', category.key | lowercase]"
+    >
+      <div
+        class="category-card"
+        [ngStyle]="{
+          'background-image':
+            'url(\'assets/images/categories/' + (category.key | lowercase) + '.jpeg\')',
+        }"
+      >
+        <p class="category-card__name">{{ category.key | titlecase }}</p>
+      </div>
+    </a>
+  </section>
+  <ng-template><app-category-page></app-category-page></ng-template>
+</div>

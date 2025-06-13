@@ -1,0 +1,72 @@
+<form
+  class="login-form login-form_shadow"
+  [formGroup]="form"
+  (ngSubmit)="onSubmitAction()"
+>
+  <h1>Sign Up</h1>
+
+  <div class="login-form__container">
+    <div class="login-form__info">
+      <app-email-field [control]="email"></app-email-field>
+
+      <app-password-field [control]="password"></app-password-field>
+
+      <app-name-field
+        label="First Name"
+        [control]="firstName"
+        id="first-name"
+        placeholder="Enter first name"
+      ></app-name-field>
+
+      <app-name-field
+        label="Last Name"
+        [control]="lastName"
+        id="last-name"
+        placeholder="Enter last name"
+      ></app-name-field>
+
+      <app-date-field [control]="dateOfBirth"></app-date-field>
+    </div>
+    @if (!isBillingShippingAddressDefault()) {
+      <app-address-form
+        (addressChange)="onShippingAddressInit($event)"
+        [isAddressDefault]="isShippingAddressDefault"
+        [isBothAddressDefault]="isShippingBillingAddressDefault"
+        [addressDefaultInput]="'shipping'"
+      ></app-address-form>
+    }
+    @if (!isShippingBillingAddressDefault()) {
+      <app-address-form
+        (addressChange)="onBillingAddressInit($event)"
+        [isAddressDefault]="isBillingAddressDefault"
+        [isBothAddressDefault]="isBillingShippingAddressDefault"
+        [addressDefaultInput]="'billing'"
+      ></app-address-form>
+    }
+  </div>
+  <div class="login-form__button-container">
+    <button
+      class="login-form__button"
+      mat-flat-button
+      type="submit"
+      [disabled]="!form.valid"
+    >
+      Sign Up
+    </button>
+    <button
+      class="login-form__button"
+      mat-flat-button
+      type="button"
+      routerLink="/main"
+    >
+      Cancel
+    </button>
+  </div>
+  <span class="login-form__link"> Already have an account? <a href="/login">Log in</a></span>
+  <div
+    *ngIf="errorMessage"
+    class="error-message"
+  >
+    {{ errorMessage() }}
+  </div>
+</form>

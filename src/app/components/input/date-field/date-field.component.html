@@ -1,0 +1,24 @@
+<div class="form-group">
+  <label
+    class="login-form__label"
+    for="date"
+    >Date of birth:
+  </label>
+  <input
+    [formControl]="control"
+    type="date"
+    class="login-form__input"
+    id="date"
+    [attr.max]="maxDate"
+    [class.invalid]="control.invalid && (control.dirty || !control.untouched)"
+  />
+  @if (control && control.invalid && (control.dirty || !control.untouched)) {
+    <div class="alert alert-validation">
+      @if (control.hasError('required')) {
+        Date of birth is required
+      } @else if (control.hasError('tooYoung')) {
+        You must be at least {{ control.getError('tooYoung')?.age }} years old.
+      }
+    </div>
+  }
+</div>

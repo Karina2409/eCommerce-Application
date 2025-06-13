@@ -1,0 +1,27 @@
+@use '../../pages/login-registration' as login-registration;
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.billing {
+  grid-area: billing;
+}
+
+.shipping {
+  grid-area: shipping;
+}
+
+.address-form__address {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.address-legend {
+  color: var(--secondary-color);
+  text-align: center;
+  padding-bottom: 0.5rem;
+}

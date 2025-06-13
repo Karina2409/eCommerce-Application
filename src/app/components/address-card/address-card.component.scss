@@ -1,0 +1,50 @@
+.address-card {
+  width: calc(900px - 2rem);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 1.8fr;
+  gap: 0.5rem;
+  background-color: var(--address-card-color);
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: var(--address-card-color-hover);
+  }
+
+  &__label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  &__detail {
+    display: flex;
+    flex-direction: row;
+    white-space: wrap;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    align-items: center;
+  }
+
+  &__type-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  &__type {
+    padding: 0.2rem;
+    background-color: var(--address-type-color);
+    color: var(--address-type-text-color);
+    border-radius: 0.5rem;
+
+    &_default {
+      border-radius: 0.5rem;
+      padding: 0.2rem;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+    }
+  }
+}

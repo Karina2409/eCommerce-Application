@@ -1,0 +1,232 @@
+<section class="user-information profile__section">
+  <h2 class="heading">Information</h2>
+
+  <button
+    mat-mini-fab
+    class="corn-icon"
+    routerLink="/profile"
+    matTooltip="Edit info"
+    (click)="toggleInfoEdition()"
+  >
+    <mat-icon fontIcon="edit"></mat-icon>
+  </button>
+
+  @if (!isInfoEditing()) {
+    <ul class="user-info">
+      <li
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Name:</div>
+        <div class="user-info__info">{{ firstName.value ?? 'Unknown' }}</div>
+      </li>
+      <li
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Surname:</div>
+        <div class="user-info__info">{{ lastName.value ?? 'Unknown' }}</div>
+      </li>
+      <li
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Date of birth:</div>
+        <div class="user-info__info">{{ dateOfBirth.value ?? 'Unknown' }}</div>
+      </li>
+      <li
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Email:</div>
+        <div class="user-info__info">{{ email.value ?? 'Unknown' }}</div>
+      </li>
+    </ul>
+  } @else {
+    <form
+      class="user-info"
+      [formGroup]="userInfoGroup"
+      (ngSubmit)="onSubmitAction()"
+    >
+      <div
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Name</div>
+        <app-name-field
+          label="First Name"
+          [control]="firstName"
+          id="first-name"
+          placeholder="Enter first name"
+          class="user-info__info"
+        ></app-name-field>
+      </div>
+      <div
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Surname</div>
+        <app-name-field
+          label="Last Name"
+          [control]="lastName"
+          id="last-name"
+          placeholder="Enter last name"
+          class="user-info__info"
+        ></app-name-field>
+      </div>
+      <div
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Date of birth</div>
+        <app-date-field
+          [control]="dateOfBirth"
+          class="user-info__info"
+        ></app-date-field>
+      </div>
+      <div
+        class="user-info__row"
+        [class.editing]="isInfoEditing()"
+      >
+        <div class="user-info__title">Email</div>
+        <app-email-field
+          [control]="email"
+          class="user-info__info"
+        ></app-email-field>
+      </div>
+      <button
+        class="login-form__button"
+        mat-flat-button
+        type="submit"
+        [disabled]="!userInfoGroup.valid"
+      >
+        Save
+      </button>
+    </form>
+  }
+</section>
+
+<section class="change-password profile__section">
+  <h2 class="heading">Password</h2>
+
+  @if (isPasswordChanging()) {
+    <button
+      mat-mini-fab
+      class="corn-icon"
+      matTooltip="Close"
+      (click)="togglePasswordEditing()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <form
+      class="change-password__form"
+      [formGroup]="passwordGroup"
+      (ngSubmit)="onEditPasswordSubmit()"
+    >
+      <app-password-field
+        label="Old Password"
+        [control]="oldPassword"
+      ></app-password-field>
+      <app-password-field
+        label="New Password"
+        [control]="newPassword"
+      ></app-password-field>
+      <p class="message_error">{{ message }}</p>
+      <button
+        class="change-password__form__button"
+        type="submit"
+        mat-flat-button
+        [disabled]="!passwordGroup.valid"
+      >
+        Save
+      </button>
+    </form>
+  } @else {
+    <button
+      class="change-password__form__button"
+      mat-flat-button
+      (click)="togglePasswordEditing()"
+    >
+      Change Password
+    </button>
+  }
+</section>
+
+<section class="user-addresses profile__section">
+  <h2 class="heading">Addresses</h2>
+
+  <div class="user-addresses__list-container">
+    <ul class="user-addresses__head">
+      <li>Address</li>
+      <li>City</li>
+      <li>Postal code</li>
+      <li>State</li>
+      <li>Country</li>
+      <li>Address type</li>
+    </ul>
+    <div class="user-addresses__list">
+      <app-address-card
+        *ngFor="let address of addresses()"
+        [address]="address"
+      ></app-address-card>
+    </div>
+  </div>
+
+  <button
+    mat-mini-fab
+    matTooltip="Add Address"
+    (click)="onOpenModal()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <app-modal
+    [show]="isModalShown()"
+    (closeModal)="onModalClose()"
+  >
+    <form (ngSubmit)="onModalConfirm($event)">
+      <div class="modal-content">
+        <div class="select-container">
+          <mat-label class="select-container__label">Address Type</mat-label>
+          <mat-select
+            [(ngModel)]="selectedAddressType"
+            name="addressType"
+            class="select-container__options"
+          >
+            <mat-option value="billing">Billing Address</mat-option>
+            <mat-option value="shipping">Shipping Address</mat-option>
+          </mat-select>
+        </div>
+
+        @if (selectedAddressType === 'billing') {
+          <app-address-form
+            (addressChange)="onAddressChange('billing', $event)"
+            [addressDefaultInput]="selectedAddressType"
+          ></app-address-form>
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="!billingAddressGroup.valid"
+          >
+            OK
+          </button>
+        } @else {
+          <app-address-form
+            (addressChange)="onAddressChange('shipping', $event)"
+            [addressDefaultInput]="selectedAddressType"
+          ></app-address-form>
+
+          <button
+            mat-flat-button
+            type="submit"
+            [disabled]="!shippingAddressGroup.valid"
+          >
+            OK
+          </button>
+        }
+      </div>
+    </form>
+  </app-modal>
+</section>
