@@ -22,7 +22,7 @@ export class CurrentCart {
   public static setCart(cart: Cart | null) {
     if (cart) {
       this.cart = cart;
-      localStorage.setItem('currentCar', JSON.stringify(cart));
+      localStorage.setItem('currentCart', JSON.stringify(cart));
     }
   }
 
@@ -32,7 +32,7 @@ export class CurrentCart {
 
   public static deleteCart() {
     this.cart = null;
-    localStorage.removeItem('currentCar');
+    localStorage.removeItem('currentCart');
   }
 
   public static getProductCount(productKey: string) {
