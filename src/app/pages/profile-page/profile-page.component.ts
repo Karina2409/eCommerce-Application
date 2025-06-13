@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
-import { Address, AddressResponse } from '@models/types';
+import { Address, AddressResponse, AddressType } from '@models/types';
 import { Customer } from '@commercetools/platform-sdk';
 import {
   FormControl,
@@ -53,8 +53,7 @@ import { AuthService } from '@services/auth-service';
   styleUrl: './profile-page.component.scss',
 })
 export class ProfilePageComponent implements OnInit {
-  public shippingAddressFormGroup!: FormGroup;
-  public billingAddressFormGroup!: FormGroup;
+  public AddressFormGroup!: FormGroup;
 
   public user!: Customer;
   public addresses = signal<AddressResponse[]>([]);
@@ -63,8 +62,11 @@ export class ProfilePageComponent implements OnInit {
   public isInfoEditing = signal(false);
   public isPasswordChanging = signal(false);
   public isModalShown = signal(false);
-  public selectedAddressType: 'billing' | 'shipping' = 'billing';
+  public selectedAddressType: AddressType = 'billing';
   public message = '';
+  public billingAddressData = {};
+  public shippingAddressData = {};
+  public addressToEdit: AddressResponse | null = null;
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
@@ -88,8 +90,7 @@ export class ProfilePageComponent implements OnInit {
       ]),
     }),
 
-    shippingAddress: new FormGroup({}),
-    billingAddress: new FormGroup({}),
+    addressForm: new FormGroup({}),
   });
 
   public get userInfoGroup(): FormGroup {
@@ -124,33 +125,33 @@ export class ProfilePageComponent implements OnInit {
     return this.userInfoGroup.get('email') as FormControl;
   }
 
-  public get shippingAddressGroup(): FormGroup {
-    return this.form.get('shippingAddress') as FormGroup;
+  public get addressFormGroup(): FormGroup {
+    return this.form.get('addressForm') as FormGroup;
   }
 
-  public get billingAddressGroup(): FormGroup {
-    return this.form.get('billingAddress') as FormGroup;
-  }
-
-  public onShippingAddressInit(addressForm: FormGroup) {
-    this.shippingAddressFormGroup = addressForm;
-    this.form.setControl('shippingAddress', this.shippingAddressFormGroup);
-  }
-
-  public onBillingAddressInit(addressForm: FormGroup) {
-    this.billingAddressFormGroup = addressForm;
-    this.form.setControl('billingAddress', this.billingAddressFormGroup);
+  public onAddressFormInit(addressForm: FormGroup) {
+    this.AddressFormGroup = addressForm;
+    this.form.setControl('addressForm', this.AddressFormGroup);
   }
 
   public async ngOnInit() {
     await this.getCustomerInfo();
   }
 
-  public onAddressChange(type: string, event: FormGroup) {
-    if (type === 'billing') {
-      this.onBillingAddressInit(event);
-    } else {
-      this.onShippingAddressInit(event);
+  public onAddressTypeChange(newType: AddressType) {
+    if (!this.addressFormGroup) return;
+    if (this.selectedAddressType === 'billing') {
+      this.billingAddressData = this.addressFormGroup.value;
+    } else if (this.selectedAddressType === 'shipping') {
+      this.shippingAddressData = this.addressFormGroup.value;
+    }
+
+    this.selectedAddressType = newType;
+
+    if (newType === 'billing') {
+      this.addressFormGroup.patchValue(this.billingAddressData || {});
+    } else if (newType === 'shipping') {
+      this.addressFormGroup.patchValue(this.shippingAddressData || {});
     }
   }
 
@@ -176,19 +177,19 @@ export class ProfilePageComponent implements OnInit {
     this.isInfoEditing.update((value) => !value);
   }
 
-  public onSubmitAction(): void {
+  public async onSubmitAction(): Promise<void> {
     if (this.userInfoGroup.valid) {
       if (this.user.lastName === this.lastName.value) {
-        this.changeLastName(this.lastName.value);
+        await this.changeLastName(this.lastName.value);
       }
       if (this.user.firstName === this.firstName.value) {
-        this.changeFirstName(this.firstName.value);
+        await this.changeFirstName(this.firstName.value);
       }
       if (this.user.email === this.email.value) {
-        this.changeEmail(this.email.value);
+        await this.changeEmail(this.email.value);
       }
       if (this.user.dateOfBirth === this.dateOfBirth.value) {
-        this.setDateOfBirth(this.dateOfBirth.value);
+        await this.setDateOfBirth(this.dateOfBirth.value);
       }
     }
     this.isInfoEditing.set(false);
@@ -232,6 +233,7 @@ export class ProfilePageComponent implements OnInit {
 
   public onModalClose(): void {
     this.isModalShown.update((value) => !value);
+    this.addressFormGroup.reset();
   }
 
   public async getCustomerInfo() {
@@ -253,23 +255,22 @@ export class ProfilePageComponent implements OnInit {
 
   public async onModalConfirm(event: Event): Promise<void> {
     event.preventDefault();
+    const address: Address = {
+      city: this.addressFormGroup.get('city')?.value ?? '',
+      country: this.addressFormGroup.get('country')?.value ?? '',
+      postalCode: this.addressFormGroup.get('postalCode')?.value ?? '',
+      streetName: this.addressFormGroup.get('streetName')?.value ?? '',
+    } as Address;
 
-    if (this.selectedAddressType === 'billing') {
-      await this.addAddress({
-        city: this.billingAddressGroup.get('city')?.value ?? '',
-        country: this.billingAddressGroup.get('country')?.value ?? '',
-        postalCode: this.billingAddressGroup.get('postalCode')?.value ?? '',
-        streetName: this.billingAddressGroup.get('streetName')?.value ?? '',
-      } as Address);
-    } else if (this.selectedAddressType === 'shipping') {
-      await this.addAddress({
-        city: this.shippingAddressGroup.get('city')?.value ?? '',
-        country: this.shippingAddressGroup.get('country')?.value ?? '',
-        postalCode: this.shippingAddressGroup.get('postalCode')?.value ?? '',
-        streetName: this.shippingAddressGroup.get('streetName')?.value ?? '',
+    if (this.addressToEdit === null) {
+      await this.addAddress(address);
+    } else {
+      await this.changeAddress({
+        ...address,
+        addressId: this.addressToEdit.id,
       } as Address);
     }
-
+    this.addressToEdit = null;
     await this.getCustomerInfo();
 
     this.onModalClose();
@@ -280,8 +281,15 @@ export class ProfilePageComponent implements OnInit {
     await this.getCustomerInfo();
   }
 
+  public async onEditAddress(address: AddressResponse): Promise<void> {
+    this.addressToEdit = address;
+    this.selectedAddressType = address.shippingAddressIds?.some((id) => address.id === id)
+      ? 'shipping'
+      : 'billing';
+    this.onOpenModal();
+  }
+
   public async addAddress({ city, country, postalCode, streetName }: Address) {
-    void this;
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
       actions: [
@@ -298,15 +306,7 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
-  public async changeAddress({
-    addressId,
-    streetName,
-    streetNumber,
-    postalCode,
-    city,
-    country,
-  }: Address) {
-    void this;
+  public async changeAddress({ addressId, streetName, postalCode, city, country }: Address) {
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -316,7 +316,6 @@ export class ProfilePageComponent implements OnInit {
           addressId,
           address: {
             streetName,
-            streetNumber,
             postalCode,
             city,
             country,
@@ -327,7 +326,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async removeAddress(addressId: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -341,7 +339,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async changeEmail(email: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -355,7 +352,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async changeFirstName(firstName: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -369,7 +365,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async changeLastName(lastName: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -384,7 +379,6 @@ export class ProfilePageComponent implements OnInit {
 
   //format dateOfBirth: '2015-10-21'
   public async setDateOfBirth(dateOfBirth: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,

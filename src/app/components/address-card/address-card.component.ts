@@ -12,6 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 export class AddressCardComponent implements OnInit {
   @Input() public address!: AddressResponse;
   @Output() public removeAddress = new EventEmitter<string>();
+  @Output() public editAddress = new EventEmitter<AddressResponse>();
 
   public addressId = '';
 
@@ -37,5 +38,9 @@ export class AddressCardComponent implements OnInit {
 
   public onRemoveAddress() {
     this.removeAddress.emit(this.addressId);
+  }
+
+  public onEditAddress() {
+    this.editAddress.emit(this.address);
   }
 }
