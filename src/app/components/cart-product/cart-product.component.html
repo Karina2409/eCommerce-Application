@@ -1,0 +1,50 @@
+<mat-card class="item-container">
+  <div
+    class="image-container"
+    *ngIf="variant"
+  >
+    <img
+      mat-card-image
+      [src]="variant.images?.[0]?.url"
+      alt="product image"
+      class="card-img"
+    />
+  </div>
+  <mat-card-content class="item-info">
+    <div class="item-info__header">
+      <div class="item-text">
+        {{ cartItem.name['en-US'] }}
+        <mat-divider [vertical]="true"></mat-divider>
+        {{ this.price }}
+      </div>
+      <button mat-icon-button><mat-icon>delete</mat-icon></button>
+    </div>
+    <div class="item-info__main">
+      <div class="item-info__buttons">
+        <button mat-icon-button>
+          <mat-icon>remove</mat-icon>
+        </button>
+        <mat-divider [vertical]="true"></mat-divider>
+        <span class="quantity">{{ this.quantity }}</span>
+        <mat-divider [vertical]="true"></mat-divider>
+        <button mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="item-info__price">
+        @if (discountedPrice) {
+          <div class="item-text strikethrough">
+            {{ this.price }}
+          </div>
+          <div class="item-text discounted">
+            {{ this.discountedPrice }}
+          </div>
+        } @else {
+          <div class="item-text">
+            {{ this.price }}
+          </div>
+        }
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
