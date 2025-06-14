@@ -22,7 +22,10 @@
       routerLink="/cart"
       matTooltip="Cart"
     >
-      <mat-icon fontIcon="shopping_cart"></mat-icon>
+      <mat-icon
+        fontIcon="shopping_cart"
+        [matBadge]="count$ | async"
+      ></mat-icon>
     </button>
     <button
       mat-mini-fab

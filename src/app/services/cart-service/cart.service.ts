@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ByProjectKeyRequestBuilder, Customer } from '@commercetools/platform-sdk';
 import { CurrentCart } from './currentCart/current-cart';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
+  public countSubject = new BehaviorSubject<number>(0);
+  public count$ = this.countSubject.asObservable();
+
   public async createRegisteredCart(apiRoot: ByProjectKeyRequestBuilder, ID: Customer['id']) {
     void this;
     try {
@@ -18,7 +22,7 @@ export class CartService {
       for (const product of products) {
         const { productId, quantity } = product;
         const version = CurrentCart.version;
-        if (CurrentCart.id && typeof version === 'number') {
+        if (CurrentCart.id) {
           const cartId = CurrentCart.id;
           await this.makePurchases(apiRoot, cartId, version, productId, quantity);
         }
@@ -114,5 +118,9 @@ export class CartService {
       }
       return String(error);
     }
+  }
+
+  public updateCartProductCount() {
+    this.countSubject.next(CurrentCart.products.length);
   }
 }

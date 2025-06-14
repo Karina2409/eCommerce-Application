@@ -77,4 +77,9 @@ export class ProductDetailService {
 
     return result;
   }
+
+  public isHasDiscount(variant: ProductVariant): boolean {
+    void this;
+    return !!variant?.prices?.[0]?.discounted?.value?.centAmount;
+  }
 }

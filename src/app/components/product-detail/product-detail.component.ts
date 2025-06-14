@@ -7,8 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '@services/product-service';
 import { ImagesModalComponent } from '@components/images-modal';
 import { ProductDetailService } from '@services/product-detail-service';
-import { CartService } from '@services/cart-service';
-import { CurrentCart } from '@services/cart-service/currentCart/current-cart';
+import { CartManipulationService, CartService } from '@services/cart-service';
 import { AuthService } from '@services/auth-service';
 
 @Component({
@@ -28,8 +27,9 @@ export class ProductDetailComponent implements OnInit {
   public variantId = 1;
   public allVariants: ProductVariant[] = [];
   public productDetailService: ProductDetailService = inject(ProductDetailService);
-  private authService: AuthService = inject(AuthService);
-  private cartService: CartService = inject(CartService);
+  protected authService: AuthService = inject(AuthService);
+  protected cartService: CartService = inject(CartService);
+  protected cartManipulation: CartManipulationService = inject(CartManipulationService);
 
   constructor(
     private route: ActivatedRoute,
@@ -70,18 +70,6 @@ export class ProductDetailComponent implements OnInit {
 
   public goBack() {
     this.location.back();
-  }
-
-  public async addProduct(currentProductId: string) {
-    let id;
-    const version = await this.cartService.currentVersionCart(
-      this.authService.apiRoot,
-      CurrentCart.id!,
-    );
-    if (CurrentCart.id && typeof version === 'number') {
-      id = CurrentCart.id;
-      this.cartService.makePurchases(this.authService.apiRoot, id, version, currentProductId);
-    }
   }
 
   public openModal(images: Image[]) {
