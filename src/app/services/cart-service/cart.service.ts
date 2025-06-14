@@ -51,6 +51,22 @@ export class CartService {
       });
   }
 
+  public async getCartByCustomerId(apiRoot: ByProjectKeyRequestBuilder, customerId: string) {
+    void this;
+    try {
+      const cart = await apiRoot.carts().withCustomerId({ customerId: customerId }).get().execute();
+
+      CurrentCart.setCart(cart.body);
+
+      return cart.body;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
+  }
+
   public async makePurchases(
     apiRoot: ByProjectKeyRequestBuilder,
     id: string,

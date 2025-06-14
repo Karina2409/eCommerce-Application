@@ -146,6 +146,8 @@ export class AuthService {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
         this.isAuthorized.set(true);
+        CustomerInfo.setCustomer(customerResponse.body.customer);
+        if (CustomerInfo.id) this.cartService.getCartByCustomerId(this.apiRoot, CustomerInfo.id);
         return {
           result: true,
           message: 'You are logged in',
