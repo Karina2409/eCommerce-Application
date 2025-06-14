@@ -107,6 +107,41 @@ export class CartService {
       });
   }
 
+  public async removePurchases(
+    apiRoot: ByProjectKeyRequestBuilder,
+    id: string,
+    version: number,
+    lineItemId: string,
+    quantity = 1,
+  ) {
+    void this;
+    await apiRoot
+      .carts()
+      .withId({ ID: id })
+      .post({
+        body: {
+          version: version,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+              quantity,
+            },
+          ],
+        },
+      })
+      .execute()
+      .then((response) => {
+        CurrentCart.setCart(response.body);
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+        return String(error);
+      });
+  }
+
   public async currentVersionCart(apiRoot: ByProjectKeyRequestBuilder, cartId: string) {
     void this;
     try {
