@@ -176,6 +176,8 @@
       <app-address-card
         *ngFor="let address of addresses()"
         [address]="address"
+        (removeAddress)="onRemoveAddress($event)"
+        (editAddress)="onEditAddress($event)"
       ></app-address-card>
     </div>
   </div>
@@ -198,6 +200,7 @@
           <mat-label class="select-container__label">Address Type</mat-label>
           <mat-select
             [(ngModel)]="selectedAddressType"
+            (selectionChange)="onAddressTypeChange($event.value)"
             name="addressType"
             class="select-container__options"
           >
@@ -205,34 +208,19 @@
             <mat-option value="shipping">Shipping Address</mat-option>
           </mat-select>
         </div>
+        <app-address-form
+          (addressChange)="onAddressFormInit($event)"
+          [addressDefaultInput]="selectedAddressType"
+          [editAddress]="addressToEdit"
+        ></app-address-form>
 
-        @if (selectedAddressType === 'billing') {
-          <app-address-form
-            (addressChange)="onAddressChange('billing', $event)"
-            [addressDefaultInput]="selectedAddressType"
-          ></app-address-form>
-
-          <button
-            mat-flat-button
-            type="submit"
-            [disabled]="!billingAddressGroup.valid"
-          >
-            OK
-          </button>
-        } @else {
-          <app-address-form
-            (addressChange)="onAddressChange('shipping', $event)"
-            [addressDefaultInput]="selectedAddressType"
-          ></app-address-form>
-
-          <button
-            mat-flat-button
-            type="submit"
-            [disabled]="!shippingAddressGroup.valid"
-          >
-            OK
-          </button>
-        }
+        <button
+          mat-flat-button
+          type="submit"
+          [disabled]="!addressFormGroup.valid"
+        >
+          OK
+        </button>
       </div>
     </form>
   </app-modal>

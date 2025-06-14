@@ -7,3 +7,4 @@ export * from './address-response';
 export * from './productExtend';
 export * from './team';
 export * from './responses';
+export * from './address-type';

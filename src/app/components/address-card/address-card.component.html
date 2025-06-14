@@ -2,18 +2,23 @@
   <div class="address-card__detail">
     {{ address.streetName ?? '--' }}
   </div>
+
   <div class="address-card__detail">
     {{ address.city ?? '--' }}
   </div>
+
   <div class="address-card__detail">
     {{ address.postalCode ?? '--' }}
   </div>
+
   <div class="address-card__detail">
     {{ address.state ?? '--' }}
   </div>
+
   <div class="address-card__detail">
     {{ address.country ?? '--' }}
   </div>
+
   <div class="address-card__detail address-card__type-container">
     @if (isBilling) {
       <span class="address-card__type">Billing</span>
@@ -27,5 +32,25 @@
     @if (isDefaultShipping) {
       <span class="address-card__type_default">Default shipping</span>
     }
+  </div>
+
+  <div class="address-card__detail">
+    <button
+      mat-mini-fab
+      matTooltip="Delete Address"
+      (click)="onRemoveAddress()"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <div class="address-card__detail">
+    <button
+      mat-mini-fab
+      matTooltip="Edit Address"
+      (click)="onEditAddress()"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
   </div>
 </div>
