@@ -141,12 +141,15 @@ export class RegistrationPageComponent {
     }
   }
 
-  public toggleAddress(flag: WritableSignal<boolean>, controlPathToToggle?: string): void {
-    flag.update((value) => !value);
-    if (controlPathToToggle) {
-      const control = this.form.get(controlPathToToggle);
+  public toggleAddress(event: { signal: WritableSignal<boolean>; value?: string }): void {
+    const { signal, value } = event;
+
+    signal.update((val) => !val);
+    if (value) {
+      const controlName = value === 'billingAddress' ? 'shippingAddress' : 'billingAddress';
+      const control = this.form.get(controlName);
       if (!control) return;
-      if (flag()) {
+      if (signal()) {
         control.disable();
       } else {
         control.enable();
