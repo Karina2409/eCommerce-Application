@@ -27,7 +27,7 @@
       <div class="card-text">
         <span
           class="discounted"
-          *ngIf="isHasDiscount(variant)"
+          *ngIf="productDetailService.isHasDiscount(variant)"
           >Sale price:</span
         >
         {{ productDetailService.getDiscountedPrice(variant) }}
@@ -37,6 +37,10 @@
       <button
         mat-flat-button
         class="card-button"
+        (click)="
+          $event.stopPropagation();
+          cartManipulation.addProduct(cartService, this.authService, product.id)
+        "
       >
         Add to cart
       </button>

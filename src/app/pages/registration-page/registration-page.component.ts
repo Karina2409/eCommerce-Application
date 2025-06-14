@@ -143,7 +143,6 @@ export class RegistrationPageComponent {
 
   public toggleAddress(flag: WritableSignal<boolean>, controlPathToToggle?: string): void {
     flag.update((value) => !value);
-
     if (controlPathToToggle) {
       const control = this.form.get(controlPathToToggle);
       if (!control) return;

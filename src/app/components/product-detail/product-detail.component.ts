@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '@services/product-service';
 import { ImagesModalComponent } from '@components/images-modal';
 import { ProductDetailService } from '@services/product-detail-service';
+import { CartManipulationService, CartService } from '@services/cart-service';
+import { AuthService } from '@services/auth-service';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,11 +21,15 @@ export class ProductDetailComponent implements OnInit {
   public locale = 'en-US';
   public images: Image[] = [];
   public currentImgIndex = 0;
+  public currentProductId = '';
   public slug = signal<string | null>(null);
   public product = signal<ProductProjection | null>(null);
   public variantId = 1;
   public allVariants: ProductVariant[] = [];
   public productDetailService: ProductDetailService = inject(ProductDetailService);
+  protected authService: AuthService = inject(AuthService);
+  protected cartService: CartService = inject(CartService);
+  protected cartManipulation: CartManipulationService = inject(CartManipulationService);
 
   constructor(
     private route: ActivatedRoute,
@@ -78,6 +84,7 @@ export class ProductDetailComponent implements OnInit {
   private async fetchProductBySlug(slug: string) {
     try {
       const response = await this.productService.getProductBySlug(slug);
+      this.currentProductId = response.body.results[0].id;
       this.product.set(response.body.results[0] ?? null);
       this.allVariants = [this.product()!.masterVariant];
       this.images = this.allVariants[this.variantId - 1].images ?? [];

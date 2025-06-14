@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   createApiBuilderFromCtpClient,
   Customer,
@@ -21,13 +21,14 @@ import { environment } from '@environments/environment.development';
 import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
 import { Session } from '@models/enums/session';
 import { CustomerDraft } from '@models/types';
+import { CustomerInfo } from './customerInfo';
+import { CartService } from '@services/cart-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   public isAuthorized = signal<boolean>(!!localStorage.getItem('authorized'));
-
   public apiRoot: ByProjectKeyRequestBuilder;
   protected PROJECT_KEY = environment.projectKey;
   protected API_URL = environment.apiUrl;
@@ -35,9 +36,12 @@ export class AuthService {
   protected CLIENT_ID = environment.clientId;
   protected CLIENT_SECRET = environment.clientSecret;
   protected SCOPES = environment.scopes;
+  private cartService: CartService = inject(CartService);
+
   constructor() {
     if (!this.isAuthorized()) {
       this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+      this.cartService.createAnonymousCart(this.apiRoot);
     } else {
       this.apiRoot = this.createApiRoot(this.getRefreshClient(Session.AUTH));
     }
@@ -65,7 +69,11 @@ export class AuthService {
           body: customerDraft,
         })
         .execute();
+
       if (customerResponse.statusCode === 201) {
+        CustomerInfo.setCustomer(customerResponse.body.customer);
+        if (CustomerInfo.id) this.cartService.createRegisteredCart(this.apiRoot, CustomerInfo.id);
+
         const addresses = customerDraft.addresses ?? [];
         const bothDefaultIndex = addresses.findIndex((addr) => addr.bothAddressesDefault);
         const shippingDefaultIndex = addresses.findIndex(
@@ -138,6 +146,8 @@ export class AuthService {
         localStorage.removeItem(`${Session.ANONYM}_${this.PROJECT_KEY}`);
         localStorage.setItem('authorized', 'true');
         this.isAuthorized.set(true);
+        CustomerInfo.setCustomer(customerResponse.body.customer);
+        if (CustomerInfo.id) this.cartService.getCartByCustomerId(this.apiRoot, CustomerInfo.id);
         return {
           result: true,
           message: 'You are logged in',
@@ -157,6 +167,7 @@ export class AuthService {
   public async logout(): Promise<void> {
     localStorage.clear();
     this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+    await this.cartService.createAnonymousCart(this.apiRoot);
     this.isAuthorized.set(false);
     await this.apiRoot.get().execute();
   }

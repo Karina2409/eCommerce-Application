@@ -81,6 +81,7 @@
       <button
         mat-flat-button
         class="product-detail__button"
+        (click)="cartManipulation.addProduct(cartService, this.authService, product.id)"
       >
         Add to cart
       </button>

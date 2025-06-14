@@ -56,4 +56,30 @@ export class ProductDetailService {
 
     return result;
   }
+
+  public getProductId(variant: ProductVariant): string | undefined {
+    void this;
+    const priceArray = variant?.prices;
+    let result;
+    if (priceArray) {
+      const centAmount = priceArray[0].discounted?.value.centAmount;
+      if (centAmount === undefined) {
+        return '';
+      }
+      const fractionDigits = priceArray[0].discounted?.value?.fractionDigits;
+      const currencyCode = priceArray[0].discounted?.value?.currencyCode;
+      let amount;
+      if (centAmount && fractionDigits) {
+        amount = centAmount / Math.pow(10, fractionDigits);
+      }
+      result = `${amount?.toFixed(fractionDigits)} ${currencyCode}`;
+    }
+
+    return result;
+  }
+
+  public isHasDiscount(variant: ProductVariant): boolean {
+    void this;
+    return !!variant?.prices?.[0]?.discounted?.value?.centAmount;
+  }
 }
