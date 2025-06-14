@@ -1,1 +1,6 @@
-<p>cart-page works!</p>
+<section class="items-container">
+  <app-cart-product
+    *ngFor="let item of cartItems()"
+    [cartItem]="item"
+  ></app-cart-product>
+</section>

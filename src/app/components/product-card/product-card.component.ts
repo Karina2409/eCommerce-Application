@@ -17,6 +17,8 @@ import { ProductDetailService } from '@services/product-detail-service';
 import { ProductProjectionExtend } from '@models/index';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormattingToolsService } from '@services/formatting-tools';
+import { AuthService } from '@services/auth-service';
+import { CartManipulationService, CartService } from '@services/cart-service';
 
 @Component({
   selector: 'app-product-card',
@@ -34,6 +36,9 @@ export class ProductCardComponent implements OnInit, OnChanges {
   public productService: ProductService = inject(ProductService);
   public productDetailService: ProductDetailService = inject(ProductDetailService);
   public formattingToolsService: FormattingToolsService = inject(FormattingToolsService);
+  protected authService: AuthService = inject(AuthService);
+  protected cartService: CartService = inject(CartService);
+  protected cartManipulation: CartManipulationService = inject(CartManipulationService);
 
   constructor(
     private router: Router,
@@ -68,11 +73,6 @@ export class ProductCardComponent implements OnInit, OnChanges {
 
   public getDescription(locale = 'en-US'): void {
     this.description = this.product.description?.[locale] || '';
-  }
-
-  public isHasDiscount(variant: ProductVariant): boolean {
-    void this;
-    return !!variant?.prices?.[0]?.discounted?.value?.centAmount;
   }
 
   public ngOnChanges(changes: SimpleChanges) {
