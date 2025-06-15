@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CurrentCart } from '@services/cart-service';
 import { LineItem } from '@commercetools/platform-sdk';
 import { NgForOf } from '@angular/common';
-import { CartProductComponent } from '@components/cart-product/cart-product.component';
+import { CartProductComponent } from '@components/cart-product';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 
