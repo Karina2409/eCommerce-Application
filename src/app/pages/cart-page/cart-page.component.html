@@ -2,6 +2,7 @@
   <app-cart-product
     *ngFor="let item of cartItems()"
     [cartItem]="item"
+    (myOutput)="getCartItems()"
   ></app-cart-product>
 </section>
 <section class="cart-control">

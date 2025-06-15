@@ -17,17 +17,28 @@
         <mat-divider [vertical]="true"></mat-divider>
         {{ this.price }}
       </div>
-      <button mat-icon-button><mat-icon>delete</mat-icon></button>
+      <button
+        mat-icon-button
+        (click)="removeProduct()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
     <div class="item-info__main">
       <div class="item-info__buttons">
-        <button mat-icon-button>
+        <button
+          mat-icon-button
+          (click)="decreaseQuantity()"
+        >
           <mat-icon>remove</mat-icon>
         </button>
         <mat-divider [vertical]="true"></mat-divider>
         <span class="quantity">{{ this.quantity }}</span>
         <mat-divider [vertical]="true"></mat-divider>
-        <button mat-icon-button>
+        <button
+          mat-icon-button
+          (click)="increaseQuantity()"
+        >
           <mat-icon>add</mat-icon>
         </button>
       </div>

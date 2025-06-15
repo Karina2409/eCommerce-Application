@@ -20,4 +20,19 @@ export class CartManipulationService {
     }
     cartService.updateCartProductCount();
   }
+  public async removeProduct(
+    cartService: CartService,
+    authService: AuthService,
+    lineItemId: string,
+    quantity?: number,
+  ) {
+    void this;
+    let id;
+    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
+    if (CurrentCart.id && typeof version === 'number') {
+      id = CurrentCart.id;
+      await cartService.removePurchases(authService.apiRoot, id, version, lineItemId, quantity);
+    }
+    cartService.updateCartProductCount();
+  }
 }
