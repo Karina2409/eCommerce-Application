@@ -12,10 +12,9 @@ export class CartManipulationService {
     currentProductId: string,
   ) {
     void this;
-    let id;
     const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
     if (CurrentCart.id && typeof version === 'number') {
-      id = CurrentCart.id;
+      const id = CurrentCart.id;
       await cartService.makePurchases(authService.apiRoot, id, version, currentProductId);
     }
     cartService.updateCartProductCount();
@@ -27,10 +26,9 @@ export class CartManipulationService {
     quantity?: number,
   ) {
     void this;
-    let id;
     const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
     if (CurrentCart.id && typeof version === 'number') {
-      id = CurrentCart.id;
+      const id = CurrentCart.id;
       await cartService.removePurchases(authService.apiRoot, id, version, lineItemId, quantity);
     }
     cartService.updateCartProductCount();

@@ -27,7 +27,6 @@ export class CartProductComponent implements OnInit {
   protected cartManipulation: CartManipulationService = inject(CartManipulationService);
 
   public async increaseQuantity() {
-    void this;
     await this.cartManipulation.addProduct(
       this.cartService,
       this.authService,
@@ -37,13 +36,11 @@ export class CartProductComponent implements OnInit {
   }
 
   public async decreaseQuantity() {
-    void this;
     await this.cartManipulation.removeProduct(this.cartService, this.authService, this.cartItem.id);
     this.myOutput.emit();
   }
 
   public async removeProduct() {
-    void this;
     await this.cartManipulation.removeProduct(
       this.cartService,
       this.authService,
