@@ -4,3 +4,19 @@
     [cartItem]="item"
   ></app-cart-product>
 </section>
+<section class="cart-control">
+  <form class="promo-container">
+    <input
+      class="promo-input"
+      type="text"
+      placeholder="Enter promo code..."
+    />
+    <button mat-flat-button>Apply</button>
+  </form>
+
+  <div class="total-count">
+    <p>Total: {{ totalPrice() }} {{ currentCurrency() }}</p>
+  </div>
+
+  <button mat-flat-button>Clear Cart</button>
+</section>

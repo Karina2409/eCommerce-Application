@@ -1,7 +1,7 @@
 import type { Cart, LineItem } from '@commercetools/platform-sdk';
 
 export class CurrentCart {
-  private static cart: Cart | null = null;
+  public static cart: Cart | null = null;
 
   public static get version() {
     return this.cart?.version || 1;
