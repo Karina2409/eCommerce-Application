@@ -206,6 +206,20 @@
           >
             <mat-option value="billing">Billing Address</mat-option>
             <mat-option value="shipping">Shipping Address</mat-option>
+            <mat-option value="shipping & billing">Shipping & Billing Address</mat-option>
+          </mat-select>
+        </div>
+        <div class="select-container">
+          <mat-label class="select-container__label">Address Default Type</mat-label>
+          <mat-select
+            [(ngModel)]="selectedAddressTypeDefault"
+            (selectionChange)="onAddressTypeAddressDefault()"
+            name="addressType"
+            class="select-container__options"
+          >
+            <mat-option value="billing">Billing Default Address</mat-option>
+            <mat-option value="shipping">Shipping Default Address</mat-option>
+            <mat-option value="shipping & billing">Shipping & Billing Default Address</mat-option>
           </mat-select>
         </div>
         <app-address-form

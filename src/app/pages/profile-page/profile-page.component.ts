@@ -63,6 +63,7 @@ export class ProfilePageComponent implements OnInit {
   public isPasswordChanging = signal(false);
   public isModalShown = signal(false);
   public selectedAddressType: AddressType = 'billing';
+  public selectedAddressTypeDefault: AddressType = 'billing';
   public message = '';
   public billingAddressData = {};
   public shippingAddressData = {};
@@ -138,12 +139,27 @@ export class ProfilePageComponent implements OnInit {
     await this.getCustomerInfo();
   }
 
-  public onAddressTypeChange(newType: AddressType) {
+  public async onAddressTypeChange(newType: AddressType) {
     if (!this.addressFormGroup) return;
     if (this.selectedAddressType === 'billing') {
       this.billingAddressData = this.addressFormGroup.value;
-    } else if (this.selectedAddressType === 'shipping') {
+      if (this.addressToEdit?.id) {
+        await this.addBillingAddressID(this.addressToEdit?.id);
+        await this.removeShippingAddressID(this.addressToEdit?.id);
+      }
+    }
+    if (this.selectedAddressType === 'shipping') {
       this.shippingAddressData = this.addressFormGroup.value;
+      if (this.addressToEdit?.id) {
+        await this.addShippingAddressID(this.addressToEdit?.id);
+        await this.removeBillingAddressID(this.addressToEdit?.id);
+      }
+    }
+    if (this.selectedAddressType === 'shipping & billing') {
+      if (this.addressToEdit?.id) {
+        await this.addShippingAddressID(this.addressToEdit?.id);
+        await this.addBillingAddressID(this.addressToEdit?.id);
+      }
     }
 
     this.selectedAddressType = newType;
@@ -152,6 +168,26 @@ export class ProfilePageComponent implements OnInit {
       this.addressFormGroup.patchValue(this.billingAddressData || {});
     } else if (newType === 'shipping') {
       this.addressFormGroup.patchValue(this.shippingAddressData || {});
+    }
+  }
+
+  public async onAddressTypeAddressDefault() {
+    if (!this.addressFormGroup) return;
+    if (this.selectedAddressTypeDefault === 'billing') {
+      if (this.addressToEdit?.id) {
+        await this.setDefaultBillingAddress(this.addressToEdit?.id);
+      }
+    }
+    if (this.selectedAddressTypeDefault === 'shipping') {
+      if (this.addressToEdit?.id) {
+        await this.setDefaultShippingAddress(this.addressToEdit?.id);
+      }
+    }
+    if (this.selectedAddressTypeDefault === 'shipping & billing') {
+      if (this.addressToEdit?.id) {
+        await this.setDefaultShippingAddress(this.addressToEdit?.id);
+        await this.setDefaultBillingAddress(this.addressToEdit?.id);
+      }
     }
   }
 
@@ -332,6 +368,84 @@ export class ProfilePageComponent implements OnInit {
       actions: [
         {
           action: 'removeAddress',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async setDefaultShippingAddress(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'setDefaultShippingAddress',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async addShippingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'addShippingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async removeShippingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'removeShippingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async setDefaultBillingAddress(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'setDefaultBillingAddress',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async addBillingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'addBillingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async removeBillingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'removeBillingAddressId',
           addressId,
         },
       ],
