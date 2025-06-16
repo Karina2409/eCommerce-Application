@@ -1,9 +1,21 @@
 <section class="items-container">
-  <app-cart-product
-    *ngFor="let item of cartItems()"
-    [cartItem]="item"
-    (myOutput)="getCartItems()"
-  ></app-cart-product>
+  @if (cartItems().length > 0) {
+    <app-cart-product
+      *ngFor="let item of cartItems()"
+      [cartItem]="item"
+      (myOutput)="getCartItems()"
+    ></app-cart-product>
+  } @else {
+    <div class="empty-field">
+      <p>Cart is empty</p>
+      <button
+        mat-flat-button
+        routerLink="/catalog"
+      >
+        Back to catalog
+      </button>
+    </div>
+  }
 </section>
 <section class="cart-control">
   <form class="promo-container">
@@ -19,5 +31,10 @@
     <p>Total: {{ totalPrice() }} {{ currentCurrency() }}</p>
   </div>
 
-  <button mat-flat-button>Clear Cart</button>
+  <button
+    mat-flat-button
+    (click)="cartManipulation.removeAllProducts(cartService, authService, cartItems())"
+  >
+    Clear Cart
+  </button>
 </section>

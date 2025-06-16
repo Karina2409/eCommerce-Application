@@ -27,6 +27,6 @@ export class CustomerInfo {
 
   public static deleteCustomer() {
     this.customer = null;
-    localStorage.removeItem('currentCart');
+    localStorage.removeItem('current-cart');
   }
 }

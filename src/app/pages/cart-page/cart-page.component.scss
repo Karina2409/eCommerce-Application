@@ -42,3 +42,11 @@
 .total-count {
   font-size: 1.2rem;
 }
+
+.empty-field {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}

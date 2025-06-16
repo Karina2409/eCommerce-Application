@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '@services/product-service';
 import { ImagesModalComponent } from '@components/images-modal';
 import { ProductDetailService } from '@services/product-detail-service';
-import { CartManipulationService, CartService } from '@services/cart-service';
+import { CartManipulationService, CartService, CurrentCart } from '@services/cart-service';
 import { AuthService } from '@services/auth-service';
 
 @Component({
@@ -24,6 +24,7 @@ export class ProductDetailComponent implements OnInit {
   public currentProductId = '';
   public slug = signal<string | null>(null);
   public product = signal<ProductProjection | null>(null);
+  public isInCart = signal<boolean>(false);
   public variantId = 1;
   public allVariants: ProductVariant[] = [];
   public productDetailService: ProductDetailService = inject(ProductDetailService);
@@ -41,6 +42,12 @@ export class ProductDetailComponent implements OnInit {
       const currentSlug = this.slug();
       if (currentSlug) {
         this.fetchProductBySlug(currentSlug);
+      }
+    });
+    effect(() => {
+      if (this.cartService) {
+        const isInCart = CurrentCart.isProductByID(this.currentProductId);
+        this.isInCart.set(isInCart);
       }
     });
   }

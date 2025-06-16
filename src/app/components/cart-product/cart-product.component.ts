@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { LineItem, ProductVariant } from '@commercetools/platform-sdk';
 import { MatCard, MatCardContent, MatCardImage } from '@angular/material/card';
@@ -19,9 +19,12 @@ export class CartProductComponent implements OnInit {
   @Input() public cartItem!: LineItem;
   public variant: ProductVariant | undefined;
   public price: string | null = null;
-  public discountedPrice: string | undefined;
+  public priceAmount: number | null = null;
+  public priceCurrency: string | null = null;
+  public discountedPrice: number | undefined;
   public quantity: number | null = null;
   public productDetailService: ProductDetailService = inject(ProductDetailService);
+  public isInCart = signal<boolean>(false);
   protected authService: AuthService = inject(AuthService);
   protected cartService: CartService = inject(CartService);
   protected cartManipulation: CartManipulationService = inject(CartManipulationService);
@@ -32,11 +35,13 @@ export class CartProductComponent implements OnInit {
       this.authService,
       this.cartItem.productId,
     );
+    this.cartService.updateTotalPrice();
     this.myOutput.emit();
   }
 
   public async decreaseQuantity() {
     await this.cartManipulation.removeProduct(this.cartService, this.authService, this.cartItem.id);
+    this.cartService.updateTotalPrice();
     this.myOutput.emit();
   }
 
@@ -47,13 +52,24 @@ export class CartProductComponent implements OnInit {
       this.cartItem.id,
       this.cartItem.quantity,
     );
+    this.cartService.updateTotalPrice();
     this.myOutput.emit();
   }
 
   public ngOnInit() {
+    this.updateProductDetail();
+  }
+
+  public updateProductDetail() {
     this.variant = this.cartItem.variant;
     this.price = this.productDetailService.getAttribute(this.variant, 'price');
-    this.discountedPrice = this.productDetailService.getDiscountedPrice(this.variant);
+    const salePrice = this.productDetailService.getDiscountedPrice(this.variant);
+    if (salePrice) this.discountedPrice = parseFloat(salePrice);
     this.quantity = this.cartItem.quantity;
+    if (this.price) {
+      const [amount, currency] = this.price.split(' ');
+      this.priceAmount = parseFloat(amount);
+      this.priceCurrency = currency;
+    }
   }
 }

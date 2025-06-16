@@ -33,7 +33,7 @@
           <mat-icon>remove</mat-icon>
         </button>
         <mat-divider [vertical]="true"></mat-divider>
-        <span class="quantity">{{ this.quantity }}</span>
+        <span class="quantity">{{ quantity }}</span>
         <mat-divider [vertical]="true"></mat-divider>
         <button
           mat-icon-button
@@ -42,18 +42,19 @@
           <mat-icon>add</mat-icon>
         </button>
       </div>
-      <div class="item-info__price">
+      <div
+        class="item-info__price"
+        *ngIf="this.priceAmount && this.quantity"
+      >
         @if (discountedPrice) {
           <div class="item-text strikethrough">
-            {{ this.price }}
+            {{ priceAmount * quantity }} {{ priceCurrency }}
           </div>
           <div class="item-text discounted">
-            {{ this.discountedPrice }}
+            {{ discountedPrice * quantity }} {{ priceCurrency }}
           </div>
         } @else {
-          <div class="item-text">
-            {{ this.price }}
-          </div>
+          <div class="item-text">{{ priceAmount * quantity }} {{ priceCurrency }}</div>
         }
       </div>
     </div>

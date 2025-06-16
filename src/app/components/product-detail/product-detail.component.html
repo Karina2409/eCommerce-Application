@@ -79,11 +79,22 @@
     </div>
     <div class="buttons-container">
       <button
+        *ngIf="!isInCart()"
         mat-flat-button
         class="product-detail__button"
         (click)="cartManipulation.addProduct(cartService, this.authService, product.id)"
       >
         Add to cart
+      </button>
+      <button
+        *ngIf="isInCart()"
+        mat-flat-button
+        class="product-detail__button"
+        (click)="
+          cartManipulation.removeProductByProductID(product.id, cartService, this.authService)
+        "
+      >
+        Remove from cart
       </button>
       <button
         mat-flat-button

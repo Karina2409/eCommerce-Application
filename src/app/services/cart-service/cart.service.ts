@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ByProjectKeyRequestBuilder, Customer } from '@commercetools/platform-sdk';
-import { CurrentCart } from './currentCart/current-cart';
+import { ByProjectKeyRequestBuilder, Customer, LineItem } from '@commercetools/platform-sdk';
+import { CurrentCart } from '@services/cart-service/current-cart/current-cart';
 import { BehaviorSubject } from 'rxjs';
+import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,16 @@ import { BehaviorSubject } from 'rxjs';
 export class CartService {
   public countSubject = new BehaviorSubject<number>(0);
   public count$ = this.countSubject.asObservable();
+
+  public priceSubject = new BehaviorSubject<CentPrecisionMoney>({
+    type: 'centPrecision',
+    centAmount: 0,
+    currencyCode: 'USD',
+    fractionDigits: 2,
+  });
+  public price$ = this.priceSubject.asObservable();
+  public productsSubject = new BehaviorSubject<LineItem[]>([]);
+  public products$ = this.productsSubject.asObservable();
 
   public async createRegisteredCart(apiRoot: ByProjectKeyRequestBuilder, ID: Customer['id']) {
     void this;
@@ -157,5 +168,13 @@ export class CartService {
 
   public updateCartProductCount() {
     this.countSubject.next(CurrentCart.products.length);
+  }
+
+  public updateTotalPrice() {
+    this.priceSubject.next(CurrentCart.price);
+  }
+
+  public updateProducts() {
+    this.productsSubject.next(CurrentCart.products);
   }
 }
