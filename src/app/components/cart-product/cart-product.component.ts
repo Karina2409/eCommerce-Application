@@ -19,7 +19,9 @@ export class CartProductComponent implements OnInit {
   @Input() public cartItem!: LineItem;
   public variant: ProductVariant | undefined;
   public price: string | null = null;
-  public discountedPrice: string | undefined;
+  public priceAmount: number | null = null;
+  public priceCurrency: string | null = null;
+  public discountedPrice: number | undefined;
   public quantity: number | null = null;
   public productDetailService: ProductDetailService = inject(ProductDetailService);
   protected authService: AuthService = inject(AuthService);
@@ -51,9 +53,19 @@ export class CartProductComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.updateProductDetail();
+  }
+
+  public updateProductDetail() {
     this.variant = this.cartItem.variant;
     this.price = this.productDetailService.getAttribute(this.variant, 'price');
-    this.discountedPrice = this.productDetailService.getDiscountedPrice(this.variant);
+    const salePrice = this.productDetailService.getDiscountedPrice(this.variant);
+    if (salePrice) this.discountedPrice = parseFloat(salePrice);
     this.quantity = this.cartItem.quantity;
+    if (this.price) {
+      const [amount, currency] = this.price.split(' ');
+      this.priceAmount = parseFloat(amount);
+      this.priceCurrency = currency;
+    }
   }
 }
