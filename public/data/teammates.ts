@@ -14,8 +14,9 @@ export const team: Teammate[] = [
     img: 'assets/images/teammates/misha.png',
     git: 'https://github.com/Mishania261282',
     role: 'Frontend developer',
-    bio: '',
-    contributions: '',
+    bio: 'I worked for 5 years in a military specialty, then quit and got a job as an engineer in the maintenance of access control systems, video surveillance, security and fire alarms. At the same time with this, I graduated from educational courses with a degree in System Administration of Windows Server. Then the Front end developer courses at the "Teach Me Skills" educational center, where I got acquainted with the basic HTML and CSS interface technologies and gained practical experience in JavaScript programming.',
+    contributions:
+      ' CommerceTools project setup, authentication service, authentication tokens handling, products filtering, sorting and searching, CRUD operations for cart entries.',
   },
   {
     name: 'Dzmitry',
