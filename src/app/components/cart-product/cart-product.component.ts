@@ -34,11 +34,13 @@ export class CartProductComponent implements OnInit {
       this.authService,
       this.cartItem.productId,
     );
+    this.cartService.updateTotalPrice();
     this.myOutput.emit();
   }
 
   public async decreaseQuantity() {
     await this.cartManipulation.removeProduct(this.cartService, this.authService, this.cartItem.id);
+    this.cartService.updateTotalPrice();
     this.myOutput.emit();
   }
 
@@ -49,6 +51,7 @@ export class CartProductComponent implements OnInit {
       this.cartItem.id,
       this.cartItem.quantity,
     );
+    this.cartService.updateTotalPrice();
     this.myOutput.emit();
   }
 

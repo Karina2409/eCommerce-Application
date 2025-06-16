@@ -1,4 +1,5 @@
 import type { Cart, LineItem } from '@commercetools/platform-sdk';
+import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 
 export class CurrentCart {
   public static cart: Cart | null = null;
@@ -17,6 +18,17 @@ export class CurrentCart {
 
   public static get products(): LineItem[] {
     return this.cart?.lineItems ?? [];
+  }
+
+  public static get price(): CentPrecisionMoney {
+    return (
+      this.cart?.totalPrice ?? {
+        type: 'centPrecision',
+        centAmount: 0,
+        currencyCode: 'USD',
+        fractionDigits: 2,
+      }
+    );
   }
 
   public static setCart(cart: Cart | null) {
