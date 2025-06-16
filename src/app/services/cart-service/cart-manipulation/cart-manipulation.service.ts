@@ -56,4 +56,22 @@ export class CartManipulationService {
     const lineId = CurrentCart.getLineItemIdByProductId(productID);
     await this.removeProduct(cartService, authService, lineId);
   }
+
+  public async applyDiscountCode(
+    cartService: CartService,
+    authService: AuthService,
+    discountCode: string,
+  ) {
+    void this;
+    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
+    if (typeof version === 'number') {
+      await cartService.applyDiscountCode(
+        authService.apiRoot,
+        CurrentCart.id!,
+        version,
+        discountCode,
+      );
+      cartService.updateTotalPrice();
+    }
+  }
 }

@@ -20,12 +20,13 @@
 <section class="cart-control">
   <form class="promo-container">
     <input
+      #promoInput
       class="promo-input"
       type="text"
       placeholder="Enter promo code..."
     />
     <button
-      (click)="applyCoupon()"
+      (click)="cartManipulation.applyDiscountCode(cartService, authService, promoInput.value)"
       mat-flat-button
     >
       Apply
