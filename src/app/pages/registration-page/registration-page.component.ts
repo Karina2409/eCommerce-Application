@@ -1,6 +1,6 @@
 import { Component, inject, WritableSignal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { signal } from '@angular/core';
@@ -26,6 +26,7 @@ import { latinValidator } from '@validators/latin';
     EmailFieldComponent,
     PasswordFieldComponent,
     DateFieldComponent,
+    CommonModule,
   ],
   templateUrl: './registration-page.component.html',
   styleUrl: './registration-page.component.scss',

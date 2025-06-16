@@ -12,6 +12,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Countries } from '@models/enums';
 import { CommonModule } from '@angular/common';
 import { AddressResponse } from '@models/types';
+import { postalCodeValidator } from '@validators/postal_code';
 
 @Component({
   selector: 'app-address-form',
@@ -39,10 +40,7 @@ export class AddressComponent implements OnInit, OnChanges {
       Validators.pattern(/^[A-Za-z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~\s]+$/),
     ]),
     city: new FormControl('', [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
-    postalCode: new FormControl('', [
-      Validators.required,
-      Validators.pattern(/^\d{5}(-\d{4})?$|^\d{6}$/),
-    ]),
+    postalCode: new FormControl('', [Validators.required, postalCodeValidator]),
     addressDefault: new FormControl(''),
     bothAddressesDefault: new FormControl(''),
   });

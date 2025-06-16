@@ -5,7 +5,14 @@
 >
   <h1>Sign Up</h1>
 
-  <div class="login-form__container">
+  <div
+    class="login-form__container"
+    [ngClass]="
+      isShippingBillingAddressDefault() || isBillingShippingAddressDefault()
+        ? 'one-address-default'
+        : ''
+    "
+  >
     <div class="login-form__info">
       <app-email-field [control]="email"></app-email-field>
 
