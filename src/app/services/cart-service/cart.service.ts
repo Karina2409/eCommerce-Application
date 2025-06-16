@@ -177,4 +177,37 @@ export class CartService {
   public updateProducts() {
     this.productsSubject.next(CurrentCart.products);
   }
+
+  public async applyDiscountCode(
+    apiRoot: ByProjectKeyRequestBuilder,
+    cartId: string,
+    version: number,
+    discountCode: string,
+  ) {
+    void this;
+    await apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: version,
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code: discountCode,
+            },
+          ],
+        },
+      })
+      .execute()
+      .then((response) => {
+        CurrentCart.setCart(response.body);
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+        return String(error);
+      });
+  }
 }
