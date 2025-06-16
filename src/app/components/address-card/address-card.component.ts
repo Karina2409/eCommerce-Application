@@ -2,10 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressResponse } from '@models/types';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-address-card',
-  imports: [MatIcon, MatTooltip],
+  imports: [MatIcon, MatTooltip, MatIconButton],
   templateUrl: './address-card.component.html',
   styleUrl: './address-card.component.scss',
 })

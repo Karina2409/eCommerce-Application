@@ -29,6 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AddressComponent } from '@components/address-form';
 import { AddressCardComponent } from '@components/address-card';
 import { AuthService } from '@services/auth-service';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-profile-page',
@@ -48,6 +49,8 @@ import { AuthService } from '@services/auth-service';
     MatSelectModule,
     AddressComponent,
     FormsModule,
+    MatTabGroup,
+    MatTab,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
