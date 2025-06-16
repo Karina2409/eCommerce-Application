@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ByProjectKeyRequestBuilder, Customer } from '@commercetools/platform-sdk';
-import { CurrentCart } from './currentCart/current-cart';
+import { CurrentCart } from '@services/cart-service/current-cart/current-cart';
 import { BehaviorSubject } from 'rxjs';
 import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 

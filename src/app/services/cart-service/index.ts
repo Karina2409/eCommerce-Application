@@ -1,3 +1,3 @@
 export * from './cart.service';
-export * from './currentCart';
+export * from './current-cart';
 export * from './cart-manipulation';
