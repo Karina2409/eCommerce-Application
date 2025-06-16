@@ -1,11 +1,12 @@
 import type { Cart, LineItem } from '@commercetools/platform-sdk';
 import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
+import { signal } from '@angular/core';
 
 export class CurrentCart {
-  public static cart: Cart | null = null;
+  public static cart = signal<Cart | null>(null);
 
   public static get version() {
-    return this.cart?.version || 1;
+    return this.cart()?.version || 1;
   }
 
   public static get getCart() {
@@ -13,16 +14,16 @@ export class CurrentCart {
   }
 
   public static get id() {
-    return this.cart?.id;
+    return this.cart()?.id;
   }
 
   public static get products(): LineItem[] {
-    return this.cart?.lineItems ?? [];
+    return this.cart()?.lineItems ?? [];
   }
 
   public static get price(): CentPrecisionMoney {
     return (
-      this.cart?.totalPrice ?? {
+      this.cart()?.totalPrice ?? {
         type: 'centPrecision',
         centAmount: 0,
         currencyCode: 'USD',
@@ -33,7 +34,7 @@ export class CurrentCart {
 
   public static setCart(cart: Cart | null) {
     if (cart) {
-      this.cart = cart;
+      this.cart.set(cart);
       localStorage.setItem('current-cart', JSON.stringify(cart));
     }
   }
@@ -43,7 +44,7 @@ export class CurrentCart {
   }
 
   public static deleteCart() {
-    this.cart = null;
+    this.cart.set(null);
     localStorage.removeItem('current-cart');
   }
 
@@ -54,6 +55,15 @@ export class CurrentCart {
       return selectedProduct?.quantity ?? 0;
     }
     return 0;
+  }
+
+  public static isProductByID(productID: string) {
+    const { products } = this;
+    if (products.length > 0) {
+      const selectedProduct = products.find((product) => product.productId === productID);
+      return !!selectedProduct;
+    }
+    return false;
   }
 
   public static getProductCountByID(productID: string) {

@@ -47,4 +47,13 @@ export class CartManipulationService {
     cartService.updateProducts();
     cartService.updateTotalPrice();
   }
+
+  public async removeProductByProductID(
+    productID: string,
+    cartService: CartService,
+    authService: AuthService,
+  ) {
+    const lineId = CurrentCart.getLineItemIdByProductId(productID);
+    await this.removeProduct(cartService, authService, lineId);
+  }
 }

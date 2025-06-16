@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { LineItem, ProductVariant } from '@commercetools/platform-sdk';
 import { MatCard, MatCardContent, MatCardImage } from '@angular/material/card';
@@ -24,6 +24,7 @@ export class CartProductComponent implements OnInit {
   public discountedPrice: number | undefined;
   public quantity: number | null = null;
   public productDetailService: ProductDetailService = inject(ProductDetailService);
+  public isInCart = signal<boolean>(false);
   protected authService: AuthService = inject(AuthService);
   protected cartService: CartService = inject(CartService);
   protected cartManipulation: CartManipulationService = inject(CartManipulationService);

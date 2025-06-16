@@ -35,14 +35,28 @@
     </mat-card-content>
     <mat-card-actions>
       <button
+        *ngIf="!isInCart()"
         mat-flat-button
         class="card-button"
         (click)="
           $event.stopPropagation();
-          cartManipulation.addProduct(cartService, this.authService, product.id)
+          cartManipulation.addProduct(cartService, this.authService, product.id);
+          isProductInCart()
         "
       >
         Add to cart
+      </button>
+      <button
+        *ngIf="isInCart()"
+        mat-flat-button
+        class="card-button"
+        (click)="
+          $event.stopPropagation();
+          cartManipulation.removeProductByProductID(product.id, cartService, this.authService);
+          isProductInCart()
+        "
+      >
+        Remove from cart
       </button>
     </mat-card-actions>
   </mat-card>
