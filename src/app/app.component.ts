@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '@components/header';
+import { CurrentCart } from '@services/cart-service';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,12 @@ import { HeaderComponent } from '@components/header';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public title = 'Devices';
+
+  public ngOnInit() {
+    void this;
+    const currentCart = localStorage.getItem('current-cart');
+    if (currentCart) CurrentCart.setCart(JSON.parse(currentCart));
+  }
 }
