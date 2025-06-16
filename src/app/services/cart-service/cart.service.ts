@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ByProjectKeyRequestBuilder, Customer } from '@commercetools/platform-sdk';
+import { ByProjectKeyRequestBuilder, Customer, LineItem } from '@commercetools/platform-sdk';
 import { CurrentCart } from '@services/cart-service/current-cart/current-cart';
 import { BehaviorSubject } from 'rxjs';
 import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
@@ -17,8 +17,9 @@ export class CartService {
     currencyCode: 'USD',
     fractionDigits: 2,
   });
-
   public price$ = this.priceSubject.asObservable();
+  public productsSubject = new BehaviorSubject<LineItem[]>([]);
+  public products$ = this.productsSubject.asObservable();
 
   public async createRegisteredCart(apiRoot: ByProjectKeyRequestBuilder, ID: Customer['id']) {
     void this;
@@ -171,5 +172,9 @@ export class CartService {
 
   public updateTotalPrice() {
     this.priceSubject.next(CurrentCart.price);
+  }
+
+  public updateProducts() {
+    this.productsSubject.next(CurrentCart.products);
   }
 }

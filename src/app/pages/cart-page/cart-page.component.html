@@ -19,5 +19,10 @@
     <p>Total: {{ totalPrice() }} {{ currentCurrency() }}</p>
   </div>
 
-  <button mat-flat-button>Clear Cart</button>
+  <button
+    mat-flat-button
+    (click)="cartManipulation.removeAllProducts(cartService, authService, cartItems())"
+  >
+    Clear Cart
+  </button>
 </section>
