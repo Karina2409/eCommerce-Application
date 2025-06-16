@@ -8,10 +8,11 @@ import { MatButton } from '@angular/material/button';
 import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declarations/src/generated/models/common';
 import { filter, map, Observable } from 'rxjs';
 import { AuthService } from '@services/auth-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page',
-  imports: [NgForOf, CartProductComponent, FormsModule, MatButton],
+  imports: [NgForOf, CartProductComponent, FormsModule, MatButton, RouterLink],
   templateUrl: './cart-page.component.html',
   styleUrl: './cart-page.component.scss',
 })
