@@ -23,7 +23,8 @@ export const team: Teammate[] = [
     img: 'assets/images/teammates/dzmitry.png',
     git: 'https://github.com/tubyliec',
     role: 'Frontend developer',
-    bio: '',
-    contributions: '',
+    bio: 'I have many years of experience working in a bank. I began learning frontend development through LinkedIn and freeCodeCamp, and later enrolled in RS School.',
+    contributions:
+      ' Prettier, ESLint, and Husky configuration. Layout for Cart, Catalog, and About pages, along with methods for rendering and functionality of their elements, as well as some methods for API interaction. Some elements on other components.',
   },
 ];
