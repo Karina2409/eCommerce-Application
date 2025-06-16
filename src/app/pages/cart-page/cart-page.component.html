@@ -24,7 +24,12 @@
       type="text"
       placeholder="Enter promo code..."
     />
-    <button mat-flat-button>Apply</button>
+    <button
+      (click)="applyCoupon()"
+      mat-flat-button
+    >
+      Apply
+    </button>
   </form>
 
   <div class="total-count">

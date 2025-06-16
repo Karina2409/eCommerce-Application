@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Injectable } from '@angular/core';
 import { ByProjectKeyRequestBuilder, Customer, LineItem } from '@commercetools/platform-sdk';
 import { CurrentCart } from '@services/cart-service/current-cart/current-cart';
@@ -176,5 +177,33 @@ export class CartService {
 
   public updateProducts() {
     this.productsSubject.next(CurrentCart.products);
+  }
+
+  public async getDiscountCodeByKey(apiRoot: ByProjectKeyRequestBuilder, discountCodeKey: string) {
+    void this;
+    try {
+      const result = await apiRoot
+        .discountCodes()
+        .withKey({ key: discountCodeKey })
+        .get()
+        .execute();
+
+      console.log('Discount code applied:', result.body);
+      return result.body;
+    } catch (error) {
+      console.error('Error applying discount code:', error);
+      throw error;
+    }
+  }
+
+  public async getDiscountCodes(apiRoot: ByProjectKeyRequestBuilder) {
+    void this;
+    try {
+      const result = await apiRoot.discountCodes().get().execute();
+      return result.body;
+    } catch (error) {
+      console.error('Error applying discount code:', error);
+      throw error;
+    }
   }
 }

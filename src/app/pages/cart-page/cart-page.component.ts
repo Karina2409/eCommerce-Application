@@ -51,6 +51,11 @@ export class CartPageComponent implements OnInit {
       });
   }
 
+  public applyCoupon(): void {
+    this.cartService.getDiscountCodes(this.authService.apiRoot);
+    this.cartService.getDiscountCodeByKey(this.authService.apiRoot, 'SUMMER10S48N');
+  }
+
   public ngOnInit(): void {
     this.getCartItems();
     this.getTotalPrice();
