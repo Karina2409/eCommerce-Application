@@ -8,7 +8,7 @@ export const team: Teammate[] = [
     role: 'Team lead / Frontend developer',
     bio: 'I am a 4th year student of the Belarusian State University of Informatics and Radioelectronics, specializing in information systems and technologies in business management, at the Faculty of Computer-Aided Design. At university I studied programming languages: Java, some HTML and CSS. I also studied how to work with databases. It was my first experience of working in a team.',
     contributions:
-      'Repository setup, task board setup in Jira, field validation, 404-page, User Profile page, password changing, edit User Profile information, manage addresses (edit, delete, add), code refactoring.',
+      'Repository setup, task board setup in Jira, field validation, 404-page, User Profile page, password changing, edit User Profile information, manage addresses (edit, delete, add), code refactoring (move the code to new components).',
   },
   {
     name: 'Misha',
