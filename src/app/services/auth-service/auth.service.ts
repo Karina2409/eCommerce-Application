@@ -1,9 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import {
-  createApiBuilderFromCtpClient,
-  Customer,
-  CustomerSignInResult,
-} from '@commercetools/platform-sdk';
+import { createApiBuilderFromCtpClient } from '@commercetools/platform-sdk';
 import {
   ClientBuilder,
   // Import middlewares
@@ -12,10 +8,8 @@ import {
   type HttpMiddlewareOptions,
   Client,
   RefreshAuthMiddlewareOptions,
-  ClientResponse,
 } from '@commercetools/ts-client';
 import type { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-
 import { SignUpResult } from '@models/types/sign-up-result';
 import { environment } from '@environments/environment.development';
 import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
@@ -72,43 +66,8 @@ export class AuthService {
 
       if (customerResponse.statusCode === 201) {
         CustomerInfo.setCustomer(customerResponse.body.customer);
-        if (CustomerInfo.id) this.cartService.createRegisteredCart(this.apiRoot, CustomerInfo.id);
-
-        const addresses = customerDraft.addresses ?? [];
-        const bothDefaultIndex = addresses.findIndex((addr) => addr.bothAddressesDefault);
-        const shippingDefaultIndex = addresses.findIndex(
-          (addr, i) => addr.addressDefault && i === 0,
-        );
-        const billingDefaultIndex = addresses.findIndex(
-          (addr, i) => addr.addressDefault && i === 1,
-        );
-        if (bothDefaultIndex !== -1) {
-          const shippingResponse = await this.setDefaultShippingAddress(
-            customerResponse,
-            bothDefaultIndex,
-          );
-          await this.setDefaultBillingAddress(shippingResponse, 0);
-        } else if (shippingDefaultIndex !== -1) {
-          const shippingResponse = await this.setDefaultShippingAddress(
-            customerResponse,
-            shippingDefaultIndex,
-          );
-          if (customerDraft.addresses[1].addressDefault) {
-            await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
-          } else {
-            await this.setBillingAddressId(shippingResponse, 1);
-          }
-        } else if (billingDefaultIndex !== -1) {
-          const shippingResponse = await this.setShippingAddressId(customerResponse, 0);
-          if (customerDraft.addresses[1].addressDefault) {
-            await this.setDefaultBillingAddress(shippingResponse, billingDefaultIndex);
-          } else {
-            await this.setBillingAddressId(shippingResponse, 1);
-          }
-        } else {
-          const shippingResponse = await this.setShippingAddressId(customerResponse, 0);
-          await this.setBillingAddressId(shippingResponse, 1);
-        }
+        if (CustomerInfo.id)
+          await this.cartService.createRegisteredCart(this.apiRoot, CustomerInfo.id);
         this.isAuthorized.set(true);
         return {
           result: true,
@@ -261,85 +220,5 @@ export class AuthService {
       return '';
     }
     return JSON.parse(token).refreshToken;
-  }
-
-  private async setDefaultBillingAddress(
-    shippingResponse: ClientResponse<Customer>,
-    index: number,
-  ) {
-    await this.apiRoot
-      .customers()
-      .withId({ ID: shippingResponse.body!.id })
-      .post({
-        body: {
-          version: shippingResponse.body!.version,
-          actions: [
-            {
-              action: 'setDefaultBillingAddress',
-              addressId: shippingResponse.body!.addresses[index].id,
-            },
-          ],
-        },
-      })
-      .execute();
-  }
-
-  private async setBillingAddressId(shippingResponse: ClientResponse<Customer>, index: number) {
-    await this.apiRoot
-      .customers()
-      .withId({ ID: shippingResponse.body!.id })
-      .post({
-        body: {
-          version: shippingResponse.body!.version,
-          actions: [
-            {
-              action: 'addBillingAddressId',
-              addressId: shippingResponse.body!.addresses[index].id,
-            },
-          ],
-        },
-      })
-      .execute();
-  }
-
-  private async setDefaultShippingAddress(
-    customerResponse: ClientResponse<CustomerSignInResult>,
-    index: number,
-  ): Promise<ClientResponse<Customer>> {
-    return await this.apiRoot
-      .customers()
-      .withId({ ID: customerResponse.body!.customer.id })
-      .post({
-        body: {
-          version: customerResponse.body!.customer.version,
-          actions: [
-            {
-              action: 'setDefaultShippingAddress',
-              addressId: customerResponse.body!.customer.addresses[index].id,
-            },
-          ],
-        },
-      })
-      .execute();
-  }
-  private async setShippingAddressId(
-    customerResponse: ClientResponse<CustomerSignInResult>,
-    index: number,
-  ): Promise<ClientResponse<Customer>> {
-    return await this.apiRoot
-      .customers()
-      .withId({ ID: customerResponse.body!.customer.id })
-      .post({
-        body: {
-          version: customerResponse.body!.customer.version,
-          actions: [
-            {
-              action: 'addShippingAddressId',
-              addressId: customerResponse.body!.customer.addresses[index].id,
-            },
-          ],
-        },
-      })
-      .execute();
   }
 }
