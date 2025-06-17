@@ -112,7 +112,7 @@
   <label class="login-form__checkbox">
     <input
       type="checkbox"
-      formControlName="addressDefault"
+      [checked]="isAddressDefault()"
       (change)="onToggleAddress(isAddressDefault)"
     />
     Use as default {{ addressDefaultInput }} address
@@ -121,7 +121,7 @@
   <label class="login-form__checkbox">
     <input
       type="checkbox"
-      formControlName="bothAddressesDefault"
+      [checked]="isBothAddressDefault()"
       (change)="onToggleAddress(isBothAddressDefault, addressDefault)"
     />
     Use as default shipping and billing address

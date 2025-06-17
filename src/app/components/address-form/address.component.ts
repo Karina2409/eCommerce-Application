@@ -7,6 +7,7 @@ import {
   OnInit,
   OnChanges,
   SimpleChanges,
+  signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Countries } from '@models/enums';
@@ -23,8 +24,8 @@ import { postalCodeValidator } from '@validators/postal_code';
 export class AddressComponent implements OnInit, OnChanges {
   @Output() public addressChange = new EventEmitter<FormGroup>();
 
-  @Input() public isAddressDefault!: WritableSignal<boolean>;
-  @Input() public isBothAddressDefault!: WritableSignal<boolean>;
+  @Input() public isAddressDefault: WritableSignal<boolean> = signal(false);
+  @Input() public isBothAddressDefault: WritableSignal<boolean> = signal(false);
   @Input() public addressDefaultInput!: string;
   @Input() public editAddress?: AddressResponse | null;
 
