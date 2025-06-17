@@ -10,8 +10,12 @@ import { emailValidator } from '@validators/email';
 import { passwordValidator } from '@validators/password';
 import { minAgeValidator } from '@validators/age';
 import { AddressComponent } from '@components/address-form';
-import { EmailFieldComponent, NameFieldComponent, PasswordFieldComponent } from '@components/input';
-import { DateFieldComponent } from '@components/input/date-field/date-field.component';
+import {
+  DateFieldComponent,
+  EmailFieldComponent,
+  NameFieldComponent,
+  PasswordFieldComponent,
+} from '@components/input';
 import { latinValidator } from '@validators/latin';
 
 @Component({
@@ -37,7 +41,6 @@ export class RegistrationPageComponent {
 
   public router = inject(Router);
   public readonly errorMessage = signal('');
-  public readonly isPasswordShown = signal(false);
   public readonly isShippingAddressDefault = signal(false);
   public readonly isBillingAddressDefault = signal(false);
   public readonly isShippingBillingAddressDefault = signal(false);
