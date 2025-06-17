@@ -66,11 +66,10 @@ export class ProfilePageComponent implements OnInit {
   public isPasswordChanging = signal(false);
   public isModalShown = signal(false);
   public selectedAddressType: AddressType = 'billing';
-  public selectedAddressTypeDefault: AddressType = 'billing';
   public message = '';
   public billingAddressData = {};
   public shippingAddressData = {};
-  public addressToEdit: AddressResponse | null = null;
+  public addressToEdit = signal<AddressResponse | null>(null);
   public isAddressDefault = signal<boolean>(false);
   public isBothAddressDefault = signal<boolean>(false);
 
@@ -166,26 +165,6 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
-  // public async onAddressTypeAddressDefault() {
-  //   if (!this.addressFormGroup) return;
-  //   if (this.selectedAddressTypeDefault === 'billing') {
-  //     if (this.addressToEdit?.id) {
-  //       await this.setDefaultBillingAddress(this.addressToEdit?.id);
-  //     }
-  //   }
-  //   if (this.selectedAddressTypeDefault === 'shipping') {
-  //     if (this.addressToEdit?.id) {
-  //       await this.setDefaultShippingAddress(this.addressToEdit?.id);
-  //     }
-  //   }
-  //   if (this.selectedAddressTypeDefault === 'shipping & billing') {
-  //     if (this.addressToEdit?.id) {
-  //       await this.setDefaultShippingAddress(this.addressToEdit?.id);
-  //       await this.setDefaultBillingAddress(this.addressToEdit?.id);
-  //     }
-  //   }
-  // }
-
   public setAddresses(customer: Customer): AddressResponse[] {
     void this;
     const {
@@ -258,13 +237,17 @@ export class ProfilePageComponent implements OnInit {
     this.message = '';
   }
 
+  public onAddAddress(): void {
+    this.addressToEdit.set(null);
+    this.onOpenModal();
+  }
+
   public onOpenModal(): void {
     this.isModalShown.update((value) => !value);
   }
 
   public onModalClose(): void {
     this.isModalShown.update((value) => !value);
-    this.addressFormGroup.reset();
   }
 
   public async getCustomerInfo() {
@@ -301,10 +284,10 @@ export class ProfilePageComponent implements OnInit {
 
     let addressId: string | null;
 
-    if (this.addressToEdit === null) {
+    if (this.addressToEdit() === null) {
       addressId = await this.addAddress(address);
     } else {
-      addressId = this.addressToEdit.id ?? null;
+      addressId = this.addressToEdit()?.id ?? null;
       await this.changeAddress({
         ...address,
         addressId,
@@ -322,17 +305,20 @@ export class ProfilePageComponent implements OnInit {
         if (this.isAddressDefault()) {
           await this.setDefaultBillingAddress(addressId);
         }
+        if (this.addresses()[0].shippingAddressIds?.some((id) => id === addressId)) {
+          await this.removeShippingAddressID(addressId);
+        }
       } else if (this.selectedAddressType === 'shipping') {
         await this.addShippingAddressID(addressId);
         if (this.isAddressDefault()) {
           await this.setDefaultShippingAddress(addressId);
         }
+        if (this.addresses()[0].billingAddressIds?.some((id) => id === addressId)) {
+          await this.removeBillingAddressID(addressId);
+        }
       }
     }
-    // if (this.isBothAddressDefault()) {
-    //   this.setDefaultShippingAddress()
-    // }
-    this.addressToEdit = null;
+    this.addressToEdit.set(null);
     await this.getCustomerInfo();
 
     this.onModalClose();
@@ -344,10 +330,12 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async onEditAddress(address: AddressResponse): Promise<void> {
-    this.addressToEdit = address;
-    this.selectedAddressType = address.shippingAddressIds?.some((id) => address.id === id)
-      ? 'shipping'
-      : 'billing';
+    this.addressToEdit.set(address);
+    if (address.billingAddressIds?.some((id) => id === address.id)) {
+      this.selectedAddressType = 'billing';
+    } else if (address.shippingAddressIds?.some((id) => id === address.id)) {
+      this.selectedAddressType = 'shipping';
+    }
     this.onOpenModal();
   }
 
