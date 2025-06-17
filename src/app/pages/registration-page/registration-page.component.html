@@ -44,6 +44,7 @@
         [isBothAddressDefault]="isShippingBillingAddressDefault"
         [addressDefaultInput]="'shipping'"
         (toggleAddress)="toggleAddress($event)"
+        [editAddress]="signal(null)"
       ></app-address-form>
     }
     @if (!isShippingBillingAddressDefault()) {
@@ -53,6 +54,7 @@
         [isBothAddressDefault]="isBillingShippingAddressDefault"
         [addressDefaultInput]="'billing'"
         (toggleAddress)="toggleAddress($event)"
+        [editAddress]="signal(null)"
       ></app-address-form>
     }
   </div>

@@ -5,8 +5,12 @@ import {
   Output,
   WritableSignal,
   OnInit,
-  OnChanges,
-  SimpleChanges,
+  signal,
+  Signal,
+  effect,
+  runInInjectionContext,
+  inject,
+  EnvironmentInjector,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Countries } from '@models/enums';
@@ -20,13 +24,13 @@ import { postalCodeValidator } from '@validators/postal_code';
   templateUrl: './address.component.html',
   styleUrl: './address.component.scss',
 })
-export class AddressComponent implements OnInit, OnChanges {
+export class AddressComponent implements OnInit {
   @Output() public addressChange = new EventEmitter<FormGroup>();
 
-  @Input() public isAddressDefault!: WritableSignal<boolean>;
-  @Input() public isBothAddressDefault!: WritableSignal<boolean>;
+  @Input() public isAddressDefault: WritableSignal<boolean> = signal(false);
+  @Input() public isBothAddressDefault: WritableSignal<boolean> = signal(false);
   @Input() public addressDefaultInput!: string;
-  @Input() public editAddress?: AddressResponse | null;
+  @Input() public editAddress!: Signal<AddressResponse | null>;
 
   @Output() public toggleAddress = new EventEmitter<{
     signal: WritableSignal<boolean>;
@@ -46,6 +50,8 @@ export class AddressComponent implements OnInit, OnChanges {
   });
 
   protected readonly countries = Countries;
+
+  private environmentInjector = inject(EnvironmentInjector);
 
   public get addressDefault(): string {
     return `${this.addressDefaultInput}Address`;
@@ -68,34 +74,42 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit() {
+    this.isBothAddressDefault.set(false);
+    this.isAddressDefault.set(false);
     this.addressChange.emit(this.addressForm);
-    if (this.editAddress !== null) {
-      this.addressForm.patchValue({
-        country: this.editAddress?.country,
-        streetName: this.editAddress?.streetName,
-        city: this.editAddress?.city,
-        postalCode: this.editAddress?.postalCode,
-        addressDefault:
-          this.editAddress?.defaultBillingAddressId ?? this.editAddress?.defaultShippingAddressId,
-        bothAddressesDefault:
-          this.editAddress?.defaultBillingAddressId && this.editAddress?.defaultShippingAddressId,
-      });
-    }
-  }
+    runInInjectionContext(this.environmentInjector, () => {
+      effect(() => {
+        const address = this.editAddress();
 
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['editAddress'] && changes['editAddress'].currentValue) {
-      const address = changes['editAddress'].currentValue as AddressResponse;
-      this.addressForm.patchValue({
-        country: address.country,
-        streetName: address.streetName,
-        city: address.city,
-        postalCode: address.postalCode,
-        addressDefault: address.defaultBillingAddressId ?? address.defaultShippingAddressId,
-        bothAddressesDefault:
-          !!address.defaultBillingAddressId && !!address.defaultShippingAddressId,
+        if (!address) {
+          this.addressForm.reset();
+          this.isAddressDefault.set(false);
+          this.isBothAddressDefault.set(false);
+          return;
+        }
+
+        this.addressForm.patchValue({
+          country: address.country,
+          streetName: address.streetName,
+          city: address.city,
+          postalCode: address.postalCode,
+        });
+
+        const isBothDefault =
+          address.defaultBillingAddressId === address.id &&
+          address.defaultShippingAddressId === address.id;
+
+        let isDefault = false;
+        if (address.billingAddressIds?.some((id) => id === address.id)) {
+          isDefault = address.defaultBillingAddressId === address.id;
+        } else if (address.shippingAddressIds?.some((id) => id === address.id)) {
+          isDefault = address.defaultShippingAddressId === address.id;
+        }
+
+        this.isBothAddressDefault.set(isBothDefault);
+        this.isAddressDefault.set(isDefault);
       });
-    }
+    });
   }
 
   public onToggleAddress(isAddressDefault: WritableSignal<boolean>, addressDefault = '') {

@@ -182,7 +182,7 @@
       <button
         mat-mini-fab
         matTooltip="Add Address"
-        (click)="onOpenModal()"
+        (click)="onAddAddress()"
       >
         <mat-icon>add</mat-icon>
       </button>
@@ -191,7 +191,7 @@
         [show]="isModalShown()"
         (closeModal)="onModalClose()"
       >
-        <form (ngSubmit)="onModalConfirm($event)">
+        <form (ngSubmit)="onAddressModalConfirm($event)">
           <div class="modal-content">
             <div class="select-container">
               <mat-label class="select-container__label">Address Type</mat-label>
@@ -203,28 +203,15 @@
               >
                 <mat-option value="billing">Billing Address</mat-option>
                 <mat-option value="shipping">Shipping Address</mat-option>
-                <mat-option value="shipping & billing">Shipping & Billing Address</mat-option>
-              </mat-select>
-            </div>
-            <div class="select-container">
-              <mat-label class="select-container__label">Address Default Type</mat-label>
-              <mat-select
-                [(ngModel)]="selectedAddressTypeDefault"
-                (selectionChange)="onAddressTypeAddressDefault()"
-                name="addressType"
-                class="select-container__options"
-              >
-                <mat-option value="billing">Billing Default Address</mat-option>
-                <mat-option value="shipping">Shipping Default Address</mat-option>
-                <mat-option value="shipping & billing"
-                  >Shipping & Billing Default Address</mat-option
-                >
               </mat-select>
             </div>
             <app-address-form
+              [isAddressDefault]="isAddressDefault"
+              [isBothAddressDefault]="isBothAddressDefault"
               (addressChange)="onAddressFormInit($event)"
               [addressDefaultInput]="selectedAddressType"
               [editAddress]="addressToEdit"
+              (toggleAddress)="onToggleAddress($event.signal)"
             ></app-address-form>
 
             <button

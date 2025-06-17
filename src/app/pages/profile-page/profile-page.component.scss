@@ -10,6 +10,7 @@
 .tab-group {
   margin: 0 auto;
   width: 90%;
+  max-width: 1200px;
 }
 
 .profile__section {
@@ -20,7 +21,7 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  padding: 1rem 0.5rem;
+  padding: 3rem 0.5rem;
   position: relative;
 }
 
@@ -84,7 +85,6 @@
   &__head {
     margin: 0 auto;
     color: var(--secondary-color);
-    width: calc(900px - 2rem);
     display: grid;
     grid-template-columns: repeat(5, 0.9fr) 1.3fr 0.3fr 0.3fr;
     gap: 0.5rem;

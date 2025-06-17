@@ -1,6 +1,5 @@
 .address-card {
   margin: 0 auto;
-  width: calc(900px - 2rem);
   display: grid;
   grid-template-columns: repeat(5, 0.9fr) 1.3fr 0.3fr 0.3fr;
   gap: 0.5rem;
