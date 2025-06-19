@@ -26,7 +26,10 @@
       placeholder="Enter promo code..."
     />
     <button
-      (click)="cartManipulation.applyDiscountCode(cartService, authService, promoInput.value)"
+      (click)="
+        cartManipulation.applyDiscountCode(cartService, authService, promoInput.value);
+        setPrevPrice()
+      "
       mat-flat-button
     >
       Apply
@@ -34,14 +37,23 @@
   </form>
 
   <div class="total-count">
-    <p>Total: {{ totalPrice() }} {{ currentCurrency() }}</p>
+    <div>
+      Total:
+      <span
+        *ngIf="prevPrice()"
+        class="strikethrough"
+        >{{ prevPrice() }} {{ currentCurrency() }}</span
+      >
+      {{ totalPrice() }} {{ currentCurrency() }}
+    </div>
   </div>
 
   <button
     mat-flat-button
     (click)="
+      cartManipulation.removeDiscountCode(cartService, authService, promoInput.value);
       cartManipulation.removeAllProducts(cartService, authService, cartItems());
-      cartManipulation.removeDiscountCode(cartService, authService, promoInput.value)
+      clearPrevPrice()
     "
   >
     Clear Cart

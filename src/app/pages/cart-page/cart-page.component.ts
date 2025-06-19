@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CartManipulationService, CartService } from '@services/cart-service';
 import { LineItem } from '@commercetools/platform-sdk';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { CartProductComponent } from '@components/cart-product';
 import { FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page',
-  imports: [NgForOf, CartProductComponent, FormsModule, MatButton, RouterLink],
+  imports: [NgForOf, CartProductComponent, FormsModule, MatButton, RouterLink, NgIf],
   templateUrl: './cart-page.component.html',
   styleUrl: './cart-page.component.scss',
 })
@@ -21,6 +21,7 @@ export class CartPageComponent implements OnInit {
   public cartItems = signal<LineItem[]>([]);
   public price$!: Observable<CentPrecisionMoney>;
   public totalPrice = signal<number>(0);
+  public prevPrice = signal<number>(0);
   public currentCurrency = signal<string>('USD');
   protected cartManipulation: CartManipulationService = inject(CartManipulationService);
   protected authService: AuthService = inject(AuthService);
@@ -54,5 +55,13 @@ export class CartPageComponent implements OnInit {
   public ngOnInit(): void {
     this.getCartItems();
     this.getTotalPrice();
+  }
+
+  public setPrevPrice(): void {
+    this.prevPrice.set(this.totalPrice());
+  }
+
+  public clearPrevPrice(): void {
+    this.prevPrice.set(0);
   }
 }
