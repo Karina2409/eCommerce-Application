@@ -74,4 +74,27 @@ export class CartManipulationService {
       cartService.updateTotalPrice();
     }
   }
+
+  public async removeDiscountCode(
+    cartService: CartService,
+    authService: AuthService,
+    discountCode: string,
+  ) {
+    void this;
+    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
+    const discountCodeResponse = await authService.apiRoot
+      .discountCodes()
+      .get({ queryArgs: { where: `code="${discountCode}"` } })
+      .execute();
+    const discountCodeId = discountCodeResponse.body.results[0].id;
+    if (typeof version === 'number') {
+      await cartService.removeDiscountCode(
+        authService.apiRoot,
+        CurrentCart.id!,
+        version,
+        discountCodeId,
+      );
+      cartService.updateTotalPrice();
+    }
+  }
 }

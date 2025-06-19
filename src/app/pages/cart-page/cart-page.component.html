@@ -39,7 +39,10 @@
 
   <button
     mat-flat-button
-    (click)="cartManipulation.removeAllProducts(cartService, authService, cartItems())"
+    (click)="
+      cartManipulation.removeAllProducts(cartService, authService, cartItems());
+      cartManipulation.removeDiscountCode(cartService, authService, promoInput.value)
+    "
   >
     Clear Cart
   </button>

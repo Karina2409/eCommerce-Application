@@ -210,4 +210,40 @@ export class CartService {
         return String(error);
       });
   }
+
+  public async removeDiscountCode(
+    apiRoot: ByProjectKeyRequestBuilder,
+    cartId: string,
+    version: number,
+    discountCodeId: string,
+  ) {
+    void this;
+    await apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: version,
+          actions: [
+            {
+              action: 'removeDiscountCode',
+              discountCode: {
+                typeId: 'discount-code',
+                id: discountCodeId,
+              },
+            },
+          ],
+        },
+      })
+      .execute()
+      .then((response) => {
+        CurrentCart.setCart(response.body);
+      })
+      .catch((error) => {
+        if (error instanceof Error) {
+          return error.message;
+        }
+        return String(error);
+      });
+  }
 }
