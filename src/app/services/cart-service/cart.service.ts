@@ -57,6 +57,7 @@ export class CartService {
       .execute()
       .then((response) => {
         CurrentCart.setCart(response.body);
+        this.countSubject.next(0);
       })
       .catch((error) => {
         if (error instanceof Error) {
