@@ -16,7 +16,7 @@ import { tokenCacheAnonym, tokenCacheAuth } from '@services/auth-service/token';
 import { Session } from '@models/enums/session';
 import { CustomerDraft } from '@models/types';
 import { CustomerInfo } from './customerInfo';
-import { CartService } from '@services/cart-service';
+import { CartService, CurrentCart } from '@services/cart-service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +35,11 @@ export class AuthService {
   constructor() {
     if (!this.isAuthorized()) {
       this.apiRoot = this.createApiRoot(this.getAnonymousClient());
+      const currentCart = localStorage.getItem('current-cart');
+      CurrentCart.setCart(JSON.parse(currentCart!));
+      const count = CurrentCart.products.length;
+      this.cartService.countSubject.next(count);
+      if (currentCart) return;
       this.cartService.createAnonymousCart(this.apiRoot);
     } else {
       this.apiRoot = this.createApiRoot(this.getRefreshClient(Session.AUTH));
