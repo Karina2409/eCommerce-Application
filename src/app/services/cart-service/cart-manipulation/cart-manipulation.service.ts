@@ -13,12 +13,14 @@ export class CartManipulationService {
     currentProductId: string,
   ) {
     void this;
-    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
-    if (CurrentCart.id && typeof version === 'number') {
-      const id = CurrentCart.id;
-      await cartService.makePurchases(authService.apiRoot, id, version, currentProductId);
+    if (CurrentCart.id) {
+      const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id);
+      if (typeof version === 'number') {
+        const id = CurrentCart.id;
+        await cartService.makePurchases(authService.apiRoot, id, version, currentProductId);
+      }
+      cartService.updateCartProductCount();
     }
-    cartService.updateCartProductCount();
   }
   public async removeProduct(
     cartService: CartService,
@@ -27,12 +29,14 @@ export class CartManipulationService {
     quantity?: number,
   ): Promise<void> {
     void this;
-    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
-    if (CurrentCart.id && typeof version === 'number') {
-      const id = CurrentCart.id;
-      await cartService.removePurchases(authService.apiRoot, id, version, lineItemId, quantity);
+    if (CurrentCart.id) {
+      const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id);
+      if (typeof version === 'number') {
+        const id = CurrentCart.id;
+        await cartService.removePurchases(authService.apiRoot, id, version, lineItemId, quantity);
+      }
+      cartService.updateCartProductCount();
     }
-    cartService.updateCartProductCount();
   }
 
   public async removeAllProducts(
@@ -63,15 +67,17 @@ export class CartManipulationService {
     discountCode: string,
   ) {
     void this;
-    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
-    if (typeof version === 'number') {
-      await cartService.applyDiscountCode(
-        authService.apiRoot,
-        CurrentCart.id!,
-        version,
-        discountCode,
-      );
-      cartService.updateTotalPrice();
+    if (CurrentCart.id) {
+      const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id);
+      if (typeof version === 'number') {
+        await cartService.applyDiscountCode(
+          authService.apiRoot,
+          CurrentCart.id!,
+          version,
+          discountCode,
+        );
+        cartService.updateTotalPrice();
+      }
     }
   }
 
@@ -81,20 +87,22 @@ export class CartManipulationService {
     discountCode: string,
   ) {
     void this;
-    const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id!);
-    const discountCodeResponse = await authService.apiRoot
-      .discountCodes()
-      .get({ queryArgs: { where: `code="${discountCode}"` } })
-      .execute();
-    const discountCodeId = discountCodeResponse.body.results[0].id;
-    if (typeof version === 'number') {
-      await cartService.removeDiscountCode(
-        authService.apiRoot,
-        CurrentCart.id!,
-        version,
-        discountCodeId,
-      );
-      cartService.updateTotalPrice();
+    if (CurrentCart.id) {
+      const version = await cartService.currentVersionCart(authService.apiRoot, CurrentCart.id);
+      const discountCodeResponse = await authService.apiRoot
+        .discountCodes()
+        .get({ queryArgs: { where: `code="${discountCode}"` } })
+        .execute();
+      const discountCodeId = discountCodeResponse.body.results[0].id;
+      if (typeof version === 'number') {
+        await cartService.removeDiscountCode(
+          authService.apiRoot,
+          CurrentCart.id!,
+          version,
+          discountCodeId,
+        );
+        cartService.updateTotalPrice();
+      }
     }
   }
 }
