@@ -58,7 +58,7 @@ export class CartService {
         .execute();
       CurrentCart.setCart(cart.body);
       this.countSubject.next(0);
-      return cart;
+      return cart.body;
     } catch (error) {
       if (error instanceof Error) {
         return error.message;
@@ -71,9 +71,7 @@ export class CartService {
     void this;
     try {
       const cart = await apiRoot.carts().withCustomerId({ customerId: customerId }).get().execute();
-
       CurrentCart.setCart(cart.body);
-
       return cart.body;
     } catch (error) {
       if (error instanceof Error) {
@@ -91,32 +89,32 @@ export class CartService {
     quantity = 1,
   ) {
     void this;
-    await apiRoot
-      .carts()
-      .withId({ ID: id })
-      .post({
-        body: {
-          version: version,
-          actions: [
-            {
-              action: 'addLineItem',
-              productId: currentProductId,
-              variantId: 1,
-              quantity,
-            },
-          ],
-        },
-      })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
+    try {
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: version,
+            actions: [
+              {
+                action: 'addLineItem',
+                productId: currentProductId,
+                variantId: 1,
+                quantity,
+              },
+            ],
+          },
+        })
+        .execute();
+      CurrentCart.setCart(response.body);
+      return response.body;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
   }
 
   public async removePurchases(
@@ -127,31 +125,31 @@ export class CartService {
     quantity = 1,
   ) {
     void this;
-    await apiRoot
-      .carts()
-      .withId({ ID: id })
-      .post({
-        body: {
-          version: version,
-          actions: [
-            {
-              action: 'removeLineItem',
-              lineItemId,
-              quantity,
-            },
-          ],
-        },
-      })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
+    try {
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: id })
+        .post({
+          body: {
+            version: version,
+            actions: [
+              {
+                action: 'removeLineItem',
+                lineItemId,
+                quantity,
+              },
+            ],
+          },
+        })
+        .execute();
+      CurrentCart.setCart(response.body);
+      return response.body;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
   }
 
   public async currentVersionCart(apiRoot: ByProjectKeyRequestBuilder, cartId: string) {
@@ -186,30 +184,30 @@ export class CartService {
     discountCode: string,
   ) {
     void this;
-    await apiRoot
-      .carts()
-      .withId({ ID: cartId })
-      .post({
-        body: {
-          version: version,
-          actions: [
-            {
-              action: 'addDiscountCode',
-              code: discountCode,
-            },
-          ],
-        },
-      })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
+    try {
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: cartId })
+        .post({
+          body: {
+            version: version,
+            actions: [
+              {
+                action: 'addDiscountCode',
+                code: discountCode,
+              },
+            ],
+          },
+        })
+        .execute();
+      CurrentCart.setCart(response.body);
+      return response.body;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
   }
 
   public async removeDiscountCode(
@@ -219,32 +217,32 @@ export class CartService {
     discountCodeId: string,
   ) {
     void this;
-    await apiRoot
-      .carts()
-      .withId({ ID: cartId })
-      .post({
-        body: {
-          version: version,
-          actions: [
-            {
-              action: 'removeDiscountCode',
-              discountCode: {
-                typeId: 'discount-code',
-                id: discountCodeId,
+    try {
+      const response = await apiRoot
+        .carts()
+        .withId({ ID: cartId })
+        .post({
+          body: {
+            version: version,
+            actions: [
+              {
+                action: 'removeDiscountCode',
+                discountCode: {
+                  typeId: 'discount-code',
+                  id: discountCodeId,
+                },
               },
-            },
-          ],
-        },
-      })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
+            ],
+          },
+        })
+        .execute();
+      CurrentCart.setCart(response.body);
+      return response.body;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
   }
 }

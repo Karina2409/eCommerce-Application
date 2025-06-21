@@ -72,7 +72,7 @@ export class CartManipulationService {
       if (typeof version === 'number') {
         await cartService.applyDiscountCode(
           authService.apiRoot,
-          CurrentCart.id!,
+          CurrentCart.id,
           version,
           discountCode,
         );
@@ -93,11 +93,12 @@ export class CartManipulationService {
         .discountCodes()
         .get({ queryArgs: { where: `code="${discountCode}"` } })
         .execute();
-      if (discountCodeResponse.body.results[0].id && typeof version === 'number') {
-        const discountCodeId = discountCodeResponse.body.results[0].id;
+      const codeResult = discountCodeResponse.body.results[0];
+      if (codeResult?.id && typeof version === 'number') {
+        const discountCodeId = codeResult.id;
         await cartService.removeDiscountCode(
           authService.apiRoot,
-          CurrentCart.id!,
+          CurrentCart.id,
           version,
           discountCodeId,
         );

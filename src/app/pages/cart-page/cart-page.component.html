@@ -46,11 +46,7 @@
 
   <button
     mat-flat-button
-    (click)="
-      cartManipulation.removeDiscountCode(cartService, authService, promoInput.value);
-      cartManipulation.removeAllProducts(cartService, authService, cartItems());
-      clearPrevPrice()
-    "
+    (click)="onClear()"
   >
     Clear Cart
   </button>

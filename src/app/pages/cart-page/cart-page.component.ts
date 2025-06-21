@@ -33,6 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class CartPageComponent implements OnInit {
   public products$!: Observable<LineItem[]>;
+  public promoCode = signal<string>('');
   public cartItems = signal<LineItem[]>([]);
   public price$!: Observable<CentPrecisionMoney>;
   public totalPrice = signal<number>(0);
@@ -47,10 +48,9 @@ export class CartPageComponent implements OnInit {
 
   constructor(private destroyRef: DestroyRef) {}
 
-  public get codeFromInput(): string {
+  public codeFromInput(): void {
     const code: string | null = this.promoInput.get('codeInput')?.value;
-    if (typeof code === 'string') return code;
-    return '';
+    if (typeof code === 'string') this.promoCode.set(code);
   }
 
   public getCartItems(): void {
@@ -93,8 +93,15 @@ export class CartPageComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    this.codeFromInput();
     this.cartManipulation
-      .applyDiscountCode(this.cartService, this.authService, this.codeFromInput)
+      .applyDiscountCode(this.cartService, this.authService, this.promoCode())
       .then(() => this.setPrevPrice());
+  }
+
+  public onClear(): void {
+    this.cartManipulation.removeDiscountCode(this.cartService, this.authService, this.promoCode());
+    this.cartManipulation.removeAllProducts(this.cartService, this.authService, this.cartItems());
+    this.clearPrevPrice();
   }
 }
