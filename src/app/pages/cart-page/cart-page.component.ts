@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CartManipulationService, CartService } from '@services/cart-service';
 import { LineItem } from '@commercetools/platform-sdk';
 import { NgForOf, NgIf } from '@angular/common';
@@ -15,6 +15,7 @@ import { CentPrecisionMoney } from '@commercetools/platform-sdk/dist/declaration
 import { filter, map, Observable } from 'rxjs';
 import { AuthService } from '@services/auth-service';
 import { RouterLink } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-cart-page',
@@ -44,6 +45,8 @@ export class CartPageComponent implements OnInit {
   protected authService: AuthService = inject(AuthService);
   protected cartService: CartService = inject(CartService);
 
+  constructor(private destroyRef: DestroyRef) {}
+
   public get codeFromInput(): string {
     const code: string | null = this.promoInput.get('codeInput')?.value;
     if (typeof code === 'string') return code;
@@ -53,7 +56,7 @@ export class CartPageComponent implements OnInit {
   public getCartItems(): void {
     this.cartService.updateProducts();
     this.products$ = this.cartService.products$;
-    this.products$.subscribe((products) => {
+    this.products$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((products) => {
       this.cartItems.set(products);
     });
   }
@@ -68,6 +71,7 @@ export class CartPageComponent implements OnInit {
           amount: price.centAmount / Math.pow(10, price.fractionDigits),
           currency: price.currencyCode,
         })),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(({ amount, currency }) => {
         this.totalPrice.set(amount);
