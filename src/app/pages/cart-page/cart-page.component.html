@@ -18,22 +18,18 @@
   }
 </section>
 <section class="cart-control">
-  <form class="promo-container">
+  <form
+    class="promo-container"
+    [formGroup]="promoInput"
+    (ngSubmit)="onSubmit()"
+  >
     <input
-      #promoInput
+      formControlName="codeInput"
       class="promo-input"
       type="text"
       placeholder="Enter promo code..."
     />
-    <button
-      (click)="
-        cartManipulation.applyDiscountCode(cartService, authService, promoInput.value);
-        setPrevPrice()
-      "
-      mat-flat-button
-    >
-      Apply
-    </button>
+    <button mat-flat-button>Apply</button>
   </form>
 
   <div class="total-count">

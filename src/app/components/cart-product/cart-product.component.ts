@@ -16,6 +16,7 @@ import { CartManipulationService, CartService } from '@services/cart-service';
 })
 export class CartProductComponent implements OnInit {
   @Output() public myOutput = new EventEmitter<string>();
+  @Input() public cartItem!: LineItem;
   public variant: ProductVariant | undefined;
   public price: string | null = null;
   public priceAmount: number | null = null;
@@ -27,12 +28,6 @@ export class CartProductComponent implements OnInit {
   protected authService: AuthService = inject(AuthService);
   protected cartService: CartService = inject(CartService);
   protected cartManipulation: CartManipulationService = inject(CartManipulationService);
-  @Input() public set cartItem(value: LineItem) {
-    if (!value) {
-      void this;
-      throw new Error('cartItem is required');
-    }
-  }
 
   public async increaseQuantity() {
     await this.cartManipulation.addProduct(
@@ -62,6 +57,9 @@ export class CartProductComponent implements OnInit {
   }
 
   public ngOnInit() {
+    if (!this.cartItem) {
+      throw new Error('cartItem is required');
+    }
     if (this.cartItem) this.updateProductDetail();
   }
 
