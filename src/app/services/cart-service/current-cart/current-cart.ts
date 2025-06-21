@@ -40,7 +40,10 @@ export class CurrentCart {
   }
 
   public static isCart() {
-    return !!this.cart;
+    if (this.cart) {
+      return this.cart;
+    }
+    return null;
   }
 
   public static deleteCart() {

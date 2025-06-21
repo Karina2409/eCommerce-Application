@@ -51,21 +51,20 @@ export class CartService {
   }
 
   public async createAnonymousCart(apiRoot: ByProjectKeyRequestBuilder) {
-    void this;
-    await apiRoot
-      .carts()
-      .post({ body: { currency: 'USD' } })
-      .execute()
-      .then((response) => {
-        CurrentCart.setCart(response.body);
-        this.countSubject.next(0);
-      })
-      .catch((error) => {
-        if (error instanceof Error) {
-          return error.message;
-        }
-        return String(error);
-      });
+    try {
+      const cart = await apiRoot
+        .carts()
+        .post({ body: { currency: 'USD' } })
+        .execute();
+      CurrentCart.setCart(cart.body);
+      this.countSubject.next(0);
+      return cart;
+    } catch (error) {
+      if (error instanceof Error) {
+        return error.message;
+      }
+      return String(error);
+    }
   }
 
   public async getCartByCustomerId(apiRoot: ByProjectKeyRequestBuilder, customerId: string) {
