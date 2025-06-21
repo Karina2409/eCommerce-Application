@@ -62,7 +62,7 @@ export class CartProductComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.updateProductDetail();
+    if (this.cartItem) this.updateProductDetail();
   }
 
   public updateProductDetail() {
