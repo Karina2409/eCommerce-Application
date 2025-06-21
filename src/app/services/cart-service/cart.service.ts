@@ -30,13 +30,14 @@ export class CartService {
         .post({ body: { currency: 'USD', customerId: ID } })
         .execute();
       CurrentCart.setCart(cartCreateResp.body);
-      for (const product of products) {
-        const { productId, quantity } = product;
-        const version = CurrentCart.version;
-        if (CurrentCart.id) {
-          const cartId = CurrentCart.id;
-          await this.makePurchases(apiRoot, cartId, version, productId, quantity);
-        }
+      const cartId = CurrentCart.id;
+      const version = CurrentCart.version;
+      if (cartId) {
+        await Promise.all(
+          products.map(({ productId, quantity }) =>
+            this.makePurchases(apiRoot, cartId, version, productId, quantity),
+          ),
+        );
       }
       return {
         cartID: cartCreateResp.body.id,
