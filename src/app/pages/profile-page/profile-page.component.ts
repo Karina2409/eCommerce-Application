@@ -1,8 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
 import { ProfileService } from '@services/profile-service';
-import { Address, AddressResponse } from '@models/types';
+import { Address, AddressResponse, AddressType, SignUpResult } from '@models/types';
 import { Customer } from '@commercetools/platform-sdk';
 import {
   FormControl,
@@ -29,6 +29,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AddressComponent } from '@components/address-form';
 import { AddressCardComponent } from '@components/address-card';
 import { AuthService } from '@services/auth-service';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-profile-page',
@@ -48,13 +49,14 @@ import { AuthService } from '@services/auth-service';
     MatSelectModule,
     AddressComponent,
     FormsModule,
+    MatTabGroup,
+    MatTab,
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',
 })
 export class ProfilePageComponent implements OnInit {
-  public shippingAddressFormGroup!: FormGroup;
-  public billingAddressFormGroup!: FormGroup;
+  public AddressFormGroup!: FormGroup;
 
   public user!: Customer;
   public addresses = signal<AddressResponse[]>([]);
@@ -63,8 +65,13 @@ export class ProfilePageComponent implements OnInit {
   public isInfoEditing = signal(false);
   public isPasswordChanging = signal(false);
   public isModalShown = signal(false);
-  public selectedAddressType: 'billing' | 'shipping' = 'billing';
+  public selectedAddressType: AddressType = 'billing';
   public message = '';
+  public billingAddressData = {};
+  public shippingAddressData = {};
+  public addressToEdit = signal<AddressResponse | null>(null);
+  public isAddressDefault = signal<boolean>(false);
+  public isBothAddressDefault = signal<boolean>(false);
 
   public form: FormGroup = new FormGroup({
     userInfo: new FormGroup({
@@ -88,8 +95,7 @@ export class ProfilePageComponent implements OnInit {
       ]),
     }),
 
-    shippingAddress: new FormGroup({}),
-    billingAddress: new FormGroup({}),
+    addressForm: new FormGroup({}),
   });
 
   public get userInfoGroup(): FormGroup {
@@ -124,33 +130,38 @@ export class ProfilePageComponent implements OnInit {
     return this.userInfoGroup.get('email') as FormControl;
   }
 
-  public get shippingAddressGroup(): FormGroup {
-    return this.form.get('shippingAddress') as FormGroup;
+  public get addressFormGroup(): FormGroup {
+    return this.form.get('addressForm') as FormGroup;
   }
 
-  public get billingAddressGroup(): FormGroup {
-    return this.form.get('billingAddress') as FormGroup;
-  }
-
-  public onShippingAddressInit(addressForm: FormGroup) {
-    this.shippingAddressFormGroup = addressForm;
-    this.form.setControl('shippingAddress', this.shippingAddressFormGroup);
-  }
-
-  public onBillingAddressInit(addressForm: FormGroup) {
-    this.billingAddressFormGroup = addressForm;
-    this.form.setControl('billingAddress', this.billingAddressFormGroup);
+  public onAddressFormInit(addressForm: FormGroup) {
+    this.AddressFormGroup = addressForm;
+    this.form.setControl('addressForm', this.AddressFormGroup);
   }
 
   public async ngOnInit() {
     await this.getCustomerInfo();
   }
 
-  public onAddressChange(type: string, event: FormGroup) {
-    if (type === 'billing') {
-      this.onBillingAddressInit(event);
-    } else {
-      this.onShippingAddressInit(event);
+  public async onToggleAddress(signal: WritableSignal<boolean>) {
+    void this;
+    signal.set(!signal());
+  }
+
+  public onAddressTypeChange(newType: AddressType) {
+    if (!this.addressFormGroup) return;
+    if (this.selectedAddressType === 'billing') {
+      this.billingAddressData = this.addressFormGroup.value;
+    } else if (this.selectedAddressType === 'shipping') {
+      this.shippingAddressData = this.addressFormGroup.value;
+    }
+
+    this.selectedAddressType = newType;
+
+    if (newType === 'billing') {
+      this.addressFormGroup.patchValue(this.billingAddressData || {});
+    } else if (newType === 'shipping') {
+      this.addressFormGroup.patchValue(this.shippingAddressData || {});
     }
   }
 
@@ -176,19 +187,19 @@ export class ProfilePageComponent implements OnInit {
     this.isInfoEditing.update((value) => !value);
   }
 
-  public onSubmitAction(): void {
+  public async onSubmitAction(): Promise<void> {
     if (this.userInfoGroup.valid) {
       if (this.user.lastName === this.lastName.value) {
-        this.changeLastName(this.lastName.value);
+        await this.changeLastName(this.lastName.value);
       }
       if (this.user.firstName === this.firstName.value) {
-        this.changeFirstName(this.firstName.value);
+        await this.changeFirstName(this.firstName.value);
       }
       if (this.user.email === this.email.value) {
-        this.changeEmail(this.email.value);
+        await this.changeEmail(this.email.value);
       }
       if (this.user.dateOfBirth === this.dateOfBirth.value) {
-        this.setDateOfBirth(this.dateOfBirth.value);
+        await this.setDateOfBirth(this.dateOfBirth.value);
       }
     }
     this.isInfoEditing.set(false);
@@ -226,6 +237,11 @@ export class ProfilePageComponent implements OnInit {
     this.message = '';
   }
 
+  public onAddAddress(): void {
+    this.addressToEdit.set(null);
+    this.onOpenModal();
+  }
+
   public onOpenModal(): void {
     this.isModalShown.update((value) => !value);
   }
@@ -250,33 +266,80 @@ export class ProfilePageComponent implements OnInit {
       }
     });
   }
+  // setDefaultShippingAddress(addressId: string),
+  // addShippingAddressID(addressId: string),
+  // removeShippingAddressID(addressId: string),
+  // setDefaultBillingAddress(addressId: string),
+  // addBillingAddressID(addressId: string),
+  // removeBillingAddressID(addressId: string),
 
-  public async onModalConfirm(event: Event): Promise<void> {
+  public async onAddressModalConfirm(event: Event): Promise<void> {
     event.preventDefault();
+    const address: Address = {
+      city: this.addressFormGroup.get('city')?.value ?? '',
+      country: this.addressFormGroup.get('country')?.value ?? '',
+      postalCode: this.addressFormGroup.get('postalCode')?.value ?? '',
+      streetName: this.addressFormGroup.get('streetName')?.value ?? '',
+    } as Address;
 
-    if (this.selectedAddressType === 'billing') {
-      await this.addAddress({
-        city: this.billingAddressGroup.get('city')?.value ?? '',
-        country: this.billingAddressGroup.get('country')?.value ?? '',
-        postalCode: this.billingAddressGroup.get('postalCode')?.value ?? '',
-        streetName: this.billingAddressGroup.get('streetName')?.value ?? '',
-      } as Address);
-    } else if (this.selectedAddressType === 'shipping') {
-      await this.addAddress({
-        city: this.shippingAddressGroup.get('city')?.value ?? '',
-        country: this.shippingAddressGroup.get('country')?.value ?? '',
-        postalCode: this.shippingAddressGroup.get('postalCode')?.value ?? '',
-        streetName: this.shippingAddressGroup.get('streetName')?.value ?? '',
+    let addressId: string | null;
+
+    if (this.addressToEdit() === null) {
+      addressId = await this.addAddress(address);
+    } else {
+      addressId = this.addressToEdit()?.id ?? null;
+      await this.changeAddress({
+        ...address,
+        addressId,
       } as Address);
     }
 
+    if (addressId) {
+      if (this.isBothAddressDefault()) {
+        await this.setDefaultShippingAddress(addressId);
+        await this.setDefaultBillingAddress(addressId);
+        await this.addShippingAddressID(addressId);
+        await this.addBillingAddressID(addressId);
+      } else if (this.selectedAddressType === 'billing') {
+        await this.addBillingAddressID(addressId);
+        if (this.isAddressDefault()) {
+          await this.setDefaultBillingAddress(addressId);
+        }
+        if (this.addresses()[0].shippingAddressIds?.some((id) => id === addressId)) {
+          await this.removeShippingAddressID(addressId);
+        }
+      } else if (this.selectedAddressType === 'shipping') {
+        await this.addShippingAddressID(addressId);
+        if (this.isAddressDefault()) {
+          await this.setDefaultShippingAddress(addressId);
+        }
+        if (this.addresses()[0].billingAddressIds?.some((id) => id === addressId)) {
+          await this.removeBillingAddressID(addressId);
+        }
+      }
+    }
+    this.addressToEdit.set(null);
     await this.getCustomerInfo();
 
     this.onModalClose();
   }
 
+  public async onRemoveAddress(id: string): Promise<void> {
+    await this.removeAddress(id);
+    await this.getCustomerInfo();
+  }
+
+  public async onEditAddress(address: AddressResponse): Promise<void> {
+    this.addressToEdit.set(address);
+    if (address.billingAddressIds?.some((id) => id === address.id)) {
+      this.selectedAddressType = 'billing';
+    } else if (address.shippingAddressIds?.some((id) => id === address.id)) {
+      this.selectedAddressType = 'shipping';
+    }
+    this.onOpenModal();
+  }
+
   public async addAddress({ city, country, postalCode, streetName }: Address) {
-    void this;
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
       actions: [
@@ -291,17 +354,14 @@ export class ProfilePageComponent implements OnInit {
         },
       ],
     });
+
+    const response: SignUpResult = await this.profileService.getCustomerInfo();
+    const newAddress = response.customer?.addresses.at(-1);
+
+    return newAddress?.id ?? null;
   }
 
-  public async changeAddress({
-    addressId,
-    streetName,
-    streetNumber,
-    postalCode,
-    city,
-    country,
-  }: Address) {
-    void this;
+  public async changeAddress({ addressId, streetName, postalCode, city, country }: Address) {
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -311,7 +371,6 @@ export class ProfilePageComponent implements OnInit {
           addressId,
           address: {
             streetName,
-            streetNumber,
             postalCode,
             city,
             country,
@@ -322,7 +381,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async removeAddress(addressId: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -335,8 +393,85 @@ export class ProfilePageComponent implements OnInit {
     });
   }
 
+  public async setDefaultShippingAddress(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'setDefaultShippingAddress',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async addShippingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'addShippingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async removeShippingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'removeShippingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async setDefaultBillingAddress(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'setDefaultBillingAddress',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async addBillingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'addBillingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
+  public async removeBillingAddressID(addressId: string) {
+    await this.profileService.getCustomerInfo();
+    await this.profileService.updateCustomerInfo(this.user.id, {
+      version: this.profileService.currentVersion,
+      actions: [
+        {
+          action: 'removeBillingAddressId',
+          addressId,
+        },
+      ],
+    });
+  }
+
   public async changeEmail(email: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -350,7 +485,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async changeFirstName(firstName: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -364,7 +498,6 @@ export class ProfilePageComponent implements OnInit {
   }
 
   public async changeLastName(lastName: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,
@@ -379,7 +512,6 @@ export class ProfilePageComponent implements OnInit {
 
   //format dateOfBirth: '2015-10-21'
   public async setDateOfBirth(dateOfBirth: string) {
-    void this;
     await this.profileService.getCustomerInfo();
     await this.profileService.updateCustomerInfo(this.user.id, {
       version: this.profileService.currentVersion,

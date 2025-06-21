@@ -21,7 +21,7 @@ export class FilterService {
     let products: ProductProjection[] = [];
     let productsRender: ProductProjectionExtend[] = [];
     const queryArgs: ProductProjectionQueryArgs = {
-      limit: 50,
+      limit: 10,
       staged: true,
       markMatchingVariants: true,
       fuzzy: true,

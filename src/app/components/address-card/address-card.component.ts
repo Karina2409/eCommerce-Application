@@ -1,14 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressResponse } from '@models/types';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-address-card',
-  imports: [],
+  imports: [MatIcon, MatTooltip, MatIconButton],
   templateUrl: './address-card.component.html',
   styleUrl: './address-card.component.scss',
 })
 export class AddressCardComponent implements OnInit {
   @Input() public address!: AddressResponse;
+  @Output() public removeAddress = new EventEmitter<string>();
+  @Output() public editAddress = new EventEmitter<AddressResponse>();
+
   public addressId = '';
 
   public get isBilling(): boolean {
@@ -29,5 +35,13 @@ export class AddressCardComponent implements OnInit {
 
   public ngOnInit() {
     this.addressId = this.address.id ?? '';
+  }
+
+  public onRemoveAddress() {
+    this.removeAddress.emit(this.addressId);
+  }
+
+  public onEditAddress() {
+    this.editAddress.emit(this.address);
   }
 }

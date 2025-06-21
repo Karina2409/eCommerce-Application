@@ -5,11 +5,21 @@
 >
   <h1>Sign Up</h1>
 
-  <div class="login-form__container">
+  <div
+    class="login-form__container"
+    [ngClass]="
+      isShippingBillingAddressDefault() || isBillingShippingAddressDefault()
+        ? 'one-address-default'
+        : ''
+    "
+  >
     <div class="login-form__info">
       <app-email-field [control]="email"></app-email-field>
 
-      <app-password-field [control]="password"></app-password-field>
+      <app-password-field
+        [control]="password"
+        id="password"
+      ></app-password-field>
 
       <app-name-field
         label="First Name"
@@ -33,6 +43,8 @@
         [isAddressDefault]="isShippingAddressDefault"
         [isBothAddressDefault]="isShippingBillingAddressDefault"
         [addressDefaultInput]="'shipping'"
+        (toggleAddress)="toggleAddress($event)"
+        [editAddress]="signal(null)"
       ></app-address-form>
     }
     @if (!isShippingBillingAddressDefault()) {
@@ -41,6 +53,8 @@
         [isAddressDefault]="isBillingAddressDefault"
         [isBothAddressDefault]="isBillingShippingAddressDefault"
         [addressDefaultInput]="'billing'"
+        (toggleAddress)="toggleAddress($event)"
+        [editAddress]="signal(null)"
       ></app-address-form>
     }
   </div>

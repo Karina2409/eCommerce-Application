@@ -1,0 +1,56 @@
+.items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cart-control {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+.promo-input {
+  width: 70%;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 0.2rem;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+}
+
+.promo-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.total-count {
+  font-size: 1.2rem;
+}
+
+.empty-field {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.strikethrough {
+  text-decoration: line-through;
+}

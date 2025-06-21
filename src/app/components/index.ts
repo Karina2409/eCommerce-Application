@@ -7,3 +7,4 @@ export * from './address-card';
 export * from './images-modal';
 export * from './input';
 export * from './modal';
+export * from './cart-product';

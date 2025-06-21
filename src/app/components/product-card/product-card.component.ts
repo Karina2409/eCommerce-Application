@@ -1,10 +1,12 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   Input,
   OnChanges,
   OnInit,
+  signal,
   SimpleChanges,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
@@ -17,6 +19,8 @@ import { ProductDetailService } from '@services/product-detail-service';
 import { ProductProjectionExtend } from '@models/index';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormattingToolsService } from '@services/formatting-tools';
+import { AuthService } from '@services/auth-service';
+import { CartManipulationService, CartService, CurrentCart } from '@services/cart-service';
 
 @Component({
   selector: 'app-product-card',
@@ -34,12 +38,21 @@ export class ProductCardComponent implements OnInit, OnChanges {
   public productService: ProductService = inject(ProductService);
   public productDetailService: ProductDetailService = inject(ProductDetailService);
   public formattingToolsService: FormattingToolsService = inject(FormattingToolsService);
+  public isInCart = signal<boolean>(false);
+  protected authService: AuthService = inject(AuthService);
+  protected cartService: CartService = inject(CartService);
+  protected cartManipulation: CartManipulationService = inject(CartManipulationService);
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private destroyRef: DestroyRef,
-  ) {}
+  ) {
+    effect(() => {
+      const isInCart = CurrentCart.isProductByID(this.product.id);
+      this.isInCart.set(isInCart);
+    });
+  }
 
   public async openProductPage(variant: ProductVariant): Promise<void> {
     const slugifiedName = this.formattingToolsService.slugify(this.name);
@@ -70,11 +83,6 @@ export class ProductCardComponent implements OnInit, OnChanges {
     this.description = this.product.description?.[locale] || '';
   }
 
-  public isHasDiscount(variant: ProductVariant): boolean {
-    void this;
-    return !!variant?.prices?.[0]?.discounted?.value?.centAmount;
-  }
-
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['product']) {
       if (this.product.variantsRender) {
@@ -82,6 +90,14 @@ export class ProductCardComponent implements OnInit, OnChanges {
       } else {
         this.allVariants = [this.product.masterVariant];
       }
+    }
+  }
+
+  public isProductInCart() {
+    if (CurrentCart.isProductByID(this.product.id)) {
+      this.isInCart.set(true);
+    } else {
+      this.isInCart.set(false);
     }
   }
 
@@ -93,5 +109,6 @@ export class ProductCardComponent implements OnInit, OnChanges {
 
     this.getName();
     this.getDescription();
+    this.isProductInCart();
   }
 }

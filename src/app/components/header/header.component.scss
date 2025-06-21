@@ -7,7 +7,7 @@
 .wrapper {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 1rem;
   width: 100%;
 }
@@ -51,4 +51,9 @@
 
 .burger {
   z-index: 999;
+}
+
+.promo {
+  display: flex;
+  align-items: center;
 }

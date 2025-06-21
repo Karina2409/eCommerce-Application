@@ -1,1 +1,53 @@
-<p>cart-page works!</p>
+<section class="items-container">
+  @if (cartItems().length > 0) {
+    <app-cart-product
+      *ngFor="let item of cartItems()"
+      [cartItem]="item"
+      (myOutput)="getCartItems()"
+    ></app-cart-product>
+  } @else {
+    <div class="empty-field">
+      <p>Cart is empty</p>
+      <button
+        mat-flat-button
+        routerLink="/catalog"
+      >
+        Back to catalog
+      </button>
+    </div>
+  }
+</section>
+<section class="cart-control">
+  <form
+    class="promo-container"
+    [formGroup]="promoInput"
+    (ngSubmit)="onSubmit()"
+  >
+    <input
+      formControlName="codeInput"
+      class="promo-input"
+      type="text"
+      placeholder="Enter promo code..."
+    />
+    <button mat-flat-button>Apply</button>
+  </form>
+
+  <div class="total-count">
+    <div>
+      Total:
+      <span
+        *ngIf="prevPrice()"
+        class="strikethrough"
+        >{{ prevPrice() }} {{ currentCurrency() }}</span
+      >
+      {{ totalPrice() }} {{ currentCurrency() }}
+    </div>
+  </div>
+
+  <button
+    mat-flat-button
+    (click)="onClear()"
+  >
+    Clear Cart
+  </button>
+</section>
