@@ -58,7 +58,7 @@ export class CartManipulationService {
     authService: AuthService,
   ) {
     const lineId = CurrentCart.getLineItemIdByProductId(productID);
-    await this.removeProduct(cartService, authService, lineId);
+    if (lineId) await this.removeProduct(cartService, authService, lineId);
   }
 
   public async applyDiscountCode(
@@ -93,8 +93,8 @@ export class CartManipulationService {
         .discountCodes()
         .get({ queryArgs: { where: `code="${discountCode}"` } })
         .execute();
-      const discountCodeId = discountCodeResponse.body.results[0].id;
-      if (typeof version === 'number') {
+      if (discountCodeResponse.body.results[0].id && typeof version === 'number') {
+        const discountCodeId = discountCodeResponse.body.results[0].id;
         await cartService.removeDiscountCode(
           authService.apiRoot,
           CurrentCart.id!,
